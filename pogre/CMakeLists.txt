@@ -43,11 +43,11 @@ elseif(WIN32)
 endif()
 
 # Copy my own versions (with CEGUI resources)
-file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg ogre_resources
+file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg resources
         DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg ogre_resources
+file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg resources
         DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG})
-file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg ogre_resources
+file(COPY ${platform}/plugins.cfg ${platform}/resources.cfg resources
         DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
 
 ## Pogre

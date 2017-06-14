@@ -1,0 +1,6 @@
+[submodule "pogre/resources"]
+	path = pogre/resources
+	url = git@github.com:phiste/ogre_resources.git
+[submodule "pse/SFML"]
+	path = pse/SFML
+	url = git@github.com:phiste/SFML
