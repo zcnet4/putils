@@ -1,0 +1,24 @@
+# PluginManager
+
+Manages a set of DLLs.
+
+### Members
+
+##### Constructor
+```
+PluginManager(const std::string &path) noexcept
+```
+Loads all libraries (.so/.dll) files in the directory specified by `path`.
+
+##### execute
+```
+void execute(const std::string &name, P &&...params);
+```
+Execute, in all DLLs, the `name` function taking `Args` as parameters
+
+##### executeWithReturn
+```
+std::vector<T> executeWithReturn(const std::string &name, P &&...params);
+```
+Execute, in all DLLs, the `name` function returning `T` and taking `Args` as parameters.
+Return values of all functions are returned in an `std::vector`.

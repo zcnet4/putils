@@ -1,0 +1,13 @@
+# OperatorForwarder
+
+Forwards all operators to a given member
+
+### Members
+
+##### Constructor
+
+```
+OperatorForwarding(Attr &attr);
+```
+
+Takes the member to which operators should be forwarded.
