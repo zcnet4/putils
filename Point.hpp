@@ -1,5 +1,6 @@
 #pragma once
 
+#include <initializer_list>
 #include <cmath>
 #include "hash.hpp"
 #include "Serializable.hpp"
@@ -126,6 +127,8 @@ namespace putils
 
         template<typename P>
         bool operator!=(const Point<P, 3> &rhs) const noexcept { return !(*this == rhs); }
+
+        Point operator-() const noexcept { return { -x, -y, -z }; }
 
         template<typename P>
         Point operator+(const Point<P, 3> &rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }

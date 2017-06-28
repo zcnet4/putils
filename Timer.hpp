@@ -35,6 +35,7 @@ namespace putils
         // Is the timer ringing
     public:
         bool isDone() const noexcept { return t_clock::now() - _start >= _duration; }
+        std::size_t getTimesDone() const noexcept { return (t_clock::now() - _start) / _duration; }
 
         // How long ago did I start the timer
     public:
