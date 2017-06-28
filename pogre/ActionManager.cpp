@@ -30,6 +30,7 @@ namespace pogre
 
         void ActionManager::addPermanentAction(const std::function<void()> &func) noexcept
         {
+            Lock _(_actionsMutex);
             _permanentActionsToAdd.push_back([func](auto &&){ func(); });
         }
 

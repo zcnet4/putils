@@ -31,7 +31,6 @@ namespace pogre
             std::mutex _actionsMutex;
 
             using Lock = std::unique_lock<std::mutex>;
-
         };
     }
 }
