@@ -5,6 +5,9 @@
 #include <stack>
 
 #include <CEGUI/WindowManager.h>
+#include <CEGUI/System.h>
+#include <CEGUI/GUIContext.h>
+#include <CEGUI/Window.h>
 
 #include "fwd.hpp"
 

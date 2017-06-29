@@ -100,10 +100,16 @@ namespace pogre
     }
 
     template<typename Precision = double>
-    void setWidgetCenter(CEGUI::Window *win, const putils::Point<Precision> &pos)
+    inline void setWidgetRelativeSize(CEGUI::Window &win, const putils::Point<Precision> &size)
     {
-        const auto size = win->getSize();
-        win->setPosition(
+        win.setSize({{ size.x, 0 }, { size.y, 0 }});
+    }
+
+    template<typename Precision = double>
+    void setWidgetCenter(CEGUI::Window &win, const putils::Point<Precision> &pos)
+    {
+        const auto size = win.getSize();
+        win.setPosition(
                 {
                         { (float)(pos.x - size.d_width.d_scale / 2), 0 },
                         { (float)(pos.y - size.d_height.d_scale / 2), 0 }
