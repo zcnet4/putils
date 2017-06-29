@@ -25,9 +25,10 @@ namespace pogre
 
         _guiContext = &CEGUI::System::getSingleton().getDefaultGUIContext();
 
-        addPermanentAction([](const Ogre::FrameEvent &event)
+        addPermanentAction([this, &system = CEGUI::System::getSingleton()](const Ogre::FrameEvent &event)
                            {
-                               CEGUI::System::getSingleton().injectTimePulse(event.timeSinceLastFrame);
+                               system.injectTimePulse(event.timeSinceLastFrame);
+                               _guiContext->injectTimePulse(event.timeSinceLastFrame);
                            }
         );
     }
