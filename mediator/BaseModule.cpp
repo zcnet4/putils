@@ -10,7 +10,8 @@ namespace putils
 
     BaseModule::~BaseModule()
     {
-        _mediator->removeModule(this);
+        if (_mediator)
+            _mediator->removeModule(this);
     }
 
     void BaseModule::sendDataPacket(const ADataPacket &packet) const noexcept

@@ -183,7 +183,7 @@ namespace putils
             // putils::Csv<',', std::string, std::string> csv("B-PAV-242 PAR.csv");
 
             // Iterate through rows and output them
-            for (auto &p : csv.getRows())
+            for (auto p : csv.getRows())
             {
                 const auto &key = p->first;
                 const auto &t = p->second;

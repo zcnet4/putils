@@ -147,25 +147,25 @@ namespace putils
         {
             CellularAutomaton<bool> ca(
                     {
-                    { { 0 }, false },
-                    { { 1 }, false },
-                    { { 2 }, true },
-                    { { 3 }, false },
-                    { { 4 }, false },
+                            { { 0 }, false },
+                            { { 1 }, false },
+                            { { 2 }, true },
+                            { { 3 }, false },
+                            { { 4 }, false },
                     }
-                    );
+            );
 
             const auto &cells = ca.step(
                     [](const std::vector<const Cell<bool> *> &neighbors, const Cell<bool> &cell)
                     {
-                    return std::find_if(neighbors.begin(), neighbors.end(), [](auto &&ptr){ return ptr->obj; })
-                    != neighbors.end();
+                        return std::find_if(neighbors.begin(), neighbors.end(), [](auto &&ptr){ return ptr->obj; })
+                               != neighbors.end();
                     },
                     [](Cell<bool> &cell)
                     {
-                    cell.obj = !cell.obj;
+                        cell.obj = !cell.obj;
                     }
-                    );
+            );
 
             for (const auto &c : cells)
                 std::cout << std::boolalpha << c.obj << std::endl;

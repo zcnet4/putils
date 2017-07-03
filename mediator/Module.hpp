@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include "BaseModule.hpp"
 #include "meta/for_each.hpp"
-#include "static_if.hpp"
 #include "Mediator.hpp"
 
 namespace kdw { class Command; }
