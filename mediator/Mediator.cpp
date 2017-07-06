@@ -16,9 +16,8 @@ namespace putils
 
     void Mediator::removeModule(BaseModule *m)
     {
-        for (auto &p : _modules)
+        for (auto & [type, category] : _modules)
         {
-            auto &category = p.second;
             const auto it = std::find(category.begin(), category.end(), m);
             if (it != category.end())
                 category.erase(it);

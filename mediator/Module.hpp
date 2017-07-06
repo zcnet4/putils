@@ -9,8 +9,6 @@
 #include "meta/for_each.hpp"
 #include "Mediator.hpp"
 
-namespace kdw { class Command; }
-
 namespace putils
 {
     template<typename CRTP, typename ...DataPackets>

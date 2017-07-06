@@ -26,20 +26,19 @@ namespace putils
         template<std::size_t Size>
         class Chunk
         {
-            static constexpr std::size_t NumBlocks = std::numeric_limits<unsigned char>::max();
+            static inline constexpr unsigned char NumBlocks = std::numeric_limits<unsigned char>::max();
 
         public:
-            Chunk() : _mem(std::make_unique<unsigned char[]>(Size * NumBlocks))
+            Chunk() : _mem(Size * NumBlocks)
             {
                 unsigned char i = 0;
-                available = NumBlocks;
-                for (unsigned char *p = _mem.get(); i < NumBlocks - 1; p += Size)
+                for (unsigned char *p = _mem.data(); i < NumBlocks; p += Size)
                     *p = ++i;
             }
 
             void *allocate()
             {
-                auto ptr = _mem.get() + Size * _firstAvailableBlock;
+                auto ptr = _mem.data() + Size * _firstAvailableBlock;
                 _firstAvailableBlock = *ptr;
                 --available;
                 return ptr;
@@ -49,17 +48,17 @@ namespace putils
             {
                 auto p = static_cast<unsigned char *>(ptr);
                 *p = _firstAvailableBlock;
-                _firstAvailableBlock = (p - _mem.get()) / Size;
+                _firstAvailableBlock = static_cast<unsigned char>((p - _mem.data()) / Size);
                 ++available;
             }
 
-            bool contains(void *ptr) const { return ptr >= _mem.get() && ptr < _mem.get() + Size * NumBlocks; }
+            bool contains(void *ptr) const { return ptr >= _mem.data() && ptr < _mem.data() + Size * NumBlocks; }
 
-            unsigned char available;
+            unsigned char available = NumBlocks;
 
         private:
             unsigned char _firstAvailableBlock = 0;
-            std::unique_ptr<unsigned char[]> _mem;
+            std::vector<unsigned char> _mem;
         };
 
         template<typename T>
@@ -107,25 +106,17 @@ namespace putils
                     {
                         _lastRelease = &c;
                         c.release(ptr);
+                        return;
                     }
                 }
             }
 
         private:
-            static std::vector<Chunk<sizeof(T)>> _chunks;
-            static Chunk<sizeof(T)> *_lastAlloc;
-            static Chunk<sizeof(T)> *_lastRelease;
+            static inline std::vector<Chunk<sizeof(T)>> _chunks;
+            static inline Chunk<sizeof(T)> *_lastAlloc = nullptr;
+            static inline Chunk<sizeof(T)> *_lastRelease = nullptr;
         };
     }
-
-    template<typename T>
-    std::vector<Chunk<sizeof(T)>> Pool<T>::_chunks;
-
-    template<typename T>
-    Chunk<sizeof(T)> *Pool<T>::_lastAlloc = nullptr;
-
-    template<typename T>
-    Chunk<sizeof(T)> *Pool<T>::_lastRelease = nullptr;
 
     template<typename CRTP>
     void *PooledObject<CRTP>::operator new(std::size_t size) { return Pool<CRTP>::allocate(); }
