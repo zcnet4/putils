@@ -8,16 +8,14 @@
 namespace putils
 {
     template<typename Precision, std::size_t Dimensions = 2>
-    struct Point : public Serializable<Point<Precision, Dimensions>>
+    struct Point : putils::Reflectible<Point<Precision, Dimensions>>,
+                   public Serializable<Point<Precision, Dimensions>>
     {
         Precision x;
         Precision y;
 
         Point(Precision x = 0, Precision y = 0)
-                : Serializable<Point<Precision, Dimensions>>(
-                std::make_pair("x", &Point::x),
-                std::make_pair("y", &Point::y)
-        ), x(x), y(y)
+                : x(x), y(y)
         {}
 
         Point(const Point &) noexcept = default;
@@ -52,19 +50,40 @@ namespace putils
                     std::pow(y - rhs.y, 2)
             );
         }
+
+        static const auto &get_attributes()
+        {
+            static const auto table = pmeta::make_table(
+                    "x", &Point::x,
+                    "y", &Point::y
+            );
+            return table;
+        }
+
+        static const auto &get_methods()
+        {
+            static const auto table = pmeta::make_table(
+                    "distanceTo", &Point::distanceTo<Precision>
+            );
+            return table;
+        }
+
+        static const auto &get_parents()
+        {
+            static const auto table = pmeta::make_table();
+            return table;
+        }
     };
 
     template<typename Precision, std::size_t Dimensions = 2>
-    struct Rect : public Serializable<Rect<Precision, Dimensions>>
+    struct Rect : public Reflectible<Rect<Precision, Dimensions>>,
+                  public Serializable<Rect<Precision, Dimensions>>
     {
         Point<Precision> topLeft;
         Point<Precision> size;
 
         Rect(Point<Precision, Dimensions> topLeft = {}, Point<Precision, Dimensions> size = {})
-                : Serializable<Rect<Precision, Dimensions>>(
-                std::make_pair("topLeft", &Rect::topLeft),
-                std::make_pair("size", &Rect::size)
-        ), topLeft(topLeft), size(size)
+                : topLeft(topLeft), size(size)
         {}
 
         template<typename P>
@@ -97,22 +116,42 @@ namespace putils
                     topLeft.y + size.y > point.y
             );
         }
+
+        static const auto &get_attributes()
+        {
+            static const auto table = pmeta::make_table(
+                    "topLeft", &Rect::topLeft,
+                    "size", &Rect::size
+            );
+            return table;
+        }
+
+        static const auto &get_methods()
+        {
+            static const auto table = pmeta::make_table(
+                    "intersect", &Rect::intersect,
+                    "contains", &Rect::contains
+            );
+            return table;
+        }
+
+        static const auto &get_parents()
+        {
+            static const auto table = pmeta::make_table();
+            return table;
+        }
     };
 
     template<typename Precision>
-    struct Point<Precision, 3> : public Serializable<Point<Precision, 3>>
+    struct Point<Precision, 3> : public Reflectible<Point<Precision, 3>>,
+                                 public Serializable<Point<Precision, 3>>
     {
         Precision x;
         Precision y;
         Precision z;
 
         Point(Precision x = 0, Precision y = 0, Precision z = 0)
-                : Serializable<Point<Precision, 3>>(
-                std::make_pair("x", &Point::x),
-                std::make_pair("y", &Point::y),
-                std::make_pair("z", &Point::z)
-        ),
-                x(x), y(y), z(z)
+                : x(x), y(y), z(z)
         {}
 
         Point(const Point &) noexcept = default;
@@ -141,6 +180,7 @@ namespace putils
 
         template<typename P>
         Point &operator-=(const Point<P, 3> &rhs) noexcept { x -= rhs.x; y -= rhs.y; z -= rhs.z; return *this; }
+
         template<typename P>
         Precision distanceTo(const Point<P, 3> &rhs) const noexcept
         {
@@ -150,19 +190,41 @@ namespace putils
                     std::pow(z - rhs.z, 2)
             );
         }
+
+        static const auto &get_attributes()
+        {
+            static const auto table = pmeta::make_table(
+                    "x", &Point::x,
+                    "y", &Point::y,
+                    "z", &Point::z
+            );
+            return table;
+        }
+
+        static const auto &get_methods()
+        {
+            static const auto table = pmeta::make_table(
+                    "distanceTo", &Point::distanceTo<Precision>
+            );
+            return table;
+        }
+
+        static const auto &get_parents()
+        {
+            static const auto table = pmeta::make_table();
+            return table;
+        }
     };
 
     template<typename Precision>
-    struct Rect<Precision, 3> : public Serializable<Rect<Precision, 3>>
+    struct Rect<Precision, 3> : public Reflectible<Rect<Precision, 3>>,
+                                public Serializable<Rect<Precision, 3>>
     {
         Point<Precision, 3> topLeft;
         Point<Precision, 3> size;
 
         Rect(Point<Precision, 3> topLeft = {}, Point<Precision, 3> size = {})
-            : Serializable<Rect<Precision, 3>>(
-                std::make_pair("topLeft", &Rect::topLeft),
-                std::make_pair("size", &Rect::size)
-        ), topLeft(topLeft), size(size)
+                : topLeft(topLeft), size(size)
         {}
 
         template<typename P>
@@ -191,6 +253,30 @@ namespace putils
                     topLeft.z <= point.z &&
                     topLeft.z + size.z > point.z
             );
+        }
+
+        static const auto &get_attributes()
+        {
+            static const auto table = pmeta::make_table(
+                    "topLeft", &Rect::topLeft,
+                    "size", &Rect::size
+            );
+            return table;
+        }
+
+        static const auto &get_methods()
+        {
+            static const auto table = pmeta::make_table(
+                    "intersect", &Rect::intersect,
+                    "contains", &Rect::contains
+            );
+            return table;
+        }
+
+        static const auto &get_parents()
+        {
+            static const auto table = pmeta::make_table();
+            return table;
         }
     };
 }
