@@ -3,6 +3,7 @@
 #include <tuple>
 #include "fwd.hpp"
 #include "type.hpp"
+#include "for_each.hpp"
 
 namespace pmeta
 {
@@ -19,6 +20,9 @@ namespace pmeta
 
         template<typename Value, typename Func>
         void get_key(Value &&value, Func &&func);
+
+        const Tuple &getKeyValues() const { return _tuple; }
+        const FlatTuple &getFlatKeyValues() const { return _flatTuple; }
 
     private:
         Tuple _tuple;
@@ -108,7 +112,7 @@ namespace pmeta
         {
             return std::tuple_cat(
                     std::make_tuple(
-                            std::make_tuple(FWD(key), FWD(type))
+                            std::make_pair(FWD(key), FWD(type))
                     ),
                     detail::make_table(FWD(args)...)
             );

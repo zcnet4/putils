@@ -7,6 +7,9 @@
 #include "fwd.hpp"
 #include "OutputPolicies.hpp"
 
+#include "reflection/Reflectible.hpp"
+#include "meta/new_from_tuple.hpp"
+
 namespace putils
 {
     // OutputPolicy: type ressembling DefaultOutputPolicy (above), with a
@@ -30,10 +33,13 @@ namespace putils
         template<typename ...Attrs>
         struct Serializer : SerializerBase
         {
-            Serializer(Attrs &&...attrs)
+            Serializer(const std::tuple<Attrs...> &attrs)
             {
-                if (_attrs == nullptr)
-                    _attrs = std::make_unique<std::tuple<Attrs...>>(FWD(attrs)...);
+                if (!_first)
+                    return;
+                _first = false;
+
+                _attrs = attrs;
             }
 
             // For each member pointer in _attrs, serialize it
@@ -42,7 +48,7 @@ namespace putils
                 OutputPolicy::startSerialize(s);
 
                 bool first = true;
-                pmeta::tuple_for_each(*_attrs, [&s, obj, &first](const auto &attr)
+                pmeta::tuple_for_each(_attrs, [&s, obj, &first](const auto &attr)
                 {
                     if (!first)
                         OutputPolicy::serializeNewField(s);
@@ -55,7 +61,7 @@ namespace putils
 
             void unserializeImpl(putils::Serializable<Derived, true, OutputPolicy> *obj, std::istream &s)
             {
-                OutputPolicy::unserialize(s, *static_cast<Derived*>(obj), *_attrs);
+                OutputPolicy::unserialize(s, *static_cast<Derived*>(obj), _attrs);
             }
 
             void unserializeImpl(putils::Serializable<Derived, false, OutputPolicy> *, std::istream &) noexcept
@@ -68,14 +74,34 @@ namespace putils
 
             // Static tuple containing the member pointers to be serialized for this class (Derived)
         private:
-            static std::unique_ptr<std::tuple<Attrs ...>> _attrs;
+            static inline std::tuple<Attrs ...> _attrs;
+            static inline std::atomic<bool> _first = true;
         };
+
+        template<typename ...Args>
+        auto make_serializer(const std::tuple<Args...> &tuple)
+        {
+            return new Serializer<Args...>(tuple);
+        }
 
         // Constructor
     public:
-        template<typename ...Fields> // MemberPointers: std::pair<std::string, Derived::*attr>
+        template<typename ...Fields> // Fields: std::pair<std::string, Derived::*attr>
         Serializable(Fields &&...attrs)
-                : _serializer(new Serializer<Fields...>(FWD(attrs)...)) {}
+                : _serializer(new Serializer<Fields...>(std::tuple<Fields...>(FWD(attrs)...))) {}
+
+        // Reflectible constructor
+    public:
+        Serializable()
+        {
+            static_assert(
+                    putils::is_reflectible<Derived>::value,
+                    "Serializable types should be reflectible, or specify their fields at construction time"
+            );
+
+            // _serializer = new Serializer(Derived::get_attributes().getKeyValues());
+            _serializer.reset(make_serializer(Derived::get_attributes().getKeyValues()));
+        }
 
     public:
         std::ostream &serialize(std::ostream &s) const noexcept
@@ -105,10 +131,12 @@ namespace putils
         std::shared_ptr<SerializerBase> _serializer;
     };
 }
+/*
 
 template<typename Derived, bool Unserialize, typename OutputPolicy>
 template<typename ...Attrs>
 std::unique_ptr<std::tuple<Attrs...>>    putils::Serializable<Derived, Unserialize, OutputPolicy>::Serializer<Attrs...>::_attrs = nullptr;
+*/
 
 namespace putils
 {
@@ -174,6 +202,31 @@ namespace putils
                     std::cout << test << std::endl;
             s >> test;
             std::cout << test << std::endl;
+
+            /*
+             * Reflectible test
+             */
+
+            class ReflectibleTest : public putils::Reflectible<ReflectibleTest>,
+                                    public putils::Serializable<ReflectibleTest>
+            {
+            public:
+                std::string hiString = "hi";
+                int fourtyTwo = 42;
+
+                static const auto &get_attributes()
+                {
+                    static const auto table = pmeta::make_table(
+                            "hiString", &ReflectibleTest::hiString,
+                            "fourtyTwo", &ReflectibleTest::fourtyTwo
+                    );
+                    return table;
+                }
+                static void get_methods() {}
+                static void get_parents() {}
+            };
+
+            std::cout << ReflectibleTest() << std::endl;
         }
     }
 }
