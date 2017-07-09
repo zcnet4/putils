@@ -6,7 +6,6 @@
 #include <algorithm>
 
 #include "fwd.hpp"
-#include "static_if.hpp"
 #include "Point.hpp"
 
 namespace putils
