@@ -31,13 +31,22 @@ namespace pse
 
         // Items getters and setters
     public:
-        void addItem(ViewItem *item, size_t height = 0) { _items.push_back(std::make_pair(item, height)); }
+        void addItem(ViewItem &item, size_t height = 0) { _items.push_back(std::make_pair(&item, height)); }
 
-        void removeItem(ViewItem *item)
+        void removeItem(const ViewItem &item)
         {
             _items.erase(std::find_if(_items.begin(), _items.end(),
-                    [item](auto &p) { return p.first == item; })
+                    [&item](auto &p) { return p.first == &item; })
             );
+        }
+
+        void setItemHeight(const ViewItem &item, std::size_t height)
+        {
+            auto it = std::find_if(_items.begin(), _items.end(),
+                                   [&item](auto &p) { return p.first == &item; }
+            );
+            if (it != _items.end())
+                it->second = height;
         }
 
         // Update the engine
