@@ -31,13 +31,13 @@ namespace putils
         }
 
     public:
-        void get(const std::string &uri, const Route &route)
+        void get(std::string_view uri, const Route &route)
         {
             _routes.addRoute(uri, RoutesModule::Method::Get, route);
         }
 
     public:
-        void post(const std::string &uri, const Route &route)
+        void post(std::string_view uri, const Route &route)
         {
             _routes.addRoute(uri, RoutesModule::Method::Post, route);
         }

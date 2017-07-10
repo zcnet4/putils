@@ -12,7 +12,7 @@ namespace putils
     class TCPConnection final : public ATCPConnection
     {
     public:
-        TCPConnection(const std::string &host, short port, bool verbose = false)
+        TCPConnection(std::string_view host, short port, bool verbose = false)
                 : ATCPConnection(host, port, verbose)
         {
 #ifdef __unix__

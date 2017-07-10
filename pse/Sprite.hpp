@@ -15,7 +15,7 @@ namespace pse
     {
         // Constructor
     public:
-        Sprite(const std::string &texture, const sf::Vector2f &pos, const sf::Vector2f &size) noexcept;
+        Sprite(std::string_view texture, const sf::Vector2f &pos, const sf::Vector2f &size) noexcept;
 
         // Destructor
     public:
@@ -38,9 +38,9 @@ namespace pse
 
         // Texture getters and setters
     public:
-        virtual void setTexture(const std::string &texture) noexcept;
+        virtual void setTexture(std::string_view texture) noexcept;
 
-        const std::string &getTextureFile() const noexcept { return _textureFile; }
+        std::string_view getTextureFile() const noexcept { return _textureFile; }
 
         // Attributes
     protected:

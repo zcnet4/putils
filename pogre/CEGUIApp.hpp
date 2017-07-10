@@ -10,7 +10,7 @@ namespace pogre
     class CEGUIApp : public App
     {
     public:
-        CEGUIApp(const std::string &name = "App");
+        CEGUIApp(std::string_view name = "App");
 
     public:
         CEGUI::GUIContext &getGuiContext() noexcept { return *_guiContext; }

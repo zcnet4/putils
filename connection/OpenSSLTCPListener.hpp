@@ -10,6 +10,7 @@
 
 #include "Directory.hpp"
 #include "RAII.hpp"
+#include "concat.hpp"
 
 namespace putils
 {
@@ -32,11 +33,11 @@ namespace putils
         }
 
     public:
-        OpenSSLTCPListener(short port, const std::string &host = "127.0.0.1",
-                           const std::string &certificate = getCertificate(".pem"),
-                           const std::string &key = getCertificate(".key"),
+        OpenSSLTCPListener(short port, std::string_view host = "127.0.0.1",
+                           std::string_view certificate = getCertificate(".pem"),
+                           std::string_view key = getCertificate(".key"),
                            bool verbose = false)
-                : ATCPListener(port, host, verbose)
+                : ATCPListener(port, host.data(), verbose)
         {
             // Initialize OpenSSL
             SSL_library_init();
@@ -48,10 +49,10 @@ namespace putils
                 throw std::runtime_error("Failed to initialize SSL context");
 
             // Specify certificate to OpenSSL
-            if (SSL_CTX_use_certificate_file(_ssl_ctx.get(), certificate.c_str(), SSL_FILETYPE_PEM) != 1)
-                throw std::runtime_error("Failed to use certificate " + certificate);
-            if (SSL_CTX_use_PrivateKey_file(_ssl_ctx.get(), key.c_str(), SSL_FILETYPE_PEM) != 1)
-                throw std::runtime_error("Failed to use private key " + key);
+            if (SSL_CTX_use_certificate_file(_ssl_ctx.get(), certificate.data(), SSL_FILETYPE_PEM) != 1)
+                throw std::runtime_error(putils::concat("Failed to use certificate ", certificate));
+            if (SSL_CTX_use_PrivateKey_file(_ssl_ctx.get(), key.data(), SSL_FILETYPE_PEM) != 1)
+                throw std::runtime_error(putils::concat("Failed to use private key ", key));
         }
 
         ~OpenSSLTCPListener() { EVP_cleanup(); }

@@ -23,26 +23,25 @@ namespace putils
 
         // Load a symbol
     protected:
-        virtual void *loadSymbol(const std::string &name) noexcept = 0;
+        virtual void *loadSymbol(std::string_view name) noexcept = 0;
 
         // Return a pointer to the [name] function of the library, returning a T and taking P as parameters
         // Uses pseudo-flyweight to avoid reloading symbols
     public:
         template<typename T, typename ...P>
         // T: return, P: param
-        T (*loadMethod(const std::string &name))(P ...)
+        T (*loadMethod(std::string_view name))(P ...)
         {
-            if (_symbols.find(name) == _symbols.end())
+            if (_symbols.find(name.data()) == _symbols.end())
             {
                 void *symbol = loadSymbol(name);
                 if (!symbol)
                     return NULL;
-                _symbols[name] = symbol;
+                _symbols[name.data()] = symbol;
             }
 
-            T        (*ret)(P ...);
-
-            if (!((ret = reinterpret_cast<T(*)(P ...)>(_symbols[name]))))
+            auto ret = reinterpret_cast<T(*)(P ...)>(_symbols[name.data()]);
+            if (ret == nullptr)
                 std::cerr << _name << ": Failed to load method '" << name << "'" << std::endl;
 
             return ret;
@@ -51,14 +50,14 @@ namespace putils
         // Executes the [name] function of the library, returning a T and taking P as parameters
     public:
         template<typename T, typename ...P>
-        T execute(const std::string &name, P &&...args)
+        T execute(std::string_view name, P &&...args)
         {
             return (loadMethod<T, P...>(name))(std::forward<P>(args)...);
         }
 
         // Name getter
     public:
-        std::string getName() const noexcept { return _name; }
+        std::string_view getName() const noexcept { return _name; }
 
         // Attributes
     private:

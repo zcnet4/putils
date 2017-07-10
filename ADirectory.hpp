@@ -25,33 +25,25 @@ namespace putils
         virtual std::unique_ptr<File> getNextFile() noexcept = 0;
 
         // Apply a function to each file in the directory
-        void for_each(const std::function<void(const File &)> &func) noexcept;
+        void for_each(const std::function<void(const File &)> &func) noexcept
+        {
+            std::unique_ptr<File> f;
+
+            while ((f = getNextFile()) != nullptr)
+                func(*f);
+        }
 
         // Get a list of all the files
-        std::vector<File> getFiles() noexcept;
-    };
-
-    /*
-     * Implementation
-     */
-
-    void ADirectory::for_each(const std::function<void(const ADirectory::File &)> &func) noexcept
-    {
-        std::unique_ptr<File> f;
-
-        while ((f = getNextFile()) != nullptr)
-            func(*f);
-    }
-
-    std::vector<ADirectory::File> ADirectory::getFiles() noexcept
-    {
-        std::vector<File> ret;
-
-        for_each([&ret](const File &f)
+        std::vector<File> getFiles() noexcept
         {
-            ret.push_back(std::move(f));
-        });
+            std::vector<File> ret;
 
-        return ret;
-    }
+            for_each([&ret](const File &f)
+                     {
+                         ret.push_back(std::move(f));
+                     });
+
+            return ret;
+        }
+    };
 }

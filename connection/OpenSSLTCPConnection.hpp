@@ -35,9 +35,9 @@ namespace putils
         }
 
     public:
-        OpenSSLTCPConnection(const std::string &host, short port,
-                             const std::string &certificate = getCertificate(".pem"),
-                             const std::string &key = getCertificate(".key"),
+        OpenSSLTCPConnection(std::string_view host, short port,
+                             std::string_view certificate = getCertificate(".pem"),
+                             std::string_view key = getCertificate(".key"),
                              bool verbose = false)
                 : ATCPConnection(host, port, verbose)
         {

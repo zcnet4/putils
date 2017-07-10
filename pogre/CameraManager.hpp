@@ -10,19 +10,19 @@ namespace pogre
         class CameraManager
         {
         public:
-            CameraMan &addCamera(const std::string &name, CameraMan &&cameraMan) noexcept
+            CameraMan &addCamera(std::string_view name, CameraMan &&cameraMan) noexcept
             {
-                return _cameras[name] = std::move(cameraMan);
+                return _cameras[name.data()] = std::move(cameraMan);
             }
 
-            void removeCamera(const std::string &name) noexcept
+            void removeCamera(std::string_view name) noexcept
             {
-                _cameras.erase(name);
+                _cameras.erase(name.data());
             }
 
-            CameraMan &getCamera(const std::string &name) noexcept
+            CameraMan &getCamera(std::string_view name) noexcept
             {
-                return _cameras[name];
+                return _cameras[name.data()];
             }
 
         public:

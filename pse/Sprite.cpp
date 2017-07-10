@@ -5,7 +5,7 @@ namespace pse
 {
     std::unordered_map<std::string, sf::Texture>    Sprite::textures;
 
-    Sprite::Sprite(const std::string &texture, const sf::Vector2f &pos, const sf::Vector2f &size) noexcept
+    Sprite::Sprite(std::string_view texture, const sf::Vector2f &pos, const sf::Vector2f &size) noexcept
             :
             _textureFile(texture),
             _size(size)
@@ -20,22 +20,22 @@ namespace pse
         return std::make_unique<Sprite>(_textureFile, _size, sf::Vector2f(0, 0));
     }
 
-    void Sprite::setTexture(const std::string &texture) noexcept
+    void Sprite::setTexture(std::string_view texture) noexcept
     {
-        if (textures.find(texture) == textures.end())
+        if (textures.find(texture.data()) == textures.end())
         {
             sf::Texture t;
 
-            if (!t.loadFromFile(texture))
+            if (!t.loadFromFile(texture.data()))
             {
                 std::cerr << "Error loading texture '" << texture << "'" << std::endl;
                 return;
             }
             t.setSmooth(true);
 
-            textures[texture] = std::move(t);
+            textures[texture.data()] = std::move(t);
         }
 
-        _sprite.setTexture(textures[texture]);
+        _sprite.setTexture(textures[texture.data()]);
     }
 }

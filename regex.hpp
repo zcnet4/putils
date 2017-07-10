@@ -2,15 +2,15 @@
 
 #include <regex>
 
-bool operator==(const std::string &str, const std::regex &reg)
+bool operator==(std::string_view str, const std::regex &reg)
 {
-    return std::regex_match(str, reg);
+    return std::regex_match(str.data(), reg);
 }
 
-std::smatch operator==(const std::string &str, const std::pair<std::regex, bool> &reg)
+std::cmatch operator==(std::string_view str, const std::pair<std::regex, bool> &reg)
 {
-    std::smatch m;
-    std::regex_match(str, m, reg.first);
+    std::cmatch m;
+    std::regex_match(str.data(), m, reg.first);
     return m;
 }
 

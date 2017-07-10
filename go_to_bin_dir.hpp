@@ -15,9 +15,9 @@
 namespace putils
 {
     // Go to the directory containing file in currentPath
-    inline void goToBinDir(const std::string &currentPath) noexcept
+    inline void goToBinDir(std::string_view currentPath) noexcept
     {
         size_t last = currentPath.find_last_of("/\\");
-        chdir(currentPath.substr(0, last).c_str());
+        chdir(currentPath.substr(0, last).data());
     }
 }

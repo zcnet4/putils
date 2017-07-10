@@ -11,10 +11,10 @@ namespace putils
     class UnixNamedPipe : public std::fstream
     {
     public:
-        UnixNamedPipe(const std::string &fileName)
-        : _fileName(fileName)
+        UnixNamedPipe(std::string_view fileName)
+        : _fileName(fileName.data())
         {
-            this->open(fileName);
+            this->open(fileName.data());
         }
         UnixNamedPipe() = default;
 
@@ -25,12 +25,12 @@ namespace putils
         }
 
     public:
-        void open(const std::string &fileName, std::ifstream::openmode mode = std::ifstream::in | std::ifstream::out)
+        void open(std::string_view fileName, std::ifstream::openmode mode = std::ifstream::in | std::ifstream::out)
         {
             this->close();
 
-            mkfifo(fileName.c_str(), 0666); // Ignore error
-            std::fstream::open(fileName.c_str(), mode);
+            mkfifo(fileName.data(), 0666); // Ignore error
+            std::fstream::open(fileName.data(), mode);
             _fileName = fileName;
         }
 

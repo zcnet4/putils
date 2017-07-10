@@ -31,10 +31,10 @@ public:
         Get,
         Post
     };
-    void addRoute(const std::string &uri, Method method, const Route &route);
+    void addRoute(std::string_view uri, Method method, const Route &route);
 
 private:
-    void sendResponse(const kia::packets::HttpRequest &p, const std::string &response) const noexcept;
+    void sendResponse(const kia::packets::HttpRequest &p, std::string_view response) const noexcept;
 
 private:
     void send404(const kia::packets::HttpRequest &request) const noexcept;

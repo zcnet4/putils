@@ -11,9 +11,9 @@ namespace putils
     class UnixDirectory final : public ADirectory
     {
     public:
-        UnixDirectory(const std::string &path) noexcept
+        UnixDirectory(std::string_view path) noexcept
                 :
-                _handle(opendir(path.c_str())),
+                _handle(opendir(path.data())),
                 _path(path),
                 _goOn(true)
         {

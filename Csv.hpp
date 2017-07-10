@@ -13,14 +13,14 @@ namespace putils
     namespace
     {
         template<typename T>
-        void extract(T &attr, const std::string &val)
+        void extract(T &attr, std::string_view val)
         {
-            std::stringstream s(val);
+            std::stringstream s(val.data());
             s >> attr;
         }
 
         template<>
-        void extract(std::string &attr, const std::string &val)
+        void extract(std::string &attr, std::string_view val)
         {
             attr = val;
         }
@@ -74,9 +74,9 @@ namespace putils
         }
 
         // Initialize from file
-        Csv(const std::string &fileName, bool ignoreFirstLine = false)
+        Csv(std::string_view fileName, bool ignoreFirstLine = false)
         {
-            std::ifstream s(fileName);
+            std::ifstream s(fileName.data());
             fillRows(s, ignoreFirstLine);
         }
 

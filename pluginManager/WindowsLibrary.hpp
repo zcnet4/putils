@@ -20,9 +20,9 @@ class WindowsLibrary final : public putils::Library
 {
 	// Constructor
 public:
-	WindowsLibrary(const std::string &name)
+	WindowsLibrary(std::string_view name)
 	:
-	Library(name)// ,
+	Library(name.data())// ,
 	// _handle(LoadLibrary(name.c_str()))
 {
     std::string copy(name);
@@ -50,7 +50,7 @@ public:
 
 	// Load a symbol
 public:
-	void *loadSymbol(const std::string &name) noexcept override { return (void*)GetProcAddress(_handle, name.c_str()); }
+	void *loadSymbol(std::string_view name) noexcept override { return (void*)GetProcAddress(_handle, name.data()); }
 
 	// Attributes
 private:

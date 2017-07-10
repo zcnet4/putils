@@ -26,7 +26,7 @@ namespace putils
         };
 
     public:
-        Process(const std::string &command,
+        Process(std::string_view command,
                 const Options &options = Options{ { false, "" }, { false, "" }, { false, "" }})
                 : _options(options)
         {

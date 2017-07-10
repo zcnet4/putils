@@ -36,8 +36,8 @@ namespace putils
             const Object &operator[](std::size_t i) const { return items[i]; }
 
             // Object
-            const Object &operator[](const std::string &name) const { return fields.at(name); }
-            Object &operator[](const std::string &name) { return fields[name]; }
+            const Object &operator[](std::string_view name) const { return fields.at(name.data()); }
+            Object &operator[](std::string_view name) { return fields[name.data()]; }
 
             // Value
             operator std::string() const { return value; }

@@ -91,7 +91,7 @@ namespace putils
 
             struct LogModule : putils::Module<LogModule, std::string, ExampleQuery> // will receive std::strings and ExampleQueries
             {
-                void handle(const std::string &packet) const { std::cout << "Received " << packet << std::endl; }
+                void handle(std::string_view packet) const { std::cout << "Received " << packet << std::endl; }
 
                 void handle(const ExampleQuery &packet) const { sendTo(42, packet.sender); }
             };

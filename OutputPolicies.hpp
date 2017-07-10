@@ -55,7 +55,7 @@ namespace putils
              * Bools
              */
 
-            static void serialize(std::ostream &s, const std::string &name, bool value)
+            static void serialize(std::ostream &s, std::string_view name, bool value)
             { s << name << ": " << std::boolalpha << value << std::noboolalpha; }
 
             static void unserialize(std::istream &s, bool &attr)
@@ -88,7 +88,7 @@ namespace putils
              */
 
             template<typename Map>
-            static void printMap(std::ostream &s, const std::string &name, Map &&map)
+            static void printMap(std::ostream &s, std::string_view name, Map &&map)
             {
                 s << name << ": {";
                 bool first = true;
@@ -168,7 +168,7 @@ namespace putils
             }
 
             template<typename Key, typename Value>
-            static void serialize(std::ostream &s, const std::string &name,
+            static void serialize(std::ostream &s, std::string_view name,
                                   const std::unordered_map<Key, Value> &map)
             { printMap(s, name, map); }
             template<typename Key, typename Value>
@@ -177,7 +177,7 @@ namespace putils
 
 
             template<typename Key, typename Value>
-            static void serialize(std::ostream &s, const std::string &name,
+            static void serialize(std::ostream &s, std::string_view name,
                                   const std::map<Key, Value> &map)
             { printMap(s, name, map); }
             template<typename Key, typename Value>
@@ -189,7 +189,7 @@ namespace putils
              */
 
             template<typename Ptr>
-            static void printPtr(std::ostream &s, const std::string &name, Ptr &&ptr)
+            static void printPtr(std::ostream &s, std::string_view name, Ptr &&ptr)
             { serialize(s, name, *ptr); }
 
             template<typename Ptr>
@@ -197,7 +197,7 @@ namespace putils
             { unserialize(s, *ptr); }
 
             template<typename T>
-            static void serialize(std::ostream &s, const std::string &name, const std::unique_ptr<T> &ptr) { printPtr(s, name, ptr); }
+            static void serialize(std::ostream &s, std::string_view name, const std::unique_ptr<T> &ptr) { printPtr(s, name, ptr); }
             template<typename T>
             static void unserialize(std::istream &s, std::unique_ptr<T> &ptr)
             {
@@ -206,7 +206,7 @@ namespace putils
             }
 
             template<typename T>
-            static void serialize(std::ostream &s, const std::string &name, const std::shared_ptr<T> &ptr) { printPtr(s, name, ptr); }
+            static void serialize(std::ostream &s, std::string_view name, const std::shared_ptr<T> &ptr) { printPtr(s, name, ptr); }
             template<typename T>
             static void unserialize(std::istream &s, std::shared_ptr<T> &ptr)
             {
@@ -219,7 +219,7 @@ namespace putils
              */
 
             template<typename Container>
-            static void printContainer(std::ostream &s, const std::string &name, const Container &container)
+            static void printContainer(std::ostream &s, std::string_view name, const Container &container)
             {
                 s << name << ": [";
                 bool first = true;
@@ -275,12 +275,12 @@ namespace putils
             }
 
             template<typename T>
-            static void serialize(std::ostream &s, const std::string &name, const std::list<T> &container) { printContainer(s, name, container); }
+            static void serialize(std::ostream &s, std::string_view name, const std::list<T> &container) { printContainer(s, name, container); }
             template<typename T>
             static void unserialize(std::istream &s, std::list<T> &attr) { unserializeContainer(s, attr); }
 
             template<typename T>
-            static void serialize(std::ostream &s, const std::string &name, const std::vector<T> &container) { printContainer(s, name, container); }
+            static void serialize(std::ostream &s, std::string_view name, const std::vector<T> &container) { printContainer(s, name, container); }
             template<typename T>
             static void unserialize(std::istream &s, std::vector<T> &attr) { unserializeContainer(s, attr); }
 
@@ -295,19 +295,19 @@ namespace putils
             }
 
             template<typename T, typename = std::enable_if_t<std::is_pointer<T>::value>>
-            static void serializeImpl(std::ostream &s, const std::string &name, const T attr)
+            static void serializeImpl(std::ostream &s, std::string_view name, const T attr)
             {
                 printPtr(s, name, attr);
             }
 
             template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value && !std::is_pointer<T>::value>>
-            static void serializeImpl(std::ostream &s, const std::string &name, const T &attr)
+            static void serializeImpl(std::ostream &s, std::string_view name, const T &attr)
             {
                 s << name << ": " << attr;
             }
 
             template<typename T>
-            static void serialize(std::ostream &s, const std::string &name, const T &attr)
+            static void serialize(std::ostream &s, std::string_view name, const T &attr)
             {
                 serializeImpl(s, name, attr);
 /*
@@ -337,7 +337,7 @@ namespace putils
 
 
             template<typename T, typename = std::enable_if_t<std::is_pointer<T>::value>>
-            static void unserializeImpl(std::istream &s, T &attr, const std::string &)
+            static void unserializeImpl(std::istream &s, T &attr, std::string_view )
             {
                 attr = new typename std::remove_pointer<T>::type;
                 unserializePtr(s, attr);
@@ -451,25 +451,25 @@ namespace putils
             };
 
             template<typename T>
-            static void serialize(std::ostream &, const std::string &, const std::unique_ptr<T> &) {}
+            static void serialize(std::ostream &, std::string_view , const std::unique_ptr<T> &) {}
 
             template<typename T>
             static void unserialize(std::istream &, std::unique_ptr<T> &) {}
 
             template<typename T>
-            static void serialize(std::ostream &, const std::string &, const std::shared_ptr<T> &) {}
+            static void serialize(std::ostream &, std::string_view , const std::shared_ptr<T> &) {}
 
             template<typename T>
             static void unserialize(std::istream &, std::shared_ptr<T> &) {}
 
             template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value>>
-            static void serialize(std::ostream &s, const std::string &name, const T &attr) { s << attr << " "; }
+            static void serialize(std::ostream &s, std::string_view name, const T &attr) { s << attr << " "; }
 
             template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value>>
             static void unserialize(std::istream &s, T &attr) { s >> attr; }
 
             template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-            static void serialize(std::ostream &s, const std::string &name, T attr) { s << (int)attr << " "; };
+            static void serialize(std::ostream &s, std::string_view name, T attr) { s << (int)attr << " "; };
 
             template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
             static void unserialize(std::istream &s, const T &attr) { s >> (int&)attr; }
@@ -498,19 +498,19 @@ namespace putils
             };
 
             template<typename T>
-            static void serialize(std::ostream &, const std::string &, const std::unique_ptr<T> &) {}
+            static void serialize(std::ostream &, std::string_view , const std::unique_ptr<T> &) {}
 
             template<typename T>
             static void unserialize(std::istream &, std::unique_ptr<T> &) {}
 
             template<typename T>
-            static void serialize(std::ostream &, const std::string &, const std::shared_ptr<T> &) {}
+            static void serialize(std::ostream &, std::string_view , const std::shared_ptr<T> &) {}
 
             template<typename T>
             static void unserialize(std::istream &, std::shared_ptr<T> &) {}
 
             template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value>>
-            static void serialize(std::ostream &s, const std::string &name, const T &attr) { s.write(&attr, sizeof(attr)); }
+            static void serialize(std::ostream &s, std::string_view name, const T &attr) { s.write(&attr, sizeof(attr)); }
 
             template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value>>
             static void unserialize(std::istream &s, T &attr) { s.read(&attr, sizeof(attr)); }
@@ -524,7 +524,7 @@ namespace putils
             template<typename T, typename Tuple>
             static void unserialize(std::istream &s, T &obj, const Tuple &tuple) {}
             template<typename Auto>
-            static void serialize(std::ostream &, const std::string &, const Auto &) {}
+            static void serialize(std::ostream &, std::string_view , const Auto &) {}
             template<typename Auto>
             static void unserialize(std::istream &, Auto &) {}
         };

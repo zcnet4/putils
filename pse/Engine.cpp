@@ -2,8 +2,8 @@
 
 namespace pse
 {
-    Engine::Engine(size_t screenWidth, size_t screenHeight, const std::string &screenName, double refreshRate) noexcept
-            : _window(sf::VideoMode(screenWidth, screenHeight), screenName, sf::Style::Close),
+    Engine::Engine(size_t screenWidth, size_t screenHeight, std::string_view screenName, double refreshRate) noexcept
+            : _window(sf::VideoMode(screenWidth, screenHeight), screenName.data(), sf::Style::Close),
               _items(),
               _refreshTimer(1 / refreshRate)
 #ifdef PSE_TGUI

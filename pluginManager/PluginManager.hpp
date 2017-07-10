@@ -26,7 +26,7 @@ namespace putils
     public:
         // Loads any .dll or .so file in the directory specified by path
         // Unix libraries should be .so files and Windows libraries should be .dll files
-        PluginManager(const std::string &path) noexcept
+        PluginManager(std::string_view path) noexcept
         {
 #ifdef _WIN32
             static std::regex			freg("^.*\\.dll$");
@@ -56,7 +56,7 @@ namespace putils
     public:
         // In each plugin, execute the [name] function, taking P as parameter
         template<typename ...P>
-        void execute(const std::string &name, P &&...params) noexcept
+        void execute(std::string_view name, P &&...params) noexcept
         {
             for (auto plugin : _libraries)
                 plugin->execute<void>(name, std::forward<P>(params)...);
@@ -65,7 +65,7 @@ namespace putils
         // In each plugin, execute the [name] function, returning a T and taking a P as parameter
         // Returns a vector of all values returned
         template<typename T, typename ...P>
-        std::vector<T> executeWithReturn(const std::string &name, P &&...params) noexcept
+        std::vector<T> executeWithReturn(std::string_view name, P &&...params) noexcept
         {
             std::vector<T> ret;
 

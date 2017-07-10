@@ -11,8 +11,8 @@ namespace putils
     class TCPListener final : public ATCPListener
     {
     public:
-        TCPListener(short port, const std::string &host = "127.0.0.1", bool verbose = false)
-                : ATCPListener(port, host, verbose)
+        TCPListener(short port, std::string_view host = "127.0.0.1", bool verbose = false)
+                : ATCPListener(port, host.data(), verbose)
         {}
 
     private:

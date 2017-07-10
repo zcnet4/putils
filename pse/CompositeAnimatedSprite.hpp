@@ -12,7 +12,7 @@ namespace pse
         // Constructor
     public:
         CompositeAnimatedSprite(
-                const std::string &texture,
+                std::string_view texture,
                 const sf::Vector2f &pos,
                 const sf::Vector2f &size,
                 size_t animations,

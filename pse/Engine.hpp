@@ -22,7 +22,7 @@ namespace pse
         // Constructor
     public:
         Engine(size_t screenWidth, size_t screenHeight,
-               const std::string &screenName,
+               std::string_view screenName,
                double refreshRate = 120) noexcept;
 
         // Destructor
@@ -89,7 +89,7 @@ namespace pse
 #ifdef PSE_TGUI
     public:
         template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-        void addItem(const std::shared_ptr<T> &widget, const std::string &name = "")
+        void addItem(const std::shared_ptr<T> &widget, std::string_view name = "")
         { _tgui.add(widget, name); }
 
         template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
@@ -97,7 +97,7 @@ namespace pse
         { return _tgui.remove(widget); }
 
         template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-        typename T::Ptr get(const std::string &name, bool recursive = false) const
+        typename T::Ptr get(std::string_view name, bool recursive = false) const
         { return _tgui.get(name, recursive); }
 
         tgui::Gui &getGui() noexcept { return _tgui; }

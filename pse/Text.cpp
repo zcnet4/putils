@@ -1,12 +1,13 @@
 #include <iostream>
 #include "Text.hpp"
+#include "concat.hpp"
 
 namespace pse
 {
     std::unordered_map<std::string, sf::Font *>    Text::fonts;
 
     Text::Text(const sf::String &str, const sf::Vector2f &pos, const sf::Color &color, unsigned int textSize,
-               const std::string &font, const sf::Text::Style &style) noexcept
+               std::string_view font, const sf::Text::Style &style) noexcept
             :
             _fontFile(font)
     {
@@ -47,20 +48,20 @@ namespace pse
         _text.setCharacterSize(_textSize);
     }
 
-    void Text::setFont(const std::string &font) noexcept
+    void Text::setFont(std::string_view font) noexcept
     {
-        if (fonts.find(font) == fonts.end())
+        if (fonts.find(font.data()) == fonts.end())
         {
             sf::Font *f = new sf::Font();
-            if (!(f->loadFromFile(font)))
+            if (!(f->loadFromFile(font.data())))
             {
-                std::cerr << "Error loading font '" + font + "'" << std::endl;
+                std::cerr << putils::concat("Error loading font '", font.data(), "'") << std::endl;
                 return;
             }
-            fonts[font] = f;
+            fonts[font.data()] = f;
         }
 
-        _font = *fonts[font];
+        _font = *fonts[font.data()];
         _text.setFont(_font);
     }
 

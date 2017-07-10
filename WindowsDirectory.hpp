@@ -15,7 +15,7 @@ namespace putils
     {
         // Constructor
     public:
-        WindowsDirectory(const std::string &path) noexcept
+        WindowsDirectory(std::string_view path) noexcept
             :
         _path(path),
         _goOn(true)
@@ -69,6 +69,5 @@ namespace putils
         WindowsDirectory	&operator=(const WindowsDirectory &) = delete;
     };
 }
-
 
 #endif

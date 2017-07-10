@@ -36,7 +36,7 @@ namespace putils
         }
 
     public:
-        ATCPConnection(const std::string &host, short port, bool verbose = false)
+        ATCPConnection(std::string_view host, short port, bool verbose = false)
                 : _verbose(verbose)
         {
 			connection::add(1);
@@ -121,7 +121,7 @@ namespace putils
     };
 
     template<>
-    inline void ATCPConnection::send(const std::string &msg) // override
+    inline void ATCPConnection::send(const std::string &msg)
     {
         doSend(msg.c_str(), msg.length());
     }

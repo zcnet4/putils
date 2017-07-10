@@ -24,13 +24,13 @@ namespace putils
             std::string value;
             std::pair<char, char> delimiters;
         };
-        using Command = std::function<void(const std::string &cmd, const std::vector<Param> &params)>;
+        using Command = std::function<void(std::string_view cmd, const std::vector<Param> &params)>;
         using CommandMap = std::unordered_map<std::string, Command>;
 
         // Ctor
     public:
         CLI(const CommandMap &funcs,
-            const Command &default_ = [](const std::string &cmd, const std::vector<Param> &) { std::cout << "Unknown command: " << cmd << std::endl; },
+            const Command &default_ = [](std::string_view cmd, const std::vector<Param> &) { std::cout << "Unknown command: " << cmd << std::endl; },
             const std::function<std::string()> &prompt = []{ return "> "; },
             std::vector<std::pair<char, char>> &&delimiters =
                     {
@@ -92,9 +92,9 @@ namespace putils
         }
 
     public:
-        void addCommand(const std::string &cmd, const Command &func)
+        void addCommand(std::string_view cmd, const Command &func)
         {
-            _funcs[cmd] = func;
+            _funcs[cmd.data()] = func;
         }
 
     public:
@@ -198,7 +198,7 @@ namespace putils
                     {
                             {
                                     "test",
-                                    [](const std::string &, const std::vector<putils::CLI::Param> &params)
+                                    [](std::string_view , const std::vector<putils::CLI::Param> &params)
                                     {
                                         std::cout << "Test successful" << std::endl;
                                         for (const auto &p : params)
@@ -207,9 +207,9 @@ namespace putils
                             }
                     },
                     // Default
-                    [](const std::string &cmd, const std::vector<putils::CLI::Param> &params)
+                    [](std::string_view cmd, const std::vector<putils::CLI::Param> &params)
                     {
-                        std::string line = cmd;
+                        std::string line(cmd);
 
                         for (const auto &p : params)
                         {

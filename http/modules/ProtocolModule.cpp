@@ -72,18 +72,18 @@ void ProtocolModule::handle(const kia::packets::IncomingMessage &packet) const n
     send(std::move(request));
 }
 
-void ProtocolModule::postParams(kia::packets::HttpRequest &request, const std::string &line) const noexcept
+void ProtocolModule::postParams(kia::packets::HttpRequest &request, std::string_view line) const noexcept
 {
     static const std::regex reg("^(.*)=(.*)$");
 
-    std::smatch m;
-    if (std::regex_match(line, m, reg))
+    std::cmatch m;
+    if (std::regex_match(line.data(), m, reg))
         request.params[m[1]] = m[2];
 }
 
-static void readGetParams(kia::packets::HttpRequest &request, const std::string &line)
+static void readGetParams(kia::packets::HttpRequest &request, std::string_view line)
 {
-    std::stringstream s(line);
+    std::stringstream s(line.data());
 
     while (s && s.peek() > 0)
     {
@@ -123,13 +123,13 @@ void ProtocolModule::getParams(kia::packets::HttpRequest &request) const noexcep
     }
 }
 
-void ProtocolModule::getRequestLine(kia::packets::HttpRequest &request, const std::string &line) const noexcept
+void ProtocolModule::getRequestLine(kia::packets::HttpRequest &request, std::string_view line) const noexcept
 {
     // From RFC 2616: Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     static const std::regex reg("^([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)$");
 
-    std::smatch m;
-    if (std::regex_match(line, m, reg))
+    std::cmatch m;
+    if (std::regex_match(line.data(), m, reg))
     {
         request.method = m[1];
         request.uri = m[2];
@@ -138,13 +138,13 @@ void ProtocolModule::getRequestLine(kia::packets::HttpRequest &request, const st
     }
 }
 
-void ProtocolModule::addHeader(kia::packets::HttpRequest &request, const std::string &line) const noexcept
+void ProtocolModule::addHeader(kia::packets::HttpRequest &request, std::string_view line) const noexcept
 {
     // message-header = field-name ":" [ field-value ]
     static const std::regex reg("^([^\\:]*)\\: (.*)$");
 
-    std::smatch m;
-    if (std::regex_match(line, m, reg))
+    std::cmatch m;
+    if (std::regex_match(line.data(), m, reg))
     {
         auto key = m[1];
         auto value = m[2];

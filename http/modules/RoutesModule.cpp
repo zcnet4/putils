@@ -6,7 +6,7 @@
 #include "concat.hpp"
 #include "url.hpp"
 
-void RoutesModule::addRoute(const std::string &uri, RoutesModule::Method method, const RoutesModule::Route &route)
+void RoutesModule::addRoute(std::string_view uri, RoutesModule::Method method, const RoutesModule::Route &route)
 {
     RoutesModule::Uri toAdd;
     std::string reg = "^";
@@ -77,7 +77,7 @@ void RoutesModule::handle(const kia::packets::HttpRequest &p) const noexcept
     send404(p);
 }
 
-void RoutesModule::sendResponse(const kia::packets::HttpRequest &p, const std::string &response) const noexcept
+void RoutesModule::sendResponse(const kia::packets::HttpRequest &p, std::string_view response) const noexcept
 {
     auto packet = kia::success(p);
     packet.body = response;
