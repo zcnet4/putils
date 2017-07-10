@@ -102,7 +102,7 @@ namespace pogre
     template<typename Precision = double>
     inline void setWidgetRelativeSize(CEGUI::Window &win, const putils::Point<Precision> &size)
     {
-        win.setSize({{ size.x, 0 }, { size.y, 0 }});
+        win.setSize({{ (float)size.x, 0 }, { (float)size.y, 0 }});
     }
 
     template<typename Precision = double>
