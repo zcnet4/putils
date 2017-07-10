@@ -25,6 +25,9 @@ namespace putils
         Point &operator=(Point &&) noexcept = default;
 
         template<typename P>
+        Point(const Point<P, 3> &other) : x(other.x), y(other.y) {}
+
+        template<typename P>
         bool operator==(const Point<P> &rhs) const noexcept { return x == rhs.x && y == rhs.y; }
 
         template<typename P>
@@ -159,6 +162,9 @@ namespace putils
 
         Point(Point &&) noexcept = default;
         Point &operator=(Point &&) noexcept = default;
+
+        template<typename P>
+        Point(const Point<P, 2> &other) : x(other.x), y(other.y), z(0) {}
 
         template<typename P>
         bool operator==(const Point<P, 3> &rhs) const noexcept
