@@ -6720,7 +6720,7 @@ namespace sol {
 			template<typename T, typename... Args>
 			static void construct(T&& obj, Args&&... args) {
 				std::allocator<meta::unqualified_t<T>> alloc{};
-				alloc.construct(obj, std::forward<Args>(args)...);
+				alloc.construct(std::forward<T>(obj), std::forward<Args>(args)...);
 			}
 
 			template<typename T, typename... Args>
