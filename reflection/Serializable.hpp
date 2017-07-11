@@ -107,7 +107,7 @@ namespace putils
         std::ostream &serialize(std::ostream &s) const noexcept
         {
             auto __tmp = static_cast<const Derived *>(this);
-            _serializer->serialize(static_cast<const Derived *>(this), s);
+            _serializer->serialize(__tmp, s);
             return s;
         }
 
