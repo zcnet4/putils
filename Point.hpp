@@ -293,6 +293,12 @@ namespace putils
             return table;
         }
     };
+
+    using Point3d = Point<double, 3>;
+    using Point2d = Point<double, 2>;
+
+    using Point3 = Point<int, 3>;
+    using Point2 = Point<int, 2>;
 }
 
 namespace std
