@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 #ifdef __unix__
 
@@ -15,9 +16,10 @@
 namespace putils
 {
     // Go to the directory containing file in currentPath
-    inline void goToBinDir(std::string_view currentPath) noexcept
+    inline void goToBinDir(const std::string &currentPath) noexcept
     {
         size_t last = currentPath.find_last_of("/\\");
-        chdir(currentPath.substr(0, last).data());
+        const auto dest = currentPath.substr(0, last);
+        chdir(dest.data());
     }
 }

@@ -2,6 +2,7 @@ add_subdirectory(mediator)
 add_subdirectory(connection)
 add_subdirectory(pluginManager)
 add_subdirectory(http)
+add_subdirectory(lua)
 
 if(PUTILS_BUILD_PSE)
     add_subdirectory(pse)

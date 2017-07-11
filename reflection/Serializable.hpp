@@ -214,6 +214,7 @@ namespace putils
                 std::string hiString = "hi";
                 int fourtyTwo = 42;
 
+                static const auto get_class_name() { return "ReflectibleTest"; }
                 static const auto &get_attributes()
                 {
                     static const auto table = pmeta::make_table(
