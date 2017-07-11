@@ -54,6 +54,8 @@ namespace putils
             );
         }
 
+        static const auto get_class_name() { return "Point2"; }
+
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
@@ -119,6 +121,8 @@ namespace putils
                     topLeft.y + size.y > point.y
             );
         }
+
+        static const auto get_class_name() { return "Rect2"; }
 
         static const auto &get_attributes()
         {
@@ -197,6 +201,8 @@ namespace putils
             );
         }
 
+        static const auto get_class_name() { return "Point3"; }
+
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
@@ -260,6 +266,8 @@ namespace putils
                     topLeft.z + size.z > point.z
             );
         }
+
+        static const auto get_class_name() { return "Rect3"; }
 
         static const auto &get_attributes()
         {

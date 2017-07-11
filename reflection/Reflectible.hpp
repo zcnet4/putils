@@ -21,6 +21,7 @@ namespace putils
             //          `get_methods`: member pointers to the methods
             //          `get_parents`: pmeta::type objects for each parent class
 
+            CRTP::get_class_name();
             CRTP::get_attributes();
             CRTP::get_methods();
             CRTP::get_parents();
@@ -50,6 +51,8 @@ namespace putils
             std::string _exampleAttribute = "Attribute";
 
         public:
+            static const auto get_class_name() { return "Test"; }
+
             static const auto &get_attributes()
             {
                 static const auto table = pmeta::make_table("exampleAttribute", &Test::_exampleAttribute);

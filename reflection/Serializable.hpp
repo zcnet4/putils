@@ -107,7 +107,7 @@ namespace putils
         std::ostream &serialize(std::ostream &s) const noexcept
         {
             auto __tmp = static_cast<const Derived *>(this);
-            _serializer->serialize(static_cast<const Derived *>(this), s);
+            _serializer->serialize(__tmp, s);
             return s;
         }
 
@@ -214,6 +214,7 @@ namespace putils
                 std::string hiString = "hi";
                 int fourtyTwo = 42;
 
+                static const auto get_class_name() { return "ReflectibleTest"; }
                 static const auto &get_attributes()
                 {
                     static const auto table = pmeta::make_table(
