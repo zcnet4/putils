@@ -54,6 +54,11 @@ namespace putils
             );
         }
 
+        double angleTo(const Point<Precision, 3> &rhs) const noexcept
+        {
+            return std::atan2(rhs.y - y, rhs.x - x);
+        }
+
         static const auto get_class_name() { return "Point2"; }
 
         static const auto &get_attributes()
@@ -68,7 +73,8 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "distanceTo", &Point::distanceTo<Precision>
+                    "distanceTo", &Point::distanceTo<Precision>,
+                    "distanceTo", &Point::angleTo
             );
             return table;
         }
@@ -201,6 +207,16 @@ namespace putils
             );
         }
 
+        double angleToXY(const Point<Precision, 3> &rhs) const noexcept
+        {
+            return std::atan2(rhs.y - y, rhs.x - x);
+        }
+
+        double angleToXZ(const Point<Precision, 3> &rhs) const noexcept
+        {
+            return std::atan2(rhs.z - z, rhs.x - x);
+        }
+
         static const auto get_class_name() { return "Point3"; }
 
         static const auto &get_attributes()
@@ -216,7 +232,9 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "distanceTo", &Point::distanceTo<Precision>
+                    "distanceTo", &Point::distanceTo<Precision>,
+                    "angleToXY", &Point::angleToXY,
+                    "angleToXZ", &Point::angleToXZ
             );
             return table;
         }
