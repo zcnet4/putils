@@ -9,7 +9,7 @@
 namespace putils
 {
     template<typename CRTP>
-    class Reflectible
+    struct Reflectible
     {
     public:
         Reflectible()

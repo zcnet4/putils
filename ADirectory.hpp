@@ -16,6 +16,7 @@ namespace putils
             std::string name;
             std::string fullPath;
             bool isDirectory;
+            bool isLink;
         };
 
         // Destructor

@@ -9,6 +9,12 @@ By default, serializes objects as JSON. Can be easily customized with policies.
 ##### Constructor
 
 ```
+Serializable()
+```
+
+A default constructor is available if the CRTP class is [Reflecitble](Reflectible.md).
+
+```
 Serializable(Fields &&...attrs)
 ```
 

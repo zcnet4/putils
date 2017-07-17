@@ -7,16 +7,17 @@ Phiste's C++ Utilities
 * [AStar](AStar.md) An implementation of the AStar pathfinding algorithm.
 * [CellularAutomaton](CellularAutomaton.md) Simple cellular automaton implementation
 * [CLI](CLI.md) Simple and extensible Command-Line Interface.
+* [Csv](Csv.md) Simple and extensible Command-Line Interface.
 * [Directory](Directory.md) An abstraction to Unix and Windows directories, which lets you iterate through a directory and get information about each file.
 * [JSON](json.md) JSON lexer and pretty-printer
 * [NamedPipe](NamedPipe.md) Abstraction to named pipes
 * [Observable](Observable.md) A minimalistic (but greatly sufficient) implementation of the Observer pattern.
 * [OperatorForward](OperatorForwarder.md) Mix-in class which lets you forward all operators to a given member.
 * [Point](Point.md) Simple abstraction to a 2D or 3D point/rectangle.
+* PooledObject: A mix-in class that turns any type into a pooled type
 * [Process](Process.md) Abstraction to a process (useful to run system commands and send them input/get their output)
 * [QuadTree](QuadTree.md) Space partitioner optimized for searching for an object's closest neighbors.
 * [RAII](RAII.md) A class template able to perform RAII on any type.
-* [Serializable](Serializable.md) Mix-in class letting any derived class serialize its attributes with great simplicity.
 * [Timer](Timer.md) Simple timer based on std::chrono.
 
 ### Packages
@@ -24,10 +25,13 @@ Phiste's C++ Utilities
 * [Connection](connection/README.md)
 * [Devices](devices/README.md)
 * [Http](http/README.md)
+* [Lua](lua/README.md)
 * [Mediator](mediator/README.md)
 * [Meta](meta/README.md)
 * [PluginManager](pluginManager/README.md)
+* [POgre](pogre/README.md)
 * [PSE](pse/README.md)
+* [Reflection](reflection/README.md)
 
 ### Function-only headers
 
@@ -47,6 +51,6 @@ Phiste's C++ Utilities
 * remove_if.hpp: function taking a container and a predicate and calling std::remove_if
 * same_sign.hpp: function indicating whether two scalars have the same sign
 * sign.hpp: function returning -1, 0 or 1 depending on the sign of the parameter
-* static_if.hpp: C++14 implementation of `if constexpr`, Copyright Vittorio Romeo
 * to_string.hpp: uses a std::stringstream to serialize an object
+* traits.hpp: type traits
 * url.hpp: URL encoder and decoder

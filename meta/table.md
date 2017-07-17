@@ -1,50 +1,72 @@
-# type_map
+# table
 
-Map types to any object.
+A type-safe association table that maps any key of any type to any value of any type.
 
 ### Members
 
-##### Constructor
+##### make function
 ```
-type_map(auto &&tuple);
+auto make_table(KeyValues &&...keyValues);
 ```
-See `Example`.
+Create a table mapping keyValues two by two (see Example).
 
-##### getDetectionType
+##### get_value
 ```
-void getDetectionType(auto &&key, auto &&func);
+void get_value(auto &&key, auto &&func);
 ```
-Retrieve the type associated to `key` and call `func` by passing it the `pmeta::type` associated to it.
+Retrieve the value associated to `key` and call `func` by passing it that value.
 See `Example`.
 
 ##### get_key
 ```
-template<typename T>
-auto get_key();
+auto get_key(auto &&value, auto &&func);
 ```
-Returns the key associated to `T`.
+Retrieve the key associated to `value` and call `func` by passing it that key.
+See `Example`.
 
 ### Example
 
 ```
-int main()
+inline void table()
 {
-    auto types = pmeta::make_type_map(
-        "string", pmeta::type<std::string>(),
-        "int", pmeta::type<int>(),
-        "float", pmeta::type<float>()
+    /*
+     * Type map
+     */
+
+    auto types = pmeta::make_table(
+            "string", pmeta::type<std::string>(),
+            "int", pmeta::type<int>(),
+            "float", pmeta::type<float>()
     );
 
     // Get a key from type
-    std::cout << types.get_key<std::string>() << std::endl;
+    types.get_key(pmeta::type<std::string>(),
+                  [](auto &&value)
+                  {
+                      std::cout << value << std::endl;
+                  });
 
     // Get a type from key
-    types.getDetectionType("int",
-        [](auto &&t)
-        {
-            using Type = pmeta_wrapped(t);
-            std::cout << typeid(Type).name() << std::endl;
-        }
+    types.get_value("int",
+            [](auto &&t)
+            {
+                using Type = pmeta_wrapped(t);
+                std::cout << typeid(Type).name() << std::endl;
+            }
     );
+
+    /*
+     * Any table
+     */
+
+    auto table = pmeta::make_table(
+            "42", 42,
+            12, "Hi there"
+    );
+
+    table.get_value("42", [](auto &&value) { std::cout << value << std::endl; });
+    table.get_key(42, [](auto &&value) { std::cout << value << std::endl; });
+    table.get_value(12, [](auto &&value) { std::cout << value << std::endl; });
+    table.get_key("Hi there", [](auto &&value) { std::cout << value << std::endl; });
 }
 ```

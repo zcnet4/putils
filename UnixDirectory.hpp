@@ -50,13 +50,16 @@ namespace putils
             auto fullPath = _path + file;
             struct stat sb;
 
-            if (stat(fullPath.c_str(), &sb) == -1)
+            if (lstat(fullPath.c_str(), &sb) == -1)
             {
                 _goOn = false;
                 return nullptr;
             }
 
-            return std::unique_ptr<File>(new File({file, fullPath, S_ISDIR(sb.st_mode)}));
+            return std::make_unique<File>(File{
+                                                  file, fullPath,
+                                                  S_ISDIR(sb.st_mode), S_ISLNK(sb.st_mode)
+                                          });
         }
 
     private:
