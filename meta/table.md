@@ -10,9 +10,9 @@ type_map(auto &&tuple);
 ```
 See `Example`.
 
-##### get_type
+##### getDetectionType
 ```
-void get_type(auto &&key, auto &&func);
+void getDetectionType(auto &&key, auto &&func);
 ```
 Retrieve the type associated to `key` and call `func` by passing it the `pmeta::type` associated to it.
 See `Example`.
@@ -39,7 +39,7 @@ int main()
     std::cout << types.get_key<std::string>() << std::endl;
 
     // Get a type from key
-    types.get_type("int",
+    types.getDetectionType("int",
         [](auto &&t)
         {
             using Type = pmeta_wrapped(t);
