@@ -313,10 +313,19 @@ namespace putils
     };
 
     using Point3d = Point<double, 3>;
+    using Rect3d = Rect<double, 3>;
     using Point2d = Point<double, 2>;
+    using Rect2d = Rect<double, 2>;
 
-    using Point3 = Point<int, 3>;
-    using Point2 = Point<int, 2>;
+    using Point3i = Point<int, 3>;
+    using Rect3i = Rect<int, 3>;
+    using Point2i = Point<int, 2>;
+    using Rect2i = Rect<int, 2>;
+
+    using Point3f = Point<float, 3>;
+    using Rect3f = Rect<float, 3>;
+    using Point2f = Point<float, 2>;
+    using Rect2f = Rect<float, 2>;
 }
 
 namespace std

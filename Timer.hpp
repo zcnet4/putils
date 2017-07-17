@@ -11,8 +11,8 @@ namespace putils
     class Timer
     {
     public:
-        using t_duration = std::chrono::system_clock::duration;
         using t_clock = std::chrono::system_clock;
+        using t_duration = std::chrono::duration<double, std::ratio<1>>;
 
         // Constructors
     public:
@@ -37,12 +37,12 @@ namespace putils
         // Is the timer ringing
     public:
         bool isDone() const noexcept { return t_clock::now() - _start >= _duration; }
-        std::size_t getTimesDone() const noexcept { return (t_clock::now() - _start) / _duration; }
+        double getTimesDone() const noexcept { return (t_clock::now() - _start) / _duration; }
 
         // How long ago did I start the timer
     public:
-        auto getTimeSinceStart() const noexcept { return t_clock::now() - _start; }
-        auto getTimeSinceDone() const noexcept
+        t_duration getTimeSinceStart() const noexcept { return t_clock::now() - _start; }
+        t_duration getTimeSinceDone() const noexcept
         {
             const auto done = t_clock::now() - _start;
 
@@ -54,7 +54,7 @@ namespace putils
 
         // How long until it rings
     public:
-        auto getTimeLeft() const noexcept { return _start + _duration - t_clock::now(); }
+        t_duration getTimeLeft() const noexcept { return _start + _duration - t_clock::now(); }
 
         // Restart the timer
     public:
@@ -64,7 +64,7 @@ namespace putils
 
         // Duration getters and setters
     public:
-        const auto &getDuration() const noexcept { return _duration; }
+        const t_duration &getDuration() const noexcept { return _duration; }
 
         template<typename Duration>
         void setDuration(Duration &&duration) noexcept { _duration = duration; }
