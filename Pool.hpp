@@ -9,18 +9,6 @@
 
 namespace putils
 {
-    template<typename CRTP>
-    class PooledObject
-    {
-    public:
-        void *operator new(std::size_t size);
-        void operator delete(void *ptr);
-    };
-
-    /*
-     * Implementation details
-     */
-
     namespace
     {
         template<std::size_t Size>
@@ -65,7 +53,7 @@ namespace putils
         class Pool
         {
         public:
-            static void *allocate()
+            T &get()
             {
                 if (_lastAlloc == nullptr)
                 {
@@ -74,6 +62,7 @@ namespace putils
                 }
                 else if (!_lastAlloc->available)
                 {
+                    _lastAlloc = nullptr;
                     for (auto &c : _chunks)
                         if (c.available)
                         {
@@ -89,11 +78,12 @@ namespace putils
                     _lastRelease = _lastAlloc;
                 }
 
-                return _lastAlloc->allocate();
+                return *static_cast<T*>(_lastAlloc->allocate());
             }
 
-            static void release(void *ptr)
+            void release(const T &obj)
             {
+                const auto ptr = (void*)(&obj);
                 if (_lastRelease != nullptr && _lastRelease->contains(ptr))
                 {
                     _lastRelease->release(ptr);
@@ -112,15 +102,20 @@ namespace putils
             }
 
         private:
-            static inline std::vector<Chunk<sizeof(T)>> _chunks;
-            static inline Chunk<sizeof(T)> *_lastAlloc = nullptr;
-            static inline Chunk<sizeof(T)> *_lastRelease = nullptr;
+            std::vector<Chunk<sizeof(T)>> _chunks;
+            Chunk<sizeof(T)> *_lastAlloc = nullptr;
+            Chunk<sizeof(T)> *_lastRelease = nullptr;
         };
     }
 
     template<typename CRTP>
-    void *PooledObject<CRTP>::operator new(std::size_t size) { return Pool<CRTP>::allocate(); }
+    class PooledObject
+    {
+    public:
+        void *operator new(std::size_t) { return &_allocator.get(); }
+        void operator delete(void *ptr) { &_allocator.release(*static_cast<const CRTP*>(ptr)); }
 
-    template<typename CRTP>
-    void PooledObject<CRTP>::operator delete(void *ptr) { Pool<CRTP>::release(ptr); }
+    private:
+        static inline Pool<CRTP> _allocator;
+    };
 }
