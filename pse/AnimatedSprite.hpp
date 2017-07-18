@@ -15,21 +15,22 @@ namespace pse
     public:
         AnimatedSprite(
                 std::string_view texture,
-                const sf::Vector2f &pos,
-                const sf::Vector2f &size,
+                const sf::Vector2f& pos,
+                const sf::Vector2f& size,
                 size_t animations,
-                const std::vector<size_t> &tilesPerAnimation,
-                const sf::Vector2f &tileDimensions,
+                const std::vector<size_t>& tilesPerAnimation,
+                const sf::Vector2f& tileDimensions,
                 double refreshDelay
         ) noexcept;
 
-        virtual ~AnimatedSprite() noexcept {}
+        virtual ~AnimatedSprite() noexcept
+        {}
 
         // ViewItem functions
     public:
         std::unique_ptr<ViewItem> copy() const noexcept override;
 
-        void draw(sf::RenderWindow &window) noexcept override
+        void draw(sf::RenderWindow& window) noexcept override
         {
             window.draw(getDrawable());
             refresh();
@@ -37,7 +38,8 @@ namespace pse
 
         // Start the animation, which should take a certain time to complete
     public:
-        virtual void startAnimation(const putils::Timer::t_duration &time = putils::Timer::t_duration(-1)) noexcept;
+        virtual void startAnimation(
+                const putils::Timer::t_duration& time = putils::Timer::t_duration(-1)) noexcept;
 
         // Stop the animation
     public:
@@ -64,29 +66,35 @@ namespace pse
 
         // Animated getters and setters
     public:
-        bool isAnimated() const noexcept { return _animated; }
+        bool isAnimated() const noexcept
+        { return _animated; }
 
-        void setAnimated(bool animated) noexcept { _animated = animated; }
+        void setAnimated(bool animated) noexcept
+        { _animated = animated; }
 
         // Current animation getters and setters
     public:
-        size_t getCurrentAnimation() const noexcept { return _currentAnimation; }
+        size_t getCurrentAnimation() const noexcept
+        { return _currentAnimation; }
 
         virtual void setAnimation(size_t animation) noexcept
         {
             _currentAnimation = animation;
-            _lastTile = _tilesPerAnimation[animation];
+            _lastTile         = _tilesPerAnimation[animation];
         }
 
         // Number of animations getter
     public:
-        size_t getAnimations() const noexcept { return _animations; }
+        size_t getAnimations() const noexcept
+        { return _animations; }
 
         // Current tile getters and setters
     public:
-        size_t getCurrentTile() const noexcept { return _currentTile; }
+        size_t getCurrentTile() const noexcept
+        { return _currentTile; }
 
-        virtual void setTile(size_t currentTile) noexcept { _currentTile = currentTile; }
+        virtual void setTile(size_t currentTile) noexcept
+        { _currentTile = currentTile; }
 
         // Texture setter
     public:
@@ -94,39 +102,45 @@ namespace pse
 
         // Tiles getters and setters
     public:
-        const std::vector<size_t> &getTilesPeranimation() const noexcept { return _tilesPerAnimation; }
+        const std::vector<size_t>& getTilesPeranimation() const noexcept
+        { return _tilesPerAnimation; }
 
-        size_t getTilesInAnimation() const noexcept { return _tilesPerAnimation[_currentAnimation]; }
+        size_t getTilesInAnimation() const noexcept
+        { return _tilesPerAnimation[_currentAnimation]; }
 
-        sf::Vector2f getTileDimensions() const noexcept { return _tileDimensions; }
+        sf::Vector2f getTileDimensions() const noexcept
+        { return _tileDimensions; }
 
         // Refresh delay getters and setters
     public:
-        double getRefreshDelay() const noexcept { return _refreshTimer.getDuration().count(); }
+        double getRefreshDelay() const noexcept
+        { return _refreshTimer.getDuration().count(); }
 
-        void setRefreshDelay(double delay) noexcept { _refreshTimer.setDuration(delay); }
+        void setRefreshDelay(double delay) noexcept
+        { _refreshTimer.setDuration(std::chrono::duration<double>(delay)); }
 
-        double getOriginalRefreshDelay() const noexcept { return _originalRefreshDelay.count(); }
+        double getOriginalRefreshDelay() const noexcept
+        { return _originalRefreshDelay.count(); }
 
         // Attributes
     private:
-        std::vector<size_t> _tilesPerAnimation;
+        std::vector<size_t>       _tilesPerAnimation;
         putils::Timer::t_duration _originalRefreshDelay;
 
     private:
-        bool _animated;
-        size_t _animations;
-        size_t _currentAnimation;
-        size_t _currentTile;
-        size_t _lastTile;
-        sf::Vector2f _tileDimensions;
+        bool          _animated;
+        size_t        _animations;
+        size_t        _currentAnimation;
+        size_t        _currentTile;
+        size_t        _lastTile;
+        sf::Vector2f  _tileDimensions;
         putils::Timer _refreshTimer;
 
         // Coplien
     public:
-        AnimatedSprite(const AnimatedSprite &) = delete;
+        AnimatedSprite(const AnimatedSprite&) = delete;
 
-        AnimatedSprite &operator=(const AnimatedSprite &) = delete;
+        AnimatedSprite& operator=(const AnimatedSprite&) = delete;
 
         // Testing
     public:

@@ -39,7 +39,7 @@ namespace pse
     void Text::setColor(const sf::Color &color) noexcept
     {
         _color = color;
-        _text.setColor(color);
+        _text.setFillColor(color);
     }
 
     void Text::setTextSize(unsigned int textSize) noexcept
