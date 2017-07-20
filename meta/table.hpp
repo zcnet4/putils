@@ -129,7 +129,7 @@ namespace pmeta
     }
 
     template<typename ...Args>
-    auto make_type_map(Args &&...args) { return make_taple(FWD(args)...); }
+    auto make_type_map(Args &&...args) { return make_table(FWD(args)...); }
 
     /*
      * Example
