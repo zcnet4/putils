@@ -310,23 +310,6 @@ namespace putils
             static void serialize(std::ostream &s, std::string_view name, const T &attr)
             {
                 serializeImpl(s, name, attr);
-/*
-                static_if(bool_v<std::is_enum<T>::value>)
-                        .then([&s, &name, attr](auto &&)
-                        {
-                            s << name << ": " << (int)attr;
-                        })
-                        .else_if(bool_v<std::is_pointer<T>::value>)
-                        .then([&s, &name, attr](auto &&)
-                        {
-                            printPtr(s, name, attr);
-                        })
-                        .else_([&s, &name, &attr](auto &&)
-                        {
-                            s << name << ": " << attr;
-                        })
-                                (attr);
-                */
             }
 
             template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
@@ -384,46 +367,6 @@ namespace putils
             static void unserialize(std::istream &s, T &attr)
             {
                 unserializeImpl(s, attr, "");
-
-/*
-                static_if(bool_v<std::is_enum<T>::value>)
-
-                        .then([&s, &name, &attr](auto &&)
-                        {
-                            unserialize(s, name, (int&)attr);
-                        })
-
-                        .else_if(bool_v<std::is_pointer<T>::value>)
-
-                        .then([&s, &name, &attr](auto &&)
-                        {
-                            attr = new typename std::remove_pointer<T>::type;
-                            unserializePtr(s, name, attr);
-                        })
-
-                        .else_([&s, &name, &attr](auto &&)
-                        {
-                            while (std::isspace(s.peek()))
-                                s.get();
-                            while (s.get() != ':');
-                            while (std::isspace(s.peek()))
-                                s.get();
-
-                            std::string value;
-                            while (s.peek() != ',' && s.peek() != '}')
-                            {
-                                const char c = s.get();
-                                if (c == '\\')
-                                    value.append(1, s.get());
-                                else
-                                    value.append(1, c);
-                            }
-
-                            std::stringstream(putils::chop(value)) >> attr;
-                        })
-                                (attr);
-*/
-
             }
         };
 
