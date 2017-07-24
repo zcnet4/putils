@@ -40,7 +40,18 @@ namespace putils
             Object &operator[](std::string_view name) { return fields[name.data()]; }
 
             // Value
-            operator std::string() const { return value; }
+            operator const std::string &() const { return value; }
+            const std::string &toString() const { return value; }
+            int toInt() const { return std::stoi(value); }
+            double toDouble() const { return std::stod(value); }
+            bool toBool() const
+            {
+                std::stringstream s;
+                s << std::boolalpha << value;
+                bool ret;
+                s >> ret;
+                return ret;
+            }
 
             friend std::ostream &operator<<(std::ostream &s, const Object &obj)
             {
@@ -149,7 +160,7 @@ namespace putils
                 else
                     ret[key] = Object{ lexValue(s), {}, {}, Object::Type::Value };
 
-                ret.value += ret[key];
+                ret.value += ret[key].value;
             }
 
             std::string lexValue(std::istringstream &s)
@@ -174,7 +185,12 @@ namespace putils
                     ret.append(1, s.get());
                 }
 
-                return putils::chop(ret);
+                ret = putils::chop(ret);
+                if ((ret.front() == '\"' && ret.back() == '\"') ||
+                        (ret.front() == '\'' && ret.back() == '\''))
+                    ret = ret.substr(1, ret.size() - 2);
+
+                return ret;
             }
 
             Object lexObject(std::istringstream &s)
@@ -249,7 +265,7 @@ namespace putils
                     else
                         ret.items.push_back(Object{ lexValue(s), {}, {}, Object::Type::Value });
 
-                    ret.value += ret.items.back();
+                    ret.value += ret.items.back().value;
 
                     while (std::isspace(s.peek()))
                         s.get();
@@ -295,10 +311,10 @@ namespace putils
             {
                 putils::json::Object o = putils::json::lex(
                         putils::concat(
-                                "{ obj: { key: value }, ",
+                                "{ obj: { key: \"value\" }, ",
                                 "objectList: ",
                                 "[ ",
-                                "{ first: { key: value } }"
+                                "{ first: { key: \"value\" } }"
                                 "{ second: { key: value } }",
                                 " ], ",
                                 "valueList: [ first, second ]",
