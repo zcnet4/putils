@@ -21,8 +21,8 @@ namespace putils
         // Get the next move towards goal
     public:
         template<typename Precision>
-        Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal,
-                                   const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept;
+        static Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals, Precision step,
+                                          const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept;
     };
 
     /*
@@ -56,7 +56,7 @@ namespace putils
     }
 
     template<typename Precision>
-    Direction AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal,
+    Direction AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals, Precision step,
                                       const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept
     {
         // The set of nodes already evaluated.
@@ -87,18 +87,21 @@ namespace putils
             const auto it = std::min_element(openSet.cbegin(), openSet.cend(), findClosest);
             auto current = *it;
 
-            if (goal == current)
+            if (goal.distanceTo(current) < 1)
                 return reconstruct_path(cameFrom, current, start);
 
             openSet.erase(it);
             closedSet.push_back(current);
 
             Point<Precision> neighbor;
-            for (auto x = current.x - 1; x <= current.x + 1; ++x)
-                for (auto y = current.y - 1; y <= current.y + 1; ++y)
+            for (auto x = current.x - step; x <= current.x + step; x += step)
+                for (auto y = current.y - step; y <= current.y + step; y += step)
                 {
-                    if ((x == current.x && y == current.y) ||
-                        (x != current.x && y != current.y))
+                    if (!diagonals &&
+                        ((x == current.x && y == current.y) ||
+                         (x != current.x && y != current.y)))
+                        continue;
+                    else if (diagonals && x == current.x && y == current.y)
                         continue;
 
                     neighbor = {x, y};
@@ -106,7 +109,7 @@ namespace putils
                     if (std::find(closedSet.cbegin(), closedSet.cend(), neighbor) != closedSet.cend())
                         continue; // Ignore the neighbor which is already evaluated.
 
-                    if (goal != neighbor && !canMoveTo(neighbor))
+                    if (goal.distanceTo(neighbor) >= 1 && !canMoveTo(neighbor))
                     {
                         closedSet.push_back(neighbor);
                         continue;

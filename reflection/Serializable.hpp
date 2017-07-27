@@ -88,7 +88,10 @@ namespace putils
     public:
         template<typename ...Fields> // Fields: std::pair<std::string, Derived::*attr>
         Serializable(Fields &&...attrs)
-                : _serializer(new Serializer<Fields...>(std::tuple<Fields...>(FWD(attrs)...))) {}
+        {
+            if (!_serializer)
+                _serializer.reset(new Serializer<Fields...>(std::tuple<Fields...>(FWD(attrs)...)));
+        }
 
         // Reflectible constructor
     public:
@@ -99,8 +102,8 @@ namespace putils
                     "Serializable types should be reflectible, or specify their fields at construction time"
             );
 
-            // _serializer = new Serializer(Derived::get_attributes().getKeyValues());
-            _serializer.reset(make_serializer(Derived::get_attributes().getKeyValues()));
+            if (!_serializer)
+                _serializer.reset(make_serializer(Derived::get_attributes().getKeyValues()));
         }
 
     public:
@@ -128,7 +131,7 @@ namespace putils
             return obj.unserialize(s);
         }
 
-        std::shared_ptr<SerializerBase> _serializer;
+        static inline std::unique_ptr<SerializerBase> _serializer = nullptr;
     };
 }
 /*

@@ -22,7 +22,7 @@ namespace putils
         };
 
     public:
-        QuadTree(const Point<Precision> &topLeft, const Point<Precision> &size, QuadTree *parent = nullptr)
+        QuadTree(const Point<Precision> &topLeft = { 0, 0 }, const Point<Precision> &size = { 1, 1 }, QuadTree *parent = nullptr)
                 : _isLeaf(true), _parent(parent),
                   _items(), _children(),
                   _topLeft(topLeft), _size(size),

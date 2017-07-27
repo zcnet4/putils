@@ -263,8 +263,17 @@ namespace putils
         template<typename P>
         bool operator!=(const Rect<P> &rhs) { return !(*this == rhs); }
 
-        bool intersect(const Rect &other) const
+        bool intersect(const Rect &other, bool inclusiveBorders = false) const
         {
+            if (inclusiveBorders)
+                return !(topLeft.x > other.topLeft.x + other.size.x ||
+                         topLeft.x + size.x < other.topLeft.x ||
+                         topLeft.y > other.topLeft.y + other.size.y ||
+                         topLeft.y + size.y < other.topLeft.y ||
+                        topLeft.z > other.topLeft.z + other.size.z ||
+                        topLeft.z + size.z < other.topLeft.z
+                );
+
             return !(topLeft.x >= other.topLeft.x + other.size.x ||
                      topLeft.x + size.x <= other.topLeft.x ||
                      topLeft.y >= other.topLeft.y + other.size.y ||
