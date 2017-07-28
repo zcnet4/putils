@@ -75,6 +75,14 @@ namespace pogre
                 setTarget(_target);
         }
 
+    public:
+        void resetOrientation()
+        {
+            auto cam = getCamNode();
+            cam->resetOrientation();
+            cam->yaw(Ogre::Degree(180));
+        }
+
         /*
          * Implementation
          */

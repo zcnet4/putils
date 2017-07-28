@@ -41,8 +41,8 @@ namespace pogre
     protected:
         bool mouseMoved(const OgreBites::MouseMotionEvent &event) override
         {
-            if (_guiContext && _guiContext->injectMouseMove(event.xrel, event.yrel))
-                return true;
+            if (_guiContext)
+                _guiContext->injectMouseMove(event.xrel, event.yrel);
             return App::mouseMoved(event);
         }
 

@@ -25,20 +25,15 @@ namespace pogre
 
         // Visibility
     public:
-        bool isVisible() const noexcept
-        {
-            return _mouseCursor->isVisible();
-        }
-
-        void setVisible(bool visible)
-        {
-            _stack.top()->setVisible(visible);
-            _mouseCursor->setVisible(visible);
-        }
-
+        bool isVisible() const { return _stack.top()->isVisible(); }
+        void setVisible(bool visible) { _stack.top()->setVisible(visible); }
         void show() { setVisible(true); }
-
         void hide() { setVisible(false); }
+
+        bool isMouseVisible() const noexcept { return _mouseCursor->isVisible(); }
+        void setMouseVisible(bool visible) { _mouseCursor->setVisible(visible); }
+        void showMouse() { setMouseVisible(true); }
+        void hideMouse() { setMouseVisible(false); }
 
         // Panel management
     public:
@@ -80,6 +75,8 @@ namespace pogre
                 pop();
         }
 
+        decltype(auto) size() const { return _stack.size(); }
+
     public:
         CEGUI::WindowManager &getWindowManager() { return *_windowManager; }
         CEGUI::MouseCursor &getMouseCursor() { return *_mouseCursor; }
@@ -91,8 +88,7 @@ namespace pogre
             if (_stack.empty())
                 return;
 
-            if (_mouseCursor->isVisible())
-                _stack.top()->setVisible(true);
+            _stack.top()->setVisible(true);
             auto &guiContext = CEGUI::System::getSingleton().getDefaultGUIContext();
             guiContext.setRootWindow(_stack.top());
         }
