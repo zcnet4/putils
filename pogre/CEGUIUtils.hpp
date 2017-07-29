@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL.h>
 #include <CEGUI/CEGUI.h>
 #include "Point.hpp"
 
@@ -115,5 +116,19 @@ namespace pogre
                         { (float)(pos.y - size.d_height.d_scale / 2), 0 }
                 }
         );
+    }
+
+    inline std::vector<Ogre::RaySceneQueryResultEntry> getSelectedEntities(CEGUI::MouseCursor &mouse, Ogre::SceneManager &scnMgr, Ogre::RenderWindow &win, Ogre::Camera &cam)
+    {
+        auto mousePos = mouse.getPosition();
+        Ogre::Ray mouseRay = cam.getCameraToViewportRay(
+                mousePos.d_x / win.getWidth(), mousePos.d_y / win.getHeight()
+        );
+
+        auto query = scnMgr.createRayQuery(Ogre::Ray());
+        query->setRay(mouseRay);
+        query->setSortByDistance(true);
+
+        return query->execute();
     }
 }

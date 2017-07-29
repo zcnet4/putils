@@ -42,6 +42,7 @@ namespace pogre
         {
             auto &ret = *(_panels[name] = _windowManager->createWindow("DefaultWindow", name));
             ret.setVisible(false);
+            ret.setMousePassThroughEnabled(true);
             return ret;
         }
 

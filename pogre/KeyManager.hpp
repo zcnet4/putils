@@ -37,8 +37,8 @@ namespace pogre
             void addMouseMovedHandler(std::string_view state, const MouseMovedHandler &func) noexcept;
 
             using MouseButtonHandler = std::function<void(const OgreBites::MouseButtonEvent &)>;
-            void addMouseButtonHandler(const MouseButtonHandler &onPress, const MouseButtonHandler &onRelease) noexcept;
-            void addMouseButtonHandler(std::string_view state, const MouseButtonHandler &onPress, const MouseButtonHandler &onRelease) noexcept;
+            void addMouseButtonHandler(const MouseButtonHandler &onPress, const MouseButtonHandler &onRelease = [](auto &&) {}) noexcept;
+            void addMouseButtonHandler(std::string_view state, const MouseButtonHandler &onPress, const MouseButtonHandler &onRelease = [](auto &&) {}) noexcept;
 
         public:
             void setState(std::string_view state) { _currentState = &_states[state.data()]; }
