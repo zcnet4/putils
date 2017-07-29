@@ -21,13 +21,16 @@ namespace pogre
     protected:
         bool keyPressed(const OgreBites::KeyboardEvent &event) override
         {
-            if (_guiContext && _guiContext->injectKeyDown(SDL_ScanCodeToCEGUIKey(event.keysym.scancode)))
+            if (_guiContext)
             {
-                _guiContext->injectChar(event.keysym.sym);
-                return true;
+                if (_guiContext->injectKeyDown(SDL_ScanCodeToCEGUIKey(event.keysym.scancode)))
+                {
+                    _guiContext->injectChar(event.keysym.sym);
+                    return true;
+                }
+                if (_guiContext->injectChar(event.keysym.sym))
+                    return true;
             }
-            if (_guiContext && _guiContext->injectChar(event.keysym.sym))
-                return true;
             return App::keyPressed(event);
         }
 
@@ -41,21 +44,21 @@ namespace pogre
     protected:
         bool mouseMoved(const OgreBites::MouseMotionEvent &event) override
         {
-            if (_guiContext && _guiContext->injectMouseMove(event.xrel, event.yrel))
+            if (_guiContext && _guiContext->getMouseCursor().isVisible() && _guiContext->injectMouseMove(event.xrel, event.yrel))
                 return true;
             return App::mouseMoved(event);
         }
 
         bool mousePressed(const OgreBites::MouseButtonEvent &event) override
         {
-            if (_guiContext && _guiContext->injectMouseButtonDown(pogre::SDL_toMouseButton(event.button)))
+            if (_guiContext && _guiContext->getMouseCursor().isVisible() && _guiContext->injectMouseButtonDown(pogre::SDL_toMouseButton(event.button)))
                 return true;
             return App::mousePressed(event);
         }
 
         bool mouseReleased(const OgreBites::MouseButtonEvent &event) override
         {
-            if (_guiContext && _guiContext->injectMouseButtonUp(pogre::SDL_toMouseButton(event.button)))
+            if (_guiContext && _guiContext->getMouseCursor().isVisible() && _guiContext->injectMouseButtonUp(pogre::SDL_toMouseButton(event.button)))
                 return true;
             return App::mouseReleased(event);
         }
