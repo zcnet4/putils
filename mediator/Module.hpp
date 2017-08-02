@@ -93,7 +93,7 @@ namespace putils
             {
                 void handle(std::string_view packet) const { std::cout << "Received " << packet << std::endl; }
 
-                void handle(const ExampleQuery &packet) const { sendTo(42, packet.sender); }
+                void handle(const ExampleQuery &packet) const { sendTo(42, *packet.sender); }
             };
 
             struct SenderModule : putils::Module<SenderModule> // will not receive anything

@@ -19,9 +19,9 @@ namespace putils
         _mediator->sendDataPacket(packet);
     }
 
-    void BaseModule::sendDataPacketTo(const ADataPacket &packet, BaseModule *dest) const noexcept
+    void BaseModule::sendDataPacketTo(const ADataPacket &packet, BaseModule &dest) const noexcept
     {
-        dest->receive(packet);
+        dest.receive(packet);
     }
 
     void BaseModule::runTask(const std::function<void()> &f) const

@@ -32,14 +32,14 @@ namespace putils
         }
 
         template<typename T>
-        void sendTo(const T &data, BaseModule *dest) const
+        void sendTo(const T &data, BaseModule &dest) const
         {
             sendDataPacketTo(DataPacket<T>(data), dest);
         }
 
     private:
         void sendDataPacket(const ADataPacket &packet) const noexcept;
-        void sendDataPacketTo(const ADataPacket &packet, BaseModule *dest) const noexcept;
+        void sendDataPacketTo(const ADataPacket &packet, BaseModule &dest) const noexcept;
 
     protected:
         void runTask(const std::function<void()> &f) const;
