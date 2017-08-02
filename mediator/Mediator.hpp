@@ -15,8 +15,8 @@ namespace putils
         ~Mediator() { running = false; completeTasks(); }
 
     public:
-        void addModule(BaseModule *m);
-        void removeModule(BaseModule *m);
+        void addModule(BaseModule &m);
+        void removeModule(BaseModule &m);
 
     public:
         template<typename T>

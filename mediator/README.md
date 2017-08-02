@@ -38,8 +38,8 @@ int main()
     SenderModule sender;
     LogModule log;
 
-    mediator.addModule(&sender);
-    mediator.addModule(&log);
+    mediator.addModule(sender);
+    mediator.addModule(log);
 
     sender.doWork();
     sender.doQuery();

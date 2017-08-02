@@ -87,7 +87,7 @@ namespace putils
             const auto it = std::min_element(openSet.cbegin(), openSet.cend(), findClosest);
             auto current = *it;
 
-            if (goal.distanceTo(current) < 1)
+            if (goal.distanceTo(current) < step)
                 return reconstruct_path(cameFrom, current, start);
 
             openSet.erase(it);
@@ -116,7 +116,7 @@ namespace putils
                     }
 
                     // The distance from start to a neighbor
-                    auto tentative_gScore = gScore.at(current) + 1;
+                    auto tentative_gScore = gScore.at(current) + step;
                     if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end())
                         openSet.push_back(neighbor);
                     else if (tentative_gScore >= gScore[neighbor])

@@ -9,7 +9,7 @@ Also lets `Modules` run asynchronous tasks.
 ##### addModule
 
 ```
-void addModule(BaseModule *m);
+void addModule(BaseModule &m);
 ```
 
 Adds a new module to be managed. Note that the `Mediator` is not responsible for the `Module`'s lifetime.
@@ -17,7 +17,7 @@ Adds a new module to be managed. Note that the `Mediator` is not responsible for
 ##### removeModule
 
 ```
-void removeModule(BaseModule *m);
+void removeModule(BaseModule &m);
 ```
 
 Removes a module.

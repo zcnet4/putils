@@ -3,22 +3,22 @@
 
 namespace putils
 {
-    void Mediator::addModule(BaseModule *m)
+    void Mediator::addModule(BaseModule &m)
     {
-        for (auto subscription : m->getSubscriptions())
+        for (auto subscription : m.getSubscriptions())
         {
             auto &category = _modules[subscription];
-            if (std::find(category.begin(), category.end(), m) == category.end())
-                category.push_back(m);
+            if (std::find(category.begin(), category.end(), &m) == category.end())
+                category.push_back(&m);
         }
-        m->setMediator(this);
+        m.setMediator(this);
     }
 
-    void Mediator::removeModule(BaseModule *m)
+    void Mediator::removeModule(BaseModule &m)
     {
         for (auto & [type, category] : _modules)
         {
-            const auto it = std::find(category.begin(), category.end(), m);
+            const auto it = std::find(category.begin(), category.end(), &m);
             if (it != category.end())
                 category.erase(it);
         }
