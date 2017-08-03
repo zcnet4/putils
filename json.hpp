@@ -145,6 +145,9 @@ namespace putils
                 while (std::isspace(s.peek()))
                     s.get();
 
+                if (s.peek() == ',')
+                    return;
+
                 std::string key = lexValue(s);
                 ret.value += key;
 

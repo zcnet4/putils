@@ -296,10 +296,10 @@ namespace putils
                         s << name << ": " << (int)attr;
                 else if constexpr (std::is_pointer<T>::value)
                         printPtr(s, name, attr);
-                else if constexpr (std::is_constructible<std::string, T>::value)
+                else if constexpr (std::is_constructible<std::string_view, T>::value)
                         s << name << ": \"" << attr << "\"";
                 else if constexpr (putils::is_streamable<std::ostream, T>::value)
-                    s << name << ": " << attr;
+                s << name << ": " << attr;
             }
 
             template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
