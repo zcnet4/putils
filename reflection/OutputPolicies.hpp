@@ -11,6 +11,7 @@
 #include "to_string.hpp"
 #include "json.hpp"
 #include "meta/for_each.hpp"
+#include "traits.hpp"
 
 namespace putils
 {
@@ -288,28 +289,17 @@ namespace putils
              * "Normal" objects
              */
 
-            template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>
-            static void serializeImpl(std::ostream &s, std::string name, const T attr)
-            {
-                s << name << ": " << (int)attr;
-            }
-
-            template<typename T, typename = std::enable_if_t<std::is_pointer<T>::value>>
-            static void serializeImpl(std::ostream &s, std::string_view name, const T attr)
-            {
-                printPtr(s, name, attr);
-            }
-
-            template<typename T, typename = std::enable_if_t<!std::is_enum<T>::value && !std::is_pointer<T>::value>>
-            static void serializeImpl(std::ostream &s, std::string_view name, const T &attr)
-            {
-                s << name << ": " << attr;
-            }
-
             template<typename T>
             static void serialize(std::ostream &s, std::string_view name, const T &attr)
             {
-                serializeImpl(s, name, attr);
+                if constexpr (std::is_enum<T>::value)
+                        s << name << ": " << (int)attr;
+                else if constexpr (std::is_pointer<T>::value)
+                        printPtr(s, name, attr);
+                else if constexpr (std::is_constructible<std::string, T>::value)
+                        s << name << ": \"" << attr << "\"";
+                else if constexpr (putils::is_streamable<std::ostream, T>::value)
+                    s << name << ": " << attr;
             }
 
             template<typename T, typename = std::enable_if_t<std::is_enum<T>::value>>

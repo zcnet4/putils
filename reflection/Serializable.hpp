@@ -43,16 +43,18 @@ namespace putils
             }
 
             // For each member pointer in _attrs, serialize it
-            void serialize(const Derived *obj, std::ostream &s) const noexcept override
+            void serialize(const Derived *obj, std::ostream &s) const noexcept final
             {
                 OutputPolicy::startSerialize(s);
 
                 bool first = true;
                 pmeta::tuple_for_each(_attrs, [&s, obj, &first](const auto &attr)
                 {
+                    const auto &val = obj->*(attr.second);
+
                     if (!first)
                         OutputPolicy::serializeNewField(s);
-                    OutputPolicy::serialize(s, attr.first, obj->*(attr.second));
+                    OutputPolicy::serialize(s, attr.first, val);
                     first = false;
                 });
 
@@ -185,10 +187,10 @@ namespace putils
             };
 
             Tmp test(24, 42,
-                    { 1, 2, 3 }, { 4, 5, 6 },
-                    new int(42), std::make_unique<int>(84), std::make_shared<int>(500),
-                    { { "one", 1 }, { "two", 2 }, { "three", 3 } },
-                    { { "four", 4 }, { "five", 5 }, { "six", 6 } }
+                     { 1, 2, 3 }, { 4, 5, 6 },
+                     new int(42), std::make_unique<int>(84), std::make_shared<int>(500),
+                     { { "one", 1 }, { "two", 2 }, { "three", 3 } },
+                     { { "four", 4 }, { "five", 5 }, { "six", 6 } }
             );
 
             std::stringstream s;
@@ -202,7 +204,7 @@ namespace putils
             test._unordered = { { "four", 4 }, { "five", 5 }, { "six", 6} };
             test._map = { { "one", 1 }, { "two", 2 }, { "three", 3 } };
 
-                    std::cout << test << std::endl;
+            std::cout << test << std::endl;
             s >> test;
             std::cout << test << std::endl;
 
