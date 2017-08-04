@@ -109,7 +109,7 @@ namespace putils
                     if (std::find(closedSet.cbegin(), closedSet.cend(), neighbor) != closedSet.cend())
                         continue; // Ignore the neighbor which is already evaluated.
 
-                    if (goal.distanceTo(neighbor) >= step && !canMoveTo(neighbor))
+                    if (goal.distanceTo(neighbor) > step && !canMoveTo(neighbor))
                     {
                         closedSet.push_back(neighbor);
                         continue;

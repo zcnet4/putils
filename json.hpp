@@ -170,6 +170,19 @@ namespace putils
             {
                 std::string ret;
 
+                if (s.peek() == '"')
+                {
+                    s.get();
+                    while (s.peek() != '"')
+                    {
+                        if (s.peek() == '\\')
+                            s.get();
+                        ret.append(1, s.get());
+                    }
+                    s.get();
+                    return ret;
+                }
+
                 while (s)
                 {
                     const char c = s.peek();
