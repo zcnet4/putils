@@ -133,6 +133,7 @@ namespace putils
             return obj.unserialize(s);
         }
 
+    private:
         static inline std::unique_ptr<SerializerBase> _serializer = nullptr;
     };
 }

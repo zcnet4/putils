@@ -21,7 +21,8 @@ namespace putils
         // Get the next move towards goal
     public:
         template<typename Precision>
-        static Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals, Precision step,
+        static Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
+                                          Precision step, Precision desiredDistance,
                                           const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept;
     };
 
@@ -56,7 +57,8 @@ namespace putils
     }
 
     template<typename Precision>
-    Direction AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals, Precision step,
+    Direction AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
+                                      Precision step, Precision desiredDistance,
                                       const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept
     {
         // The set of nodes already evaluated.
@@ -109,7 +111,7 @@ namespace putils
                     if (std::find(closedSet.cbegin(), closedSet.cend(), neighbor) != closedSet.cend())
                         continue; // Ignore the neighbor which is already evaluated.
 
-                    if (goal.distanceTo(neighbor) > step && !canMoveTo(neighbor))
+                    if (goal.distanceTo(neighbor) > desiredDistance && !canMoveTo(neighbor))
                     {
                         closedSet.push_back(neighbor);
                         continue;
