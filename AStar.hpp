@@ -23,7 +23,7 @@ namespace putils
         template<typename Precision>
         static Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
                                           Precision step, Precision desiredDistance,
-                                          const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept;
+                                          const std::function<bool(const Point<Precision> &from, const Point<Precision> &to)> &canMoveTo) noexcept;
     };
 
     /*
@@ -59,7 +59,7 @@ namespace putils
     template<typename Precision>
     Direction AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
                                       Precision step, Precision desiredDistance,
-                                      const std::function<bool(const Point<Precision> &dest)> &canMoveTo) noexcept
+                                      const std::function<bool(const Point<Precision> &from, const Point<Precision> &to)> &canMoveTo) noexcept
     {
         // The set of nodes already evaluated.
         std::vector<Point<Precision>> closedSet;
@@ -89,7 +89,7 @@ namespace putils
             const auto it = std::min_element(openSet.cbegin(), openSet.cend(), findClosest);
             auto current = *it;
 
-            if (goal.distanceTo(current) < step)
+            if (goal.distanceTo(current) < desiredDistance)
                 return reconstruct_path(cameFrom, current, start);
 
             openSet.erase(it);
@@ -111,7 +111,7 @@ namespace putils
                     if (std::find(closedSet.cbegin(), closedSet.cend(), neighbor) != closedSet.cend())
                         continue; // Ignore the neighbor which is already evaluated.
 
-                    if (goal.distanceTo(neighbor) > desiredDistance && !canMoveTo(neighbor))
+                    if (goal.distanceTo(neighbor) > desiredDistance && !canMoveTo(current, neighbor))
                     {
                         closedSet.push_back(neighbor);
                         continue;
@@ -127,7 +127,7 @@ namespace putils
                     // This path is the best until now. Record it!
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentative_gScore;
-                    fScore[neighbor] = heuristic_cost_estimate(neighbor, goal);
+                    fScore[neighbor] = tentative_gScore + heuristic_cost_estimate(neighbor, goal);
                 }
         }
 

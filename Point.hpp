@@ -74,7 +74,7 @@ namespace putils
         {
             static const auto table = pmeta::make_table(
                     "distanceTo", &Point::distanceTo<Precision>,
-                    "distanceTo", &Point::angleTo
+                    "angleTo", &Point::angleTo
             );
             return table;
         }
