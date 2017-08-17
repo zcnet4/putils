@@ -5,6 +5,7 @@
 #include <string_view>
 
 #include "meta/table.hpp"
+#include "reflection/nameof.hpp"
 
 namespace putils
 {
@@ -28,8 +29,24 @@ namespace putils
         }
     };
 
+/*
     template<typename T>
     using is_reflectible = std::is_base_of<Reflectible<T>, T>;
+*/
+
+    template<typename T>
+    class is_reflectible
+    {
+        template<typename TT>
+        static auto test(int)
+                -> decltype(T::get_class_name(), T::get_attributes(), T::get_methods(), T::get_parents(), std::true_type());
+
+        template<typename TT>
+        static auto test(...) -> std::false_type;
+
+    public:
+        static constexpr bool value = decltype(test<T>(0))::value;
+    };
 
     namespace test
     {
@@ -55,19 +72,19 @@ namespace putils
 
             static const auto &get_attributes()
             {
-                static const auto table = pmeta::make_table("exampleAttribute", &Test::_exampleAttribute);
+                static const auto table = pmeta::make_table(pmeta_nameof_private(_exampleAttribute), &Test::_exampleAttribute);
                 return table;
             }
 
             static const auto &get_methods()
             {
-                static const auto table = pmeta::make_table("exampleMethod", &Test::exampleMethod);
+                static const auto table = pmeta::make_table(pmeta_nameof(exampleMethod), &Test::exampleMethod);
                 return table;
             }
 
             static const auto &get_parents()
             {
-                static const auto table = pmeta::make_table("ExampleParent", pmeta::type<ExampleParent>());
+                static const auto table = pmeta::make_table(pmeta_nameof(ExampleParent), pmeta::type<ExampleParent>());
                 return table;
             }
         };
