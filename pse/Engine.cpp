@@ -69,7 +69,7 @@ namespace pse
         while (drawn < _items.size())
         {
             for (const auto &p : _items)
-                if (p.second == height)
+                if (p.second <= height)
                 {
                     p.first->draw(_window);
                     ++drawn;
