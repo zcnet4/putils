@@ -64,8 +64,8 @@ namespace putils
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
-                    "x", &Point::x,
-                    "y", &Point::y
+                    pmeta_reflectible_attribute(&Point::x),
+                    pmeta_reflectible_attribute(&Point::y)
             );
             return table;
         }
@@ -73,8 +73,8 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "distanceTo", &Point::distanceTo<Precision>,
-                    "angleTo", &Point::angleTo
+                    pmeta_nameof(distanceTo), &Point::distanceTo<Precision>,
+                    pmeta_reflectible_attribute(&Point::angleTo)
             );
             return table;
         }
@@ -133,8 +133,8 @@ namespace putils
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
-                    "topLeft", &Rect::topLeft,
-                    "size", &Rect::size
+                    pmeta_reflectible_attribute(&Rect::topLeft),
+                    pmeta_reflectible_attribute(&Rect::size)
             );
             return table;
         }
@@ -142,8 +142,8 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "intersect", &Rect::intersect,
-                    "contains", &Rect::contains
+                    pmeta_reflectible_attribute(&Rect::intersect),
+                    pmeta_reflectible_attribute(&Rect::contains)
             );
             return table;
         }
@@ -222,9 +222,9 @@ namespace putils
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
-                    "x", &Point::x,
-                    "y", &Point::y,
-                    "z", &Point::z
+                    pmeta_reflectible_attribute(&Point::x),
+                    pmeta_reflectible_attribute(&Point::y),
+                    pmeta_reflectible_attribute(&Point::z)
             );
             return table;
         }
@@ -232,9 +232,9 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "distanceTo", &Point::distanceTo<Precision>,
-                    "angleToXY", &Point::angleToXY,
-                    "angleToXZ", &Point::angleToXZ
+                    pmeta_nameof(distanceTo), &Point::distanceTo<Precision>,
+                    pmeta_reflectible_attribute(&Point::angleToXY),
+                    pmeta_reflectible_attribute(&Point::angleToXZ)
             );
             return table;
         }
@@ -270,8 +270,8 @@ namespace putils
                          topLeft.x + size.x < other.topLeft.x ||
                          topLeft.y > other.topLeft.y + other.size.y ||
                          topLeft.y + size.y < other.topLeft.y ||
-                        topLeft.z > other.topLeft.z + other.size.z ||
-                        topLeft.z + size.z < other.topLeft.z
+                         topLeft.z > other.topLeft.z + other.size.z ||
+                         topLeft.z + size.z < other.topLeft.z
                 );
 
             return !(topLeft.x >= other.topLeft.x + other.size.x ||
@@ -299,8 +299,8 @@ namespace putils
         static const auto &get_attributes()
         {
             static const auto table = pmeta::make_table(
-                    "topLeft", &Rect::topLeft,
-                    "size", &Rect::size
+                    pmeta_reflectible_attribute(&Rect::topLeft),
+                    pmeta_reflectible_attribute(&Rect::size)
             );
             return table;
         }
@@ -308,8 +308,8 @@ namespace putils
         static const auto &get_methods()
         {
             static const auto table = pmeta::make_table(
-                    "intersect", &Rect::intersect,
-                    "contains", &Rect::contains
+                    pmeta_reflectible_attribute(&Rect::intersect),
+                    pmeta_reflectible_attribute(&Rect::contains)
             );
             return table;
         }

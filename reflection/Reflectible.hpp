@@ -5,7 +5,11 @@
 #include <string_view>
 
 #include "meta/table.hpp"
-#include "reflection/nameof.hpp"
+#include "meta/nameof.hpp"
+
+#define pmeta_reflectible_attribute(memberPtr) std::string_view(#memberPtr).substr(std::string_view(#memberPtr).find("::") + 2), memberPtr
+#define pmeta_reflectible_attribute_private(memberPtr) std::string_view(#memberPtr).substr(std::string_view(#memberPtr).find("::") + 3), memberPtr
+#define pmeta_reflectible_parent(T) pmeta_nameof(type), pmeta::type<T>()
 
 namespace putils
 {
@@ -72,19 +76,25 @@ namespace putils
 
             static const auto &get_attributes()
             {
-                static const auto table = pmeta::make_table(pmeta_nameof_private(_exampleAttribute), &Test::_exampleAttribute);
+                static const auto table = pmeta::make_table(
+                        pmeta_reflectible_attribute_private(&Test::_exampleAttribute)
+                );
                 return table;
             }
 
             static const auto &get_methods()
             {
-                static const auto table = pmeta::make_table(pmeta_nameof(exampleMethod), &Test::exampleMethod);
+                static const auto table = pmeta::make_table(
+                        pmeta_reflectible_attribute(&Test::exampleMethod)
+                );
                 return table;
             }
 
             static const auto &get_parents()
             {
-                static const auto table = pmeta::make_table(pmeta_nameof(ExampleParent), pmeta::type<ExampleParent>());
+                static const auto table = pmeta::make_table(
+                        pmeta_reflectible_parent(ExampleParent)
+                );
                 return table;
             }
         };
