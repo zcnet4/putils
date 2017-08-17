@@ -42,6 +42,48 @@ using is_reflectible = std::is_base_of<Reflectible<T>, T>;
 
 Lets client code check whether a given-type is reflectible.
 
+### Helper macros
+
+##### pmeta_reflectible_attribute(memberPtr)
+
+Takes a member pointer as parameter and generates a pair of parameters under the form `"var", &Class::var` to avoid redundancy when passing parameters to `pmeta::make_table`. For instance:
+
+```
+const auto table = pmeta::make_table(
+    "x", &Point::x,
+    "y", &Point::y
+);
+```
+
+can be refactored to:
+
+```
+const auto table = pmeta::make_table(
+    pmeta_reflectible_attribute(&Point::x),
+    pmeta_reflectible_attribute(&Point::y)
+);
+```
+
+##### pmeta_reflectible_attribute_private(memberPtr)
+
+Provides the same functionality as `pmeta_reflectible_attribute`, but skips the first character of the attribute's name (such as an `_` or `m`) that would mark a private member. For instance:
+
+```
+const auto table = pmeta::make_table(
+    "name", &Human::_name,
+    "age", &Human::_age
+);
+```
+
+can be refactored to:
+
+```
+const auto table = pmeta::make_table(
+    pmeta_reflectible_attribute_private(&Human::_name),
+    pmeta_reflectible_attribute_private(&Human::_age)
+);
+```
+
 ### Example
 
 ```
@@ -67,19 +109,25 @@ public:
 
     static const auto &get_attributes()
     {
-        static const auto table = pmeta::make_table("exampleAttribute", &Test::_exampleAttribute);
+        static const auto table = pmeta::make_table(
+                pmeta_reflectible_attribute_private(&Test::_exampleAttribute)
+        );
         return table;
     }
 
     static const auto &get_methods()
     {
-        static const auto table = pmeta::make_table("exampleMethod", &Test::exampleMethod);
+        static const auto table = pmeta::make_table(
+                pmeta_reflectible_attribute(&Test::exampleMethod)
+        );
         return table;
     }
 
     static const auto &get_parents()
     {
-        static const auto table = pmeta::make_table("ExampleParent", pmeta::type<ExampleParent>());
+        static const auto table = pmeta::make_table(
+                pmeta_reflectible_parent(ExampleParent)
+        );
         return table;
     }
 };

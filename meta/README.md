@@ -14,3 +14,4 @@ Phiste's metaprogramming utilities.
 * for_each.hpp: call a function for each element in a tuple, or instantiate a template type and call a static function for each type in a list
 * has_type.hpp: type_trait indicating whether a tuple contains a certain type
 * new_from_tuple.hpp: a make_from_tuple that creates a heap-based object
+* nameof.hpp: helper macros to get a class/variable name and avoid matching raw strings to actual names
