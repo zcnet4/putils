@@ -16,6 +16,10 @@ namespace putils
         virtual ~BaseModule();
 
     public:
+        BaseModule(const BaseModule &) = delete;
+        BaseModule &operator=(const BaseModule &) = delete;
+
+    public:
         virtual const std::vector<pmeta::type_index> &getSubscriptions() const noexcept = 0;
         virtual void receive(const ADataPacket &) noexcept = 0;
 
