@@ -112,10 +112,7 @@ namespace putils
                         continue; // Ignore the neighbor which is already evaluated.
 
                     if (goal.distanceTo(neighbor) > desiredDistance && !canMoveTo(current, neighbor))
-                    {
-                        closedSet.push_back(neighbor);
                         continue;
-                    }
 
                     // The distance from start to a neighbor
                     auto tentative_gScore = gScore.at(current) + step;
