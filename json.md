@@ -1,4 +1,4 @@
-# JSON
+# [JSON](json.hpp)
 
 JSON lexer and pretty-printer.
 
