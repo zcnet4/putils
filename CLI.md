@@ -1,4 +1,4 @@
-# CLI
+# [CLI](CLI.hpp)
 
 Simple and extensible Command-Line Interface class which lets you simply provide a set of commands.
 
