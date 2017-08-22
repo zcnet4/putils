@@ -1,4 +1,4 @@
-# OperatorForwarder
+# [OperatorForwarder](OperatorForwarder.hpp)
 
 Forwards all operators to a given member
 
