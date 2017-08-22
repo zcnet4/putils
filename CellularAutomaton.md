@@ -1,4 +1,4 @@
-# CellularAutomaton
+# [CellularAutomaton](CellularAutomaton.hpp)
 
 A simple implementation for a generic cellular automaton.
 
