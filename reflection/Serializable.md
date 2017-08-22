@@ -55,14 +55,35 @@ int main()
     Tmp test(24, 42);
     std::stringstream s;
 
-    test.serialize(std::cout); std::cout << std::endl;
-    test.serialize(s);
+    std::cout << test << std::endl;
+    s << test << std::endl;
 
     test._x = 5; test._y = 5;
 
-    test.serialize(std::cout); std::cout << std::endl;
-    test.unserialize(s);
-    test.serialize(std::cout); std::cout << std::endl;
+    std::cout << test << std::endl;
+    s >> test;
+    std::cout << test << std::endl;
+    
+    class ReflectibleTest : public putils::Reflectible<ReflectibleTest>, public putils::Serializable<ReflectibleTest>
+    {
+    public:
+        std::string hiString = "hi";
+        int _fourtyTwo = 42;
+        
+        static const auto get_class_name() { return pmeta_nameof(ReflectibleTest); }
+        static const auto &get_attributes()
+        {
+            static const auto table = pmeta::make_table(
+                pmeta_reflectible_attribute(&ReflectibleTest::hiString),
+                pmeta_reflectible_attribute_private(&ReflectibleTest::_fourtyTwo)
+            );
+            return table;
+        }
+        static void get_methods() {}
+        static void get_parents() {}
+    };
+    
+    std::cout << ReflectibleTest{} << std::endl;
 }
 ```
 
