@@ -1,4 +1,4 @@
-# RAII
+# [RAII](RAII.hpp)
 
 A class template able to perform RAII on any type. `RAII<T>` is constructed with a `T` and an `std::function<void(T)>` that will be called at destruction time.
 Automatic conversions from `RAII<T>` to `T` exist to greatly simplify usage.
