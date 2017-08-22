@@ -1,4 +1,4 @@
-# AStar
+# [AStar](AStar.hpp)
 
 An implementation of the AStar algorithm.
 
