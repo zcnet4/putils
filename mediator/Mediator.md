@@ -1,4 +1,4 @@
-# Mediator
+# [Mediator](Mediator.hpp)
 
 Manages various [Modules](Module.md) and lets them send each other `DataPackets`.
 
