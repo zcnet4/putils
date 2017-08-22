@@ -1,4 +1,4 @@
-# Observable<Args...>
+# [Observable<Args...>](Observable.hpp)
 
 A minimalistic (but greatly sufficient) implementation of the Observer pattern.
 
