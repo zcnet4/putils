@@ -1,4 +1,4 @@
-# Serializable
+# [Serializable](Serializable.hpp)
 
 Mix-in class letting any derived class serialize its attributes with great simplicity.
 
