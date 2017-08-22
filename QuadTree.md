@@ -1,4 +1,4 @@
-# QuadTree<Contained, Precision, MaxChildren>
+# [QuadTree<Contained, Precision, MaxChildren>](QuadTree.hpp)
 
 Space partitioner optimized for searching for an object's closest neighbors.
 
