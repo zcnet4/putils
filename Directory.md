@@ -1,4 +1,4 @@
-# Directory
+# [Directory](ADirectory.hpp)
 
 An abstraction to Unix and Windows directories, which lets you iterate through a directory and get information about each file.
 

@@ -1,4 +1,4 @@
-# OpenSSLTCPConnection
+# [OpenSSLTCPConnection](OpenSSLTCPConnection.hpp)
 
 A final implementation of a client socket over an OpenSSL secure connection.
 

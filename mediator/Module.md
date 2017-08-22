@@ -1,4 +1,4 @@
-# Module
+# [Module](Module.hpp)
 
 One "client" of a [Mediator](Mediator.md). `Modules` communicate by sending each other `DataPackets` (which can be of any user-specified type).
 

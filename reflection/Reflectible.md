@@ -1,4 +1,4 @@
-# Reflectible
+# [Reflectible](Reflectible.hpp)
 
 Template class that should be inherited by any type wanting to expose its members.
 
@@ -18,20 +18,20 @@ Returns the class name.
 ```
 static const auto &get_attributes();
 ```
-Returns a table mapping strings to pointers to the attributes.
+Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the attributes.
 
 ##### get_methods
 
 ```
 static const auto &get_methods();
 ```
-Returns a table mapping strings to pointers to the methods.
+Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the methods.
 
 ##### get_parents
 ```
 static const auto &get_parents();
 ```
-Returns a table mapping strings to `pmeta::type` objects for each of the class' parents.
+Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to `pmeta::type` objects for each of the class' parents.
 
 ### type trait
 

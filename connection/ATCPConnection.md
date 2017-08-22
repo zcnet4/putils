@@ -1,4 +1,4 @@
-# ATCPConnection
+# [ATCPConnection](ATCPConnection.hpp)
 
 Base class for the Connection classes.
 

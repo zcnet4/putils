@@ -1,4 +1,4 @@
-# Library
+# [Library](UnixLibrary.hpp)
 
 The "Library" class family are abstractions to Unix and Windows DLLs. These should not be explitly instantiated, but instead created by `LibraryFactory::make`
 

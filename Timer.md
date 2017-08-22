@@ -1,4 +1,4 @@
-# Timer
+# [Timer](Timer.hpp)
 
 Simple timer class based on std::chrono.
 

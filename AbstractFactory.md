@@ -1,4 +1,4 @@
-# AbstractFactory<TList...>
+# [AbstractFactory<TList...>](AbstractFactory.hpp)
 
 Template class for an abstract factory able to create any type in a provided typelist.
 Given an `AbstractFactory<TList...>`, users can call `make<T>()` to create an object of type T (or any type derived from it, as determined by the concrete factory implementation).

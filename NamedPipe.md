@@ -1,4 +1,4 @@
-# NamedPipe
+# [NamedPipe](UnixNamedPipe.hpp)
 
 Abstraction to named pipes.
 

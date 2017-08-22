@@ -1,4 +1,4 @@
-# Keyboard
+# [Keyboard](Keyboard.hpp)
 
 An abstraction to a keyboard. Each key is an observable object that will notify its observers when it changes state (pressed or unpressed).
 A public `Key` enum is available, which contains a set of default keys (feel free to add whatever other keys you need).

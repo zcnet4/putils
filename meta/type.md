@@ -1,4 +1,4 @@
-# type
+# [type](type.hpp)
 
 Object representation of a type.
 

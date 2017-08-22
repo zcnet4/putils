@@ -1,4 +1,4 @@
-# Point<Precision, Dimensions>, Rect
+# [Point<Precision, Dimensions>, Rect](Point.hpp)
 
 Abstraction to a 2D or 3D point/rectangle.
 

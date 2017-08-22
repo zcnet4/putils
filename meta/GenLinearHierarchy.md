@@ -1,4 +1,4 @@
-# GenLinearHierarchy
+# [GenLinearHierarchy](GenLinearHierarchy.hpp)
 
 Given a class template `T` and a typelist `List`, generate a new type inheriting from `T` specialized on each type in `List`.
 

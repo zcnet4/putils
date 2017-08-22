@@ -1,4 +1,4 @@
-# table
+# [table](table.hpp)
 
 A type-safe association table that maps any key of any type to any value of any type.
 
