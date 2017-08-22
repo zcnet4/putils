@@ -1,4 +1,4 @@
-# Mouse
+# [Mouse](Mouse.hpp)
 
 An abstraction to a mouse. Each button is an observable object that will notify its observers when it changes state (pressed or unpressed).
 
