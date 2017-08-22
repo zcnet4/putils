@@ -1,4 +1,4 @@
-# PluginManager
+# [PluginManager](PluginManager.hpp)
 
 Manages a set of DLLs.
 
