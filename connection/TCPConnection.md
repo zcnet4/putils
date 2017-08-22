@@ -1,4 +1,4 @@
-# TCPConnection
+# [TCPConnection](TCPConnection.hpp)
 
 A final implementation of a client socket.
 
