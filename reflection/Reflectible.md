@@ -8,34 +8,34 @@ These should be defined by all types inheriting from Reflectible. This is enforc
 
 ##### get_class_name
 
-```
+```cpp
 static const auto get_class_name();
 ```
 Returns the class name.
 
 ##### get_attributes
 
-```
+```cpp
 static const auto &get_attributes();
 ```
 Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the attributes.
 
 ##### get_methods
 
-```
+```cpp
 static const auto &get_methods();
 ```
 Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to pointers to the methods.
 
 ##### get_parents
-```
+```cpp
 static const auto &get_parents();
 ```
 Returns a [table](https://github.com/phiste/putils/blob/master/meta/table.md) mapping strings to `pmeta::type` objects for each of the class' parents.
 
 ### type trait
 
-```
+```cpp
 template<typename T>
 using is_reflectible = std::is_base_of<Reflectible<T>, T>;
 ```
@@ -48,7 +48,7 @@ Lets client code check whether a given-type is reflectible.
 
 Takes a member pointer as parameter and generates a pair of parameters under the form `"var", &Class::var` to avoid redundancy when passing parameters to `pmeta::make_table`. For instance:
 
-```
+```cpp
 const auto table = pmeta::make_table(
     "x", &Point::x,
     "y", &Point::y
@@ -57,7 +57,7 @@ const auto table = pmeta::make_table(
 
 can be refactored to:
 
-```
+```cpp
 const auto table = pmeta::make_table(
     pmeta_reflectible_attribute(&Point::x),
     pmeta_reflectible_attribute(&Point::y)
@@ -68,7 +68,7 @@ const auto table = pmeta::make_table(
 
 Provides the same functionality as `pmeta_reflectible_attribute`, but skips the first character of the attribute's name (such as an `_` or `m`) that would mark a private member. For instance:
 
-```
+```cpp
 const auto table = pmeta::make_table(
     "name", &Human::_name,
     "age", &Human::_age
@@ -77,7 +77,7 @@ const auto table = pmeta::make_table(
 
 can be refactored to:
 
-```
+```cpp
 const auto table = pmeta::make_table(
     pmeta_reflectible_attribute_private(&Human::_name),
     pmeta_reflectible_attribute_private(&Human::_age)
@@ -86,7 +86,7 @@ const auto table = pmeta::make_table(
 
 ### Example
 
-```
+```cpp
 class ExampleParent
 {
 };
