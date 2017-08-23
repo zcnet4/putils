@@ -6,13 +6,13 @@ Abstraction to a process (useful to run system commands and send them input/get 
 
 ##### Constructor
 
-```
+```cpp
 Process(const std::string &command, const Options &options);
 ```
 Starts a process which will run `command` with the given `options`.
 
 ##### Options structure
-```
+```cpp
 struct Options
 {
     struct Stream
@@ -32,7 +32,7 @@ By default, none of the streams are redirected, and if they are, the default nam
 
 ##### Stream getters
 
-```
+```cpp
 std::ostream &getStdin();
 std::istream &getStdout();
 std::istream &getStderr();
@@ -41,7 +41,7 @@ Used to get the redirected streams and communicate with the process.
 
 ##### sendEOF
 
-```
+```cpp
 void sendEOF();
 ```
 Sends the equivalent of a CTRL+D to the process' stdin.
