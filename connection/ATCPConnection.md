@@ -6,7 +6,7 @@ Base class for the Connection classes.
 
 ##### send
 
-```
+```cpp
 void send(const T &data);
 ```
 
@@ -14,7 +14,7 @@ Send `data` to the server. Specialized for `std::string` to send the underlying 
 
 ##### receive
 
-```
+```cpp
 std::string receive();
 void receive(T &dest);
 ```
