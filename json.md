@@ -3,13 +3,13 @@
 JSON lexer and pretty-printer.
 
 ### prettyprint
-```
+```cpp
 std::string prettyprint(auto &&str);
 ```
 Prints JSON-formatted string `str` with pretty alignment.
 
 ### Object
-```
+```cpp
 struct Object
 {
     enum class Type
@@ -30,7 +30,7 @@ struct Object
 Representation for a JSON object, which may be a simple value, an actual object, or an array of objects.
 
 ### lex
-```
+```cpp
 Object lex(auto &&str);
 ```
 Lexes JSON-formatted string `str` and returns a JSON object.
