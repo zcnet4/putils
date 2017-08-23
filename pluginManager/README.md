@@ -3,7 +3,7 @@ A simple and re-usable C++ dynamic library abstraction.
 
 ### EXPORT
 Export.hpp contains an `EXPORT` macro which should be added to the prototype of DLL functions to be exported.
-```
+```cpp
 EXPORT void someFunction() {}
 ```
 
