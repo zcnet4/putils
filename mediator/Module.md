@@ -4,7 +4,7 @@ One "client" of a [Mediator](Mediator.md). `Modules` communicate by sending each
 
 During class definition, a `Module` indicates what types of `DataPackets` it would like to receive, and must specify a
 
-```
+```cpp
 void handle(const DataPacket &);
 ```
 
@@ -14,7 +14,7 @@ function for each of those types.
 
 ##### Definition
 
-```
+```cpp
 template<typename CRTP, typename ...DataPackets>
 class Module;
 ```
@@ -23,7 +23,7 @@ Modules must indicate their sub-type (see `CRTP`), as well as the types of `Data
 
 ##### Constructor
 
-```
+```cpp
 Module(Mediator *m = nullptr);
 ```
 
@@ -31,7 +31,7 @@ The Mediator can optionally be specified at construction time in order to send `
 
 ##### send
 
-```
+```cpp
 void send(const T &data) const
 ```
 
@@ -39,7 +39,7 @@ Sends the `data` `DataPacket` to all subscribed modules.
 
 ##### sendTo
 
-```
+```cpp
 void sendTo(const T &data, BaseModule *dest) const;
 ```
 
@@ -47,7 +47,7 @@ Sends the `data` `DataPacket` to the `dest` `Module`.
 
 ##### query
 
-```
+```cpp
 template<typename Response>
 Response query(auto &&q); // q: DataPacket containing a "putils::BaseModule *sender" field
 ```
@@ -58,7 +58,7 @@ Other `Modules` can reply to the query by calling `sendTo` with the `sender` fie
 
 ##### runTask
 
-```
+```cpp
 void runTask(const std::function<void()> &f) const;
 ```
 
