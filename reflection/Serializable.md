@@ -8,13 +8,13 @@ By default, serializes objects as JSON. Can be easily customized with policies.
 
 ##### Constructor
 
-```
+```cpp
 Serializable()
 ```
 
 A default constructor is available if the CRTP class is [Reflecitble](Reflectible.md).
 
-```
+```cpp
 Serializable(Fields &&...attrs)
 ```
 
@@ -22,21 +22,21 @@ Takes as arguments the various attributes which should be serialized, paired wit
 
 ##### serialize
 
-```
+```cpp
 void serialize(std::ostream &s) const;
 std::ostream &operator<<(std::ostream &s, const putils::Serializable<Derived, OutputPolicy> &obj)
 ```
 
 ##### unserialize
 
-```
+```cpp
 void unserialize(std::istream &s) noexcept override
 std::istream &operator>>(std::istream &s, putils::Serializable<Derived, OutputPolicy> &obj)
 ```
 
 ### Example
 
-```
+```cpp
 int main()
 {
     struct Tmp : public Serializable<Tmp>
