@@ -9,7 +9,7 @@ Movable, but not copyable.
 
 ##### Constructor
 
-```
+```cpp
 RAII(T &&res, std::function<void(T &)> &&dtor = [](T &) {});
 ```
 
@@ -25,12 +25,12 @@ A `get()` function also lets you explicitly access the resource.
 
 For instance, to securely use a C socket:
 
-```
+```cpp
 auto socket = RAII<int>{ socket(...), [](int sock) { close(sock); } };
 ```
 
 For an OpenSSL object:
 
-```
+```cpp
 auto ctx = RAII<SSL*> { nullptr, [](SSL *ssl) { SSL_free(ssl); } };
 ```
