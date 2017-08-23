@@ -6,7 +6,7 @@ A final implementation of a listening socket over an OpenSSL secure connection.
 
 ##### Constructor
 
-```
+```cpp
 OpenSSLTCPListener(short port, const std::string &host = "127.0.0.1",
                    const std::string &certificate, const std::string &key);
 ```
