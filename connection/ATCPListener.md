@@ -6,7 +6,7 @@ Basic interface for the Listener classes. It inherits from `putils::Observable` 
 
 ##### select
 
-```
+```cpp
 void select(timeval &&timeout = {-1, -1});
 ```
 
@@ -19,7 +19,7 @@ The following functions are pure virtual and are all that needs to be redefined 
 
 ##### doRemove
 
-```
+```cpp
 virtual void doRemove(int fd) = 0;
 ```
 
@@ -27,7 +27,7 @@ Perform whatever should happen when removing a client (such as freeing the SSL* 
 
 ##### doAccept
 
-```
+```cpp
 virtual bool doAccept(int fd) = 0;
 ```
 
@@ -35,7 +35,7 @@ Perform whatever should happen when accepting a new client (such as SSL_accept i
 
 ##### doRead
 
-```
+```cpp
 virtual int doRead(int fd, char *dest, size_t length) = 0;
 ```
 
@@ -43,7 +43,7 @@ Perform a read operation, reading up to `length` bytes into `dest`
 
 ##### doWrite
 
-```
+```cpp
 virtual int doWrite(int fd, const char *data, size_t length) = 0;
 ```
 
@@ -59,30 +59,30 @@ Clients contain two `putils::Observable`:
 The following functions let users access received message and send data to the client:
 
 ##### getBuff
-```
+```cpp
 T getBuff() const;
 ```
 Recovers the last message from the client as a `T` (for binary protocols).
-```
+```cpp
 std::string getBuff() const;
 std::string getMsg() const;
 ```
 Recovers the last message from the client as an `std::string` (for text protocols).
 
 ##### send
-```
+```cpp
 void send(T &&data);
 ```
 Sends data to the client as a `T` (specialized for std::string to send the underlying c_str).
 
 ##### receive
-```
+```cpp
 T receive(bool selectAlreadyRunning = false, timeval timeout = { -1, -1 })
 ```
 Blocks until a new message is received, or until `timeout` is reached. If `select` is already being called from another thread, `selectAlreadyRunning` should be set to `true`.
 
 ##### disconnect
-```
+```cpp
 void disconnect() const;
 ```
 Disconnects the client
