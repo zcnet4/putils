@@ -8,7 +8,7 @@ Abstraction to a 2D or 3D point/rectangle.
 
 ##### Coordinates
 
-```
+```cpp
 Precision x;
 Precision y;
 { Precision z; } // If Dimensions == 3
@@ -16,7 +16,7 @@ Precision y;
 
 ##### Operators
 
-```
+```cpp
 bool operator==(const Point<P> &rhs) const;
 bool operator!=(const Point<P> &rhs) const;
 Point operator+(const Point<P> &rhs) const;
@@ -27,7 +27,7 @@ Point &operator-=(const Point<P> &rhs);
 
 ##### distanceTo
 
-```
+```cpp
 Precision distanceTo(const Point<P> &rhs) const;
 ```
 Returns the distance to another point.
@@ -38,21 +38,21 @@ Returns the distance to another point.
 
 ##### Coordinates
 
-```
+```cpp
 Point<Precision> topLeft;
 Point<Precision> size;
 ```
 
 ##### Operators
 
-```
+```cpp
 bool operator==(const Rect<P> &rhs) const;
 bool operator!=(const Rect<P> &rhs) const;
 ```
 
 ##### intersect
 
-```
+```cpp
 bool intersect(const Rect &other) const
 ```
 Returns whether this rectangle intersects with `other`.
