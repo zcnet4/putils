@@ -6,7 +6,7 @@ Given an `AbstractFactory<TList...>`, users can call `make<T>()` to create an ob
 ### Members
 
 ##### make
-```
+```cpp
 template<typename T> // T must be in TList
 std::unique_ptr<T> make();
 ```
@@ -15,7 +15,7 @@ Creates an object of type T, or any type derived from T. Construction is perform
 ### Example code
 In this example, "CFactory" can create `ints` and `doubles`, which isn't particularly useful. However, you can imagine how this could be useful if CFactory could create concrete versions of GUI elements, for instance.
 
-```
+```cpp
 #include <iostream>
 #include "AbstractFactory.hpp"
 
