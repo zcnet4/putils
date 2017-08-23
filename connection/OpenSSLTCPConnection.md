@@ -6,7 +6,7 @@ A final implementation of a client socket over an OpenSSL secure connection.
 
 ##### Constructor
 
-```
+```cpp
 OpenSSLTCPConnection(const std::string &host, short port,
                      const std::string &certificate, const std::string &key);
 ```
