@@ -11,7 +11,7 @@ A [Mediator](Mediator.md) object manages [Modules](Module.md) and lets them comm
 
 ### Example
 
-```
+```cpp
 int main()
 {
     struct ExampleQuery
