@@ -7,13 +7,13 @@ A `pmeta::type` is an empty object which can be passed to template functions to 
 ### Static members
 
 ##### wrapped
-```
+```cpp
 using wrapped = T;
 ```
 Provides access to the actual type this object represents.
 
 ##### index
-```
+```cpp
 using type_index = std::size_t;
 static const type_index index;
 ```
@@ -23,7 +23,7 @@ For instance, in an Entity Component System, `Entities` may map their `Component
 
 ### Macros
 
-```
+```cpp
 #define pmeta_typeof(object) std::decay_t<decltype(object)>
 #define pmeta_wrapped(typeObject) typename pmeta_typeof(typeObject)::wrapped
 ```
