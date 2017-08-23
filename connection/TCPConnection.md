@@ -6,6 +6,6 @@ A final implementation of a client socket.
 
 ##### Constructor
 
-```
+```cpp
 TCPConnection(const std::string &host, short port);
 ```
