@@ -23,7 +23,7 @@ namespace pogre
                   _camNode(scnMgr.getRootSceneNode()->createChildSceneNode()),
                   _strategy(std::move(strategy))
         {
-            _camera->setNearClipDistance(5);
+            _camera->setNearClipDistance(0.1);
             _camera->setAutoAspectRatio(true);
             window.addViewport(_camera, ZOrder, left, top, width, height);
 
