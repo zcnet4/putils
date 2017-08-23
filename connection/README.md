@@ -16,7 +16,7 @@ The "Listener" family class is an abstraction to server sockets.
 Here's the code for a simple server that listens on port 4242, prints messages from clients on stdout and sends "Hello there!" as a reply.
 You can test this server with "nc 127.0.0.1 4242": anything you type should be echoed server-side, and nc should print "Hello there!" back.
 
-```
+```cpp
 #include <iostream>
 #include "TCPListener.hpp"
 
@@ -67,7 +67,7 @@ The "Connection" family class is an abstraction to client sockets.
 Here's the code for a simple client that connects to localhost on port 4242, sends messages entered on stdin and prints replies from the server.
 You can test this client with "nc -l -p 4242": anything you type in the client should be echoed by nc, and vice versa.
 
-```
+```cpp
 #include <iostream>
 #include "TCPConnection.hpp"
 
