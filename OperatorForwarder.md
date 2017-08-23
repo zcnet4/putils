@@ -6,7 +6,7 @@ Forwards all operators to a given member
 
 ##### Constructor
 
-```
+```cpp
 OperatorForwarding(Attr &attr);
 ```
 
