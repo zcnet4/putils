@@ -6,7 +6,7 @@ Simple and extensible Command-Line Interface class which lets you simply provide
 
 ##### Constructor
 
-```
+```cpp
 CLI(const CommandMap &funcs,
     const Command &default_ = [](const std::string &cmd, const std::vector<Param> &) { std::cout << "Unknown command: " << cmd << std::endl; },
     const std::function<std::string()> &prompt = []{ return "> "; },
@@ -18,32 +18,32 @@ CLI(const CommandMap &funcs,
 * `delimiters`: pairs of delimiters which may surround parameters (defaults to "", '' and ())
 
 ##### run
-```
+```cpp
 void run() const;
 ```
 Starts the input loop.
 
 ##### step
-```
+```cpp
 void step() const
 ```
 Reads and executes one command.
 
 ##### addCommand
-```
+```cpp
 void addCommand(const std::string &cmd, const Command &func);
 ```
 Adds a new command (perhaps an alias the user created)
 
 ##### running
-```
+```cpp
 std::atomic<bool> running { true };
 ```
 Used for multi-threading purposes, to force the CLI to stop.
 
 ##### Ease-of-use types
 
-```
+```cpp
 struct Param
 {
     std::string value;
@@ -52,19 +52,19 @@ struct Param
 ```
 A parameter is defined by its value, and possibly the delimiters that surrounded it.
 
-```
+```cpp
 using Command = std::function<void(const std::string &cmd, const std::vector<Param> &params)>;
 ```
 A `Command` takes two parameters: the command itself (argv[0]), and the set of parameters entered by the user.
 
-```
+```cpp
 using CommandMap = std::unordered_map<std::string, Command>;
 ```
 Maps strings (the command the user has to type) to commands (the function to execute).
 
 ### Example
 
-```
+```cpp
 int main()
 {
     putils::CLI(
