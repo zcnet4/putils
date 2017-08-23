@@ -9,7 +9,7 @@ The only class users have to interact with in order to get a working server is `
 ### Members
 
 ##### Constructor
-```
+```cpp
 HttpServer(short normalPort = 4242, short securePort = 4243);
 ```
 Starts a server on the given ports. `securePort` will be used for an HTTPS connection using OpenSSL.
@@ -17,20 +17,20 @@ Starts a server on the given ports. `securePort` will be used for an HTTPS conne
 Upon construction, one thread is started for each port.
 
 ##### get
-```
+```cpp
 void get(const std::string &uri, const Route &route)
 ```
 Adds a new GET endpoint at the given `uri`, which will be served by `route`.
 
 ##### post
-```
+```cpp
 void post(const std::string &uri, const Route &route)
 ```
 Adds a new POST endpoint at the given `uri`, which will be served by `route`.
 
 ##### Helper types
 
-```
+```cpp
 using HttpParams = std::unordered_map<std::string, std::string>;
 using Route = std::function<std::string(const HttpParams &)>;
 ```
@@ -38,7 +38,7 @@ A `Route` is a function that will be called upon request for a given URI. It sho
 
 ### Example
 
-```
+```cpp
 int main()
 {
     putils::HttpServer server(4242, -1);
