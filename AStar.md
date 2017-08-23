@@ -6,7 +6,7 @@ An implementation of the AStar algorithm.
 
 ##### getNextDirection
 
-```
+```cpp
 Direction getNextDirection(const Point<Precision> &start, const Point<Precision> &goal,
                            const std::function<bool(const Point<Precision> &dest)> &canMoveTo);
 ```
