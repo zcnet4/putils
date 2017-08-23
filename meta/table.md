@@ -5,20 +5,20 @@ A type-safe association table that maps any key of any type to any value of any 
 ### Members
 
 ##### make function
-```
+```cpp
 auto make_table(KeyValues &&...keyValues);
 ```
 Create a table mapping keyValues two by two (see Example).
 
 ##### get_value
-```
+```cpp
 void get_value(auto &&key, auto &&func);
 ```
 Retrieve the value associated to `key` and call `func` by passing it that value.
 See `Example`.
 
 ##### get_key
-```
+```cpp
 auto get_key(auto &&value, auto &&func);
 ```
 Retrieve the key associated to `value` and call `func` by passing it that key.
@@ -26,7 +26,7 @@ See `Example`.
 
 ### Example
 
-```
+```cpp
 inline void table()
 {
     /*
