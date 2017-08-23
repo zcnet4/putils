@@ -5,7 +5,7 @@ The "Library" class family are abstractions to Unix and Windows DLLs. These shou
 ### Members
 
 ##### execute
-```
+```cpp
 T execute(const std::string &name, P &&...args)
 ```
 Execute the `name` function, returning T and taking `args` as parameters.
@@ -16,7 +16,7 @@ These are the functions to be redefined if a new type of library is to be suppor
 
 ##### loadSymbol
 
-```
+```cpp
 virtual void *loadSymbol(const std::string &name) = 0;
 ```
 
