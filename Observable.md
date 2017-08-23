@@ -11,20 +11,20 @@ Classes inheriting from `Observable` can notify their observers by calling `chan
 ### Members
 
 ##### addObserver
-```
+```cpp
 intptr_t addObserver(const std::function<void(const Args &...)> &observer);
 Observable &operator+=(const std::function<void()> &observer) noexcept { addObserver(observer); return *this; }
 ```
 Returns an ID for the observer, letting you remove it later.
 
 ### removeObserver
-```
+```cpp
 void removeObserver(intptr_t id);
 ```
 Removes the observer with the given `id`.
 
 ### changed
-```
+```cpp
 void changed(const Args &...args);
 void operator()(const Args &...args);
 ```
