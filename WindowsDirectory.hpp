@@ -8,6 +8,7 @@
 #include <fileapi.h>
 #include <handleapi.h>
 #include "ADirectory.hpp"
+#include "concat.hpp"
 
 namespace putils
 {
@@ -15,7 +16,7 @@ namespace putils
     {
         // Constructor
     public:
-        WindowsDirectory(std::string_view path) noexcept
+        WindowsDirectory(std::string_view path)
             :
         _path(path),
         _goOn(true)
@@ -23,6 +24,8 @@ namespace putils
         if (_path[_path.length() - 1] != '/')
             _path = _path + "/";
         _handle = FindFirstFile((_path + "*").c_str(), &_ffd);
+        if (_handle == nullptr)
+            throw std::runtime_error(putils::concat("No such directory: ", path));
     }
 
         // Destructor

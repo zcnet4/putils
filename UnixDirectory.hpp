@@ -5,18 +5,22 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include "ADirectory.hpp"
+#include "concat.hpp"
 
 namespace putils
 {
     class UnixDirectory final : public ADirectory
     {
     public:
-        UnixDirectory(std::string_view path) noexcept
+        UnixDirectory(std::string_view path)
                 :
                 _handle(opendir(path.data())),
                 _path(path),
                 _goOn(true)
         {
+            if (!_handle)
+                throw std::runtime_error(putils::concat("No such directory: ", path));
+
             if (_path[_path.length() - 1] != '/')
                 _path = _path + "/";
         }
