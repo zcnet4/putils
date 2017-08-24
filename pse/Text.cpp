@@ -4,8 +4,6 @@
 
 namespace pse
 {
-    std::unordered_map<std::string, sf::Font *>    Text::fonts;
-
     Text::Text(const sf::String &str, const sf::Vector2f &pos, const sf::Color &color, unsigned int textSize,
                std::string_view font, const sf::Text::Style &style) noexcept
             :
@@ -52,17 +50,17 @@ namespace pse
     {
         if (fonts.find(font.data()) == fonts.end())
         {
-            sf::Font *f = new sf::Font();
+            auto f = std::make_unique<sf::Font>();
             if (!(f->loadFromFile(font.data())))
             {
                 std::cerr << putils::concat("Error loading font '", font.data(), "'") << std::endl;
                 return;
             }
-            fonts[font.data()] = f;
+            fonts.emplace(font.data(), std::move(f));
         }
 
-        _font = *fonts[font.data()];
-        _text.setFont(_font);
+        _font = fonts[font.data()].get();
+        _text.setFont(*_font);
     }
 
     void Text::setStyle(const sf::Text::Style &style) noexcept

@@ -47,12 +47,12 @@ namespace pse
         sf::String _str;
         sf::Color _color;
         unsigned int _textSize;
-        sf::Font _font;
+        sf::Font *_font = nullptr;
         std::string _fontFile;
         sf::Text::Style _style;
 
     private:
-        static std::unordered_map<std::string, sf::Font *> fonts;
+        static inline std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
 
         // Coplien
     public:
