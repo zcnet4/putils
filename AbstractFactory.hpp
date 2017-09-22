@@ -40,7 +40,7 @@ namespace putils
 
     namespace test
     {
-        inline void abstractFactory()
+        inline bool abstractFactory()
         {
             class CFactory : public AbstractFactory<int, double>
             {
@@ -49,7 +49,7 @@ namespace putils
             };
 
             CFactory factory;
-            putils::runTests(
+            return putils::runTests(
                     "Create type 1", [&factory] { return *(factory.make<int>()) == 0; },
                     "Create type 2", [&factory] { return *(factory.make<double>()) == 42; }
             );

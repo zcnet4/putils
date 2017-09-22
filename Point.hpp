@@ -349,3 +349,9 @@ namespace std
     };
 }
 
+namespace putils
+{
+    template<typename Precision>
+    using PointHash = std::hash<putils::Point<Precision>>;
+}
+

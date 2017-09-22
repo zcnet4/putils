@@ -141,9 +141,9 @@ namespace putils
 
     namespace test
     {
-        inline void astar()
+        inline bool astar()
         {
-            putils::runTests(
+            return putils::runTests(
                     "First step", []
                     {
                         const auto steps = putils::AStar::getNextDirection<int>(

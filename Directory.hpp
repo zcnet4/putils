@@ -14,9 +14,9 @@ namespace putils
 
     namespace test
     {
-        inline void directory()
+        inline bool directory()
         {
-            putils::runTests(
+            return putils::runTests(
                     "for_each", []
                     {
                         Directory d(".");

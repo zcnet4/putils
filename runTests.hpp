@@ -5,26 +5,27 @@
 namespace putils
 {
     template<typename ...Tests>
-    void runTests(Tests &&...tests);
+    bool runTests(Tests &&...tests);
 
     template<>
-    inline void runTests() {}
+    inline bool runTests() { return true; }
 
     template<typename Str, typename Test, typename ...Tests>
-    void runTests(Str &&str, Test &&test, Tests &&...tests)
+    bool runTests(Str &&str, Test &&test, Tests &&...tests)
     {
-        std::cout << str << ": " << (test() ? "[OK]" : "[KO]") << std::endl;
-        runTests(std::forward<Tests>(tests)...);
+        bool ret = test();
+        std::cout << str << ": " << (ret ? "[OK]" : "[KO]") << std::endl;
+        return ret && runTests(std::forward<Tests>(tests)...);
     }
-    
+
     namespace test
     {
-        inline void runTests()
+        inline bool runTests()
         {
-            putils::runTests(
-                "Good test", [] { return true; },
-                "Bad tests", [] { return false; }
-            );            
+            return putils::runTests(
+                    "Good test", [] { return true; },
+                    "Bad tests", [] { return false; }
+            );
         }
     }
 }
