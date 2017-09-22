@@ -8,7 +8,7 @@ namespace putils
     void runTests(Tests &&...tests);
 
     template<>
-    void runTests() {}
+    inline void runTests() {}
 
     template<typename Str, typename Test, typename ...Tests>
     void runTests(Str &&str, Test &&test, Tests &&...tests)
