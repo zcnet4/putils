@@ -7,6 +7,7 @@
 
 #include "fwd.hpp"
 #include "Point.hpp"
+#include "runTests.hpp"
 
 namespace putils
 {
@@ -142,7 +143,7 @@ namespace putils
 
     namespace test
     {
-        inline void cellularAutomaton()
+        inline bool cellularAutomaton()
         {
             CellularAutomaton<bool> ca(
                     {
@@ -154,20 +155,26 @@ namespace putils
                     }
             );
 
-            const auto &cells = ca.step(
-                    [](const std::vector<const Cell<bool> *> &neighbors, const Cell<bool> &cell)
+            return putils::runTests(
+                    "step", [&ca]
                     {
-                        return std::find_if(neighbors.begin(), neighbors.end(), [](auto &&ptr){ return ptr->obj; })
-                               != neighbors.end();
-                    },
-                    [](Cell<bool> &cell)
-                    {
-                        cell.obj = !cell.obj;
+                        const auto &cells = ca.step(
+                                [](const std::vector<const Cell<bool> *> &neighbors, const Cell<bool> &cell)
+                                {
+                                    return std::find_if(neighbors.begin(), neighbors.end(), [](auto &&ptr){ return ptr->obj; })
+                                           != neighbors.end();
+                                },
+                                [](Cell<bool> &cell)
+                                {
+                                    cell.obj = !cell.obj;
+                                }
+                        );
+
+                        return cells.size() == 5 &&
+                               !cells[0].obj && !cells[4].obj &&
+                               cells[1].obj && cells[2].obj && cells[3].obj;
                     }
             );
-
-            for (const auto &c : cells)
-                std::cout << std::boolalpha << c.obj << std::endl;
         }
     }
 }
