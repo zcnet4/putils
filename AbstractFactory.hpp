@@ -4,6 +4,7 @@
 #include <tuple>
 #include "meta/type.hpp"
 #include "meta/GenLinearHierarchy.hpp"
+#include "runTests.hpp"
 
 namespace putils
 {
@@ -48,12 +49,10 @@ namespace putils
             };
 
             CFactory factory;
-
-            auto i = *(factory.make<int>());
-            auto d = *(factory.make<double>());
-
-            assert(i == 0);
-            assert(d == 42);
+            putils::runTests(
+                    "Create type 1", [&factory] { return *(factory.make<int>()) == 0; },
+                    "Create type 2", [&factory] { return *(factory.make<double>()) == 42; }
+            );
         }
     }
 }
