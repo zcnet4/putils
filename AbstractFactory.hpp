@@ -37,23 +37,5 @@ namespace putils
             return unit.makeImpl(pmeta::type<T>());
         }
     };
-
-    namespace test
-    {
-        inline bool abstractFactory()
-        {
-            class CFactory : public AbstractFactory<int, double>
-            {
-                std::unique_ptr<int> makeImpl(pmeta::type<int>) noexcept final { return std::make_unique<int>(0); }
-                std::unique_ptr<double> makeImpl(pmeta::type<double>) noexcept final { return std::make_unique<double>(42); }
-            };
-
-            CFactory factory;
-            return putils::runTests(
-                    "Create type 1", [&factory] { return *(factory.make<int>()) == 0; },
-                    "Create type 2", [&factory] { return *(factory.make<double>()) == 42; }
-            );
-        }
-    }
 }
 

@@ -119,8 +119,8 @@ namespace putils
             putils::QuadTree<int> tree({ { 0, 0 }, { 16, 16 } });
 
             int id = 0;
-            for (int x = 0; x < 8; ++x)
-                for (int y = 0; y < 8; ++y)
+            for (int x = 0; x < 64; ++x)
+                for (int y = 0; y < 64; ++y)
                     tree.add(++id, { { x, y }, { 1, 1 } });
 
             tree.add(4242, { { 3, 3 }, { 2, 2 } });
