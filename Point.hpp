@@ -56,7 +56,7 @@ namespace putils
 
         double angleTo(const Point<Precision, 3> &rhs) const noexcept
         {
-            return -std::atan2(rhs.y - y, rhs.x - x) + M_PI / 2;
+            return std::atan2(rhs.y - y, rhs.x - x);
         }
 
         static const auto get_class_name() { return "Point2"; }
@@ -214,7 +214,7 @@ namespace putils
 
         double angleToXZ(const Point<Precision, 3> &rhs) const noexcept
         {
-            return -std::atan2(rhs.z - z, rhs.x - x) + M_PI / 2;
+            return std::atan2(rhs.z - z, rhs.x - x);
         }
 
         static const auto get_class_name() { return "Point3"; }
