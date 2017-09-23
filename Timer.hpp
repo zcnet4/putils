@@ -13,6 +13,7 @@ namespace putils
     public:
         using t_clock = std::chrono::system_clock;
         using t_duration = std::chrono::duration<double, std::ratio<1>>;
+        using seconds = t_duration;
 
         // Constructors
     public:
@@ -51,12 +52,13 @@ namespace putils
 
         t_duration getTimeSinceDone() const noexcept
         {
-            const auto done = t_clock::now() - _start;
+            return t_clock::now() - (_start + _duration);
+            // const auto done = t_clock::now() - _start;
 
-            if (_duration == _duration.zero())
-                return done - std::size_t(0) * _duration;
+            // if (_duration == _duration.zero())
+            //     return done - std::size_t(0) * _duration;
 
-            return done - (getTimesDone() * _duration);
+            // return done - (getTimesDone() * _duration);
         }
 
         // How long until it rings
