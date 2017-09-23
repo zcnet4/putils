@@ -113,9 +113,9 @@ namespace putils
                 );
 
             return !(topLeft.x >= other.topLeft.x + other.size.x ||
-                     topLeft.x + size.x < other.topLeft.x ||
+                     topLeft.x + size.x <= other.topLeft.x ||
                      topLeft.y >= other.topLeft.y + other.size.y ||
-                     topLeft.y + size.y < other.topLeft.y
+                     topLeft.y + size.y <= other.topLeft.y
             );
         }
 

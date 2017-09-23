@@ -127,12 +127,18 @@ TEST(RectTest, IntersectOutside)
     putils::Rect2i r{ { 0, 0 }, { 5, 5 } };
     putils::Rect2i r2{ { -1, -1 }, { 1, 1 } };
     EXPECT_FALSE(r.intersect(r2));
+
+    r2 = putils::Rect2i{ { 5, 5 }, { 1, 1 } };
+    EXPECT_FALSE(r.intersect(r2));
 }
 
 TEST(RectTest, IntersectInclusiveBorders)
 {
     putils::Rect2i r{ { 0, 0 }, { 5, 5 } };
     putils::Rect2i r2{ { -1, -1 }, { 1, 1 } };
+    EXPECT_TRUE(r.intersect(r2, true));
+
+    r2 = putils::Rect2i{ { 5, 5 }, { 1, 1 } };
     EXPECT_TRUE(r.intersect(r2, true));
 }
 
