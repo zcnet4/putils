@@ -18,6 +18,8 @@ target_include_directories(putils INTERFACE .)
 
 set(test_name putils_test)
 add_subdirectory(googletest)
-file(GLOB testSrc test/*.cpp test/*.hpp)
+file(GLOB testSrc
+        test/*.cpp test/*.hpp
+        test/*/*.cpp test/*/*.hpp)
 add_executable(${test_name} ${testSrc})
-target_link_libraries(${test_name} putils gtest_main)
+target_link_libraries(${test_name} putils mediator connection pluginManager gtest_main)

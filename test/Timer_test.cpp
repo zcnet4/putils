@@ -36,8 +36,6 @@ TEST_F(TimerTest, GetTimeSinceDone)
 {
     std::this_thread::sleep_for(5ms);
     EXPECT_LE(t.getTimeSinceDone(), 1ms);
-    std::cerr << t.getTimeSinceDone().count() << std::endl;
-    std::cerr << putils::Timer::t_duration(1ms).count() << std::endl;
     std::this_thread::sleep_for(5ms);
     EXPECT_GE(t.getTimeSinceDone(), 5ms);
 }
