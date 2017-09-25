@@ -23,7 +23,9 @@ struct CLITest : testing::Test
                 for (const auto &p : params)
                     std::cout << " [" << p.value << "]";
                 std::cout << std::endl;
-            }
+            },
+            // Prompt
+            [] { return ""; }
     };
 };
 
@@ -46,14 +48,6 @@ TEST_F(CLITest, DefaultCommand)
     cli.executeCommand("unknown one two three");
     const auto str = testing::internal::GetCapturedStdout();
     EXPECT_EQ(str, "[unknown] [one] [two] [three]\n");
-}
-
-TEST_F(CLITest, Prompt)
-{
-    testing::internal::CaptureStdout();
-    cli.displayPrompt();
-    const auto str = testing::internal::GetCapturedStdout();
-    EXPECT_EQ(str, "> ");
 }
 
 TEST_F(CLITest, AddCommand)

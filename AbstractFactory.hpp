@@ -24,9 +24,9 @@ namespace putils
     //
     // To build an object of type T, use factory.make<T>()
     //
-    template<typename ...TList>
+    template<typename ...Types>
     class AbstractFactory :
-            public pmeta::GenLinearHierarchy<AbstractFactoryUnit, std::tuple<TList...>>
+            public pmeta::GenLinearHierarchy<AbstractFactoryUnit, Types...>
     {
         // Make an object of type T by casting myself to the right AbstractFactoryUnit
     public:
