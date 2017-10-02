@@ -15,14 +15,14 @@ namespace putils
     namespace
     {
         template<typename T>
-        void extract(T &attr, std::string_view val)
+        void extract(T& attr, std::string_view val)
         {
             std::stringstream s(val.data());
             s >> attr;
         }
 
         template<>
-        void extract(std::string &attr, std::string_view val)
+        void extract(std::string& attr, std::string_view val)
         {
             attr = val;
         }
@@ -31,14 +31,14 @@ namespace putils
     namespace
     {
         template<typename ...Fields>
-        void parseFieldsImplem(const std::tuple<Fields...> &,
-                               const std::tuple<std::function<void(Fields)>...> &,
+        void parseFieldsImplem(const std::tuple<Fields...>&,
+                               const std::tuple<std::function<void(Fields)>...>&,
                                std::index_sequence<>)
-        {}
+        { }
 
         template<typename ...Fields, size_t I, size_t ...Is>
-        void parseFieldsImplem(const std::tuple<Fields...> &fields,
-                               const std::tuple<std::function<void(Fields)>...> &actions,
+        void parseFieldsImplem(const std::tuple<Fields...>& fields,
+                               const std::tuple<std::function<void(Fields)>...>& actions,
                                std::index_sequence<I, Is...>)
         {
             std::get<I>(actions)(std::get<I>(fields));
@@ -46,8 +46,8 @@ namespace putils
         };
 
         template<typename ...Fields>
-        void parseFields(const std::tuple<Fields...> &fields,
-                         const std::tuple<std::function<void(Fields)>...> &actions)
+        void parseFields(const std::tuple<Fields...>& fields,
+                         const std::tuple<std::function<void(Fields)>...>& actions)
         {
             parseFieldsImplem(fields, actions, std::index_sequence_for<Fields...>());
         }
@@ -70,7 +70,7 @@ namespace putils
         // Constructors
     public:
         // Initialize from stream
-        Csv(std::istream &s, bool ignoreFirstLine = false)
+        Csv(std::istream& s, bool ignoreFirstLine = false)
         {
             fillRows(s, ignoreFirstLine);
         }
@@ -82,15 +82,16 @@ namespace putils
             fillRows(s, ignoreFirstLine);
         }
 
-        Csv() {}
+        Csv()
+        { }
 
     public:
-        void dump(std::ostream &s) const
+        void dump(std::ostream& s) const
         {
-            for (auto &p : _orderedRows)
+            for (auto& p : _orderedRows)
             {
                 s << p->first;
-                pmeta::tuple_for_each(p->second, [&s](auto &attr)
+                pmeta::tuple_for_each(p->second, [&s](auto& attr)
                 {
                     s << Separator << attr;
                 });
@@ -100,20 +101,23 @@ namespace putils
 
         // Get the row for specified key
     public:
-        const std::tuple<Fields...> &get(const Key &key) const { return _rows.at(key); }
+        const std::tuple<Fields...>& get(const Key& key) const
+        { return _rows.at(key); }
 
         // Get all rows
     public:
-        const std::vector<std::pair<const Key, std::tuple<Fields...>> *> &getRows() const { return _orderedRows; }
+        const std::vector<std::pair<const Key, std::tuple<Fields...>>*>& getRows() const
+        { return _orderedRows; }
 
     public:
-        void add(const Key &key, const std::tuple<Fields...> &t)
+        void add(const Key& key, const std::tuple<Fields...>& t)
         {
-            const auto &p = _rows.emplace(key, t);
+            const auto& p = _rows.emplace(key, t);
             _orderedRows.emplace_back(&(*p.first));
         }
 
-        void add(const Key &key, const Fields &...fields) { add(key, std::make_tuple(fields...)); }
+        void add(const Key& key, const Fields& ...fields)
+        { add(key, std::make_tuple(fields...)); }
 
     public:
         void addRow(std::string line)
@@ -126,7 +130,7 @@ namespace putils
             line = line.substr(pos + 1);
 
             std::tuple<Fields...> row;
-            pmeta::tuple_for_each(row, [&line](auto &attr)
+            pmeta::tuple_for_each(row, [&line](auto& attr)
             {
                 const auto pos = line.find(Separator);
                 std::string val = line.substr(0, pos);
@@ -135,17 +139,17 @@ namespace putils
                 extract(attr, val);
             });
 
-            const auto &p = _rows.emplace(std::move(key), std::move(row));
+            const auto& p = _rows.emplace(std::move(key), std::move(row));
             _orderedRows.emplace_back(&(*p.first));
         }
 
     public:
         void parse(
-                const std::function<void(Key)> &init,
-                const std::tuple<std::function<void(Fields)>...> &actions,
-                const std::function<void()> &end) const
+                const std::function<void(Key)>& init,
+                const std::tuple<std::function<void(Fields)>...>& actions,
+                const std::function<void()>& end) const
         {
-            for (const auto &p : _orderedRows)
+            for (const auto& p : _orderedRows)
             {
                 init(p->first);
                 parseFields(p->second, actions);
@@ -155,7 +159,7 @@ namespace putils
 
         // Constructor implementation detail
     private:
-        void fillRows(std::istream &s, bool ignoreFirstLine)
+        void fillRows(std::istream& s, bool ignoreFirstLine)
         {
             if (ignoreFirstLine)
             {
@@ -169,6 +173,6 @@ namespace putils
 
     private:
         std::unordered_map<Key, std::tuple<Fields...>> _rows;
-        std::vector<std::pair<const Key, std::tuple<Fields...>> *> _orderedRows;
+        std::vector<std::pair<const Key, std::tuple<Fields...>>*> _orderedRows;
     };
 }

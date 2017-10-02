@@ -6,7 +6,7 @@
 #include "concat.hpp"
 #include "url.hpp"
 
-void RoutesModule::addRoute(std::string_view uri, RoutesModule::Method method, const RoutesModule::Route &route)
+void RoutesModule::addRoute(std::string_view uri, RoutesModule::Method method, const RoutesModule::Route& route)
 {
     RoutesModule::Uri toAdd;
     std::string reg = "^";
@@ -34,8 +34,7 @@ void RoutesModule::addRoute(std::string_view uri, RoutesModule::Method method, c
                 reg += "(.*)";
             else
                 reg += putils::concat("([^", uri[i], "]*)", uri[i]);
-        }
-        else
+        } else
             reg.append(1, uri[i]);
     }
 
@@ -50,11 +49,11 @@ void RoutesModule::addRoute(std::string_view uri, RoutesModule::Method method, c
         _post.push_back(std::move(toAdd));
 }
 
-void RoutesModule::handle(const kia::packets::HttpRequest &p) const noexcept
+void RoutesModule::handle(const kia::packets::HttpRequest& p) const noexcept
 {
-    const auto &vec = (p.method == "GET") ? _get : _post;
+    const auto& vec = (p.method == "GET") ? _get : _post;
 
-    for (const auto &uri : vec)
+    for (const auto& uri : vec)
     {
         std::smatch m;
 
@@ -73,18 +72,18 @@ void RoutesModule::handle(const kia::packets::HttpRequest &p) const noexcept
 
     // No route for that uri
     auto err = std::string("[Routes] Unknown route ") + p.uri;
-    send(kia::packets::Log{ err });
+    send(kia::packets::Log{err});
     send404(p);
 }
 
-void RoutesModule::sendResponse(const kia::packets::HttpRequest &p, std::string_view response) const noexcept
+void RoutesModule::sendResponse(const kia::packets::HttpRequest& p, std::string_view response) const noexcept
 {
     auto packet = kia::success(p);
     packet.body = response;
     send(std::move(packet));
 }
 
-void RoutesModule::send404(const kia::packets::HttpRequest &request) const noexcept
+void RoutesModule::send404(const kia::packets::HttpRequest& request) const noexcept
 {
     // TODO: Load an error page specified in routes.txt
     auto response = kia::error(request, "404");

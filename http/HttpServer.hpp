@@ -18,26 +18,26 @@ namespace putils
         using Route = RoutesModule::Route;
 
     public:
-        HttpServer(short normalPort = 4242, short securePort = 4243)
+        explicit HttpServer(short normalPort = 4242, short securePort = 4243)
         {
             _modules.push_back(std::make_unique<LoggerModule>());
             _modules.push_back(std::make_unique<ProtocolModule>());
             _modules.push_back(std::make_unique<SecureConnectionModule>(_mediator, normalPort, securePort));
 
-            for (const auto &m : _modules)
+            for (const auto& m : _modules)
                 _mediator.addModule(m.get());
 
             _mediator.addModule(&_routes);
         }
 
     public:
-        void get(std::string_view uri, const Route &route)
+        void get(std::string_view uri, const Route& route)
         {
             _routes.addRoute(uri, RoutesModule::Method::Get, route);
         }
 
     public:
-        void post(std::string_view uri, const Route &route)
+        void post(std::string_view uri, const Route& route)
         {
             _routes.addRoute(uri, RoutesModule::Method::Post, route);
         }
@@ -55,19 +55,19 @@ namespace putils
             putils::HttpServer server(4242, -1);
 
             // Home page
-            server.get("/", [](const auto &)
+            server.get("/", [](const auto&)
             {
                 return "saucisseuh";
             });
 
             // Get with parameters
-            server.get("/getParams", [](const auto &params)
+            server.get("/getParams", [](const auto& params)
             {
                 return params.at("first") + " " + params.at("second");
             });
 
             // Run an executable
-            server.get("/run/{first}", [](const auto &params)
+            server.get("/run/{first}", [](const auto& params)
             {
                 putils::Process::Options options;
                 options.stdout.redirected = true;
@@ -78,7 +78,7 @@ namespace putils
             });
 
             // Post
-            server.post("/{first}", [](const auto &params)
+            server.post("/{first}", [](const auto& params)
             {
                 return params.at("first") + " " + params.at("str");
             });

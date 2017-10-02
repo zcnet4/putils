@@ -1,5 +1,8 @@
 #pragma once
 
+#include <putils/fwd.hpp>
+#include <putils/to_string.hpp>
+#include "reflection/Reflectible.hpp"
 #include "sol.hpp"
 #include "traits.hpp"
 
@@ -8,7 +11,7 @@ namespace putils
     namespace lua
     {
         template<typename T>
-        void registerType(sol::state &state)
+        void registerType(sol::state& state)
         {
             static_assert(putils::is_reflectible<T>::value, "Please make your type reflectible before registering it");
 
@@ -19,14 +22,16 @@ namespace putils
             );
 
             std::apply(
-                    [&state](auto &&...params) { state.new_usertype<T>(FWD(params)...); },
+                    [&state](auto&& ...params)
+                    { state.new_usertype<T>(FWD(params)...); },
                     t
             );
 
             if constexpr (putils::is_streamable<std::ostream, T>::value)
             {
                 state[T::get_class_name()][sol::meta_function::to_string] =
-                        [](const T &obj) { return putils::to_string(obj); };
+                        [](const T& obj)
+                        { return putils::to_string(obj); };
             }
         }
     }

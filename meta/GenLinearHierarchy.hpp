@@ -13,7 +13,9 @@ namespace pmeta
 
     // Empty tuple specialization (called when Tuple is empty)
     template<template<class> class T>
-    class GenLinearHierarchy<T> {};
+    class GenLinearHierarchy<T>
+    {
+    };
 
     //
     // Typical specialization: inherits from T<U>

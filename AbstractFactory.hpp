@@ -33,7 +33,7 @@ namespace putils
         template<typename T>
         std::unique_ptr<T> make() noexcept
         {
-            AbstractFactoryUnit<T> &unit = static_cast<AbstractFactoryUnit<T> &>(*this);
+            auto& unit = static_cast<AbstractFactoryUnit<T>&>(*this);
             return unit.makeImpl(pmeta::type<T>());
         }
     };

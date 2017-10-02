@@ -2,8 +2,8 @@
 
 #include <mutex>
 #include <vector>
-#include <OgreFrameListener.h>
-#include <OgreAnimationState.h>
+#include <OGRE/OgreFrameListener.h>
+#include <OGRE/OgreAnimationState.h>
 
 namespace pogre
 {
@@ -12,14 +12,14 @@ namespace pogre
         class AnimationManager
         {
         public:
-            void addAnimation(Ogre::AnimationState &anim, bool loop = true) noexcept;
-            void removeAnimation(Ogre::AnimationState &anim) noexcept;
+            void addAnimation(Ogre::AnimationState& anim, bool loop = true) noexcept;
+            void removeAnimation(Ogre::AnimationState& anim) noexcept;
 
         protected:
-            void frameRendered(const Ogre::FrameEvent &event) noexcept;
+            void frameRendered(const Ogre::FrameEvent& event) noexcept;
 
         private:
-            std::vector<Ogre::AnimationState *> _animations;
+            std::vector<Ogre::AnimationState*> _animations;
         };
     }
 }

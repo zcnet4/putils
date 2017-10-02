@@ -25,7 +25,8 @@ namespace pogre
         {
             addInputListener(this);
         }
-        virtual ~App() = default;
+
+        ~App() override = default;
 
         void start()
         {
@@ -36,17 +37,17 @@ namespace pogre
 
         // Update
     protected:
-        bool frameRenderingQueued(const Ogre::FrameEvent &event) override;
+        bool frameRenderingQueued(const Ogre::FrameEvent& event) override;
 
         // Key handling
     protected:
-        bool keyPressed(const OgreBites::KeyboardEvent &event) override;
-        bool keyReleased(const OgreBites::KeyboardEvent &event) override;
+        bool keyPressed(const OgreBites::KeyboardEvent& event) override;
+        bool keyReleased(const OgreBites::KeyboardEvent& event) override;
 
         // Mouse handling
     protected:
-        bool mouseMoved(const OgreBites::MouseMotionEvent &event) override;
-        bool mousePressed(const OgreBites::MouseButtonEvent &event) override;
-        bool mouseReleased(const OgreBites::MouseButtonEvent &event) override;
-   };
+        bool mouseMoved(const OgreBites::MouseMotionEvent& event) override;
+        bool mousePressed(const OgreBites::MouseButtonEvent& event) override;
+        bool mouseReleased(const OgreBites::MouseButtonEvent& event) override;
+    };
 }

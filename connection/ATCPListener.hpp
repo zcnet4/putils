@@ -39,20 +39,21 @@ namespace putils
         struct Client
         {
             template<typename Str>
-            Client(int fd, Str &&addr, short port, ATCPListener &connection)
-                    : fd(fd, [](int fd) { connection::closeSocket(fd); }),
+            Client(int fd, Str&& addr, short port, ATCPListener& connection)
+                    : fd(fd, [](int fd)
+            { connection::closeSocket(fd); }),
                       addr(FWD(addr)),
                       port(port),
                       _connection(connection)
-            {}
+            { }
 
             template<typename Str>
-            Client(putils::RAII<int> &&fd, Str &&addr, short port, ATCPListener &connection)
+            Client(putils::RAII<int>&& fd, Str&& addr, short port, ATCPListener& connection)
                     : fd(std::move(fd)),
                       addr(FWD(addr)),
                       port(port),
                       _connection(connection)
-            {}
+            { }
 
             putils::Observable<> newMessage;
             putils::Observable<> disconnected;
@@ -62,32 +63,36 @@ namespace putils
             short port;
 
             template<typename T>
-            T getBuff() const { return reinterpret_cast<const T>(*(_buff.get())); }
+            T getBuff() const
+            { return reinterpret_cast<const T>(*(_buff.get())); }
 
-            std::string getMsg() const { return std::string(_buff.get()); }
+            std::string getMsg() const
+            { return std::string(_buff.get()); }
 
             template<typename T>
-            void send(T &&data) { _connection.send(*this, FWD(data)); }
+            void send(T&& data)
+            { _connection.send(*this, FWD(data)); }
 
             template<typename T = std::string>
-            T receive(bool selectAlreadyRunning = false, timeval timeout = { -1, -1 })
+            T receive(bool selectAlreadyRunning = false, timeval timeout = {-1, -1})
             {
                 return _connection.receive<T>(*this, selectAlreadyRunning, timeout);
             }
 
-            void disconnect() const { _connection.removeClient(fd); }
+            void disconnect() const
+            { _connection.removeClient(fd); }
 
         private:
             friend ATCPListener;
 
-            void setBuff(std::unique_ptr<char[]> &&buff)
+            void setBuff(std::unique_ptr<char[]>&& buff)
             {
                 _buff = std::move(buff);
             }
 
         private:
             mutable std::mutex _mutex;
-            ATCPListener &_connection;
+            ATCPListener& _connection;
             std::unique_ptr<char[]> _buff;
         };
 
@@ -97,20 +102,21 @@ namespace putils
         // Any handshake process (such as SSL_accept) is done here
         virtual bool doAccept(int fd) noexcept = 0;
 
-        virtual int doRead(int fd, char *dest, size_t length) noexcept = 0;
+        virtual int doRead(int fd, char* dest, size_t length) noexcept = 0;
 
-        virtual int doWrite(int fd, const char *data, size_t length) noexcept = 0;
-
-    public:
-		virtual ~ATCPListener() { connection::add(-1); }
+        virtual int doWrite(int fd, const char* data, size_t length) noexcept = 0;
 
     public:
-        ATCPListener(short port, const std::string &host = "127.0.0.1", bool verbose = false)
+        virtual ~ATCPListener()
+        { connection::add(-1); }
+
+    public:
+        ATCPListener(short port, const std::string& host = "127.0.0.1", bool verbose = false)
                 : _verbose(verbose)
         {
             FD_ZERO(&_all_fds);
 
-			connection::add(1);
+            connection::add(1);
 
             // Open socket
             _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -119,11 +125,11 @@ namespace putils
             _maxfd = _serverSocket + 1;
             FD_SET(_serverSocket, &_all_fds);
 
-            struct sockaddr_in addr;
+            struct sockaddr_in addr{ };
             addr.sin_family = AF_INET;
             addr.sin_addr.s_addr = inet_addr(host.c_str());
             addr.sin_port = htons(port);
-            if (bind(_serverSocket, (struct sockaddr *) (&addr), sizeof(addr)) != 0)
+            if (bind(_serverSocket, (struct sockaddr*)(&addr), sizeof(addr)) != 0)
             {
                 perror("bind");
                 throw std::runtime_error("Failed to bind");
@@ -133,15 +139,15 @@ namespace putils
         }
 
     public:
-        void select(timeval &&timeout = {-1, -1})
+        void select(timeval&& timeout = {-1, -1})
         {
             fd_set read_fds = _all_fds;
-            fd_set write_fds;
+            fd_set write_fds{ };
             FD_ZERO(&write_fds);
 
             {
                 std::lock_guard<std::recursive_mutex> _(_clientsMutex);
-                for (const auto &p : _toWrite)
+                for (const auto& p : _toWrite)
                     FD_SET(p.first, &write_fds);
             }
 
@@ -161,14 +167,14 @@ namespace putils
                 acceptClient();
 
             std::lock_guard<std::recursive_mutex> _(_clientsMutex);
-            for (const auto &c : _clients)
+            for (const auto& c : _clients)
             {
                 int fd = c->fd;
                 if (FD_ISSET(fd, &read_fds))
                     readFromClient(fd);
                 if (FD_ISSET(fd, &write_fds))
                 {
-                    const auto &p = _toWrite.at(fd);
+                    const auto& p = _toWrite.at(fd);
                     writeToClient(fd, p.first.get(), p.second);
                     _toWrite.erase(fd);
                 }
@@ -194,10 +200,11 @@ namespace putils
     private:
     private:
         template<typename T>
-        void send(Client &client, const T &msg)
+        void send(Client& client, const T& msg)
         {
-            if (std::find_if(_clients.begin(), _clients.end(), [&client](const auto &c) { return c.get() == &client; })
-                    == _clients.end())
+            if (std::find_if(_clients.begin(), _clients.end(), [&client](const auto& c)
+            { return c.get() == &client; })
+                == _clients.end())
                 throw std::runtime_error("Client disconnected");
 
             std::lock_guard<std::mutex> _(client._mutex);
@@ -209,27 +216,29 @@ namespace putils
 
     private:
         template<typename T = std::string>
-        T receive(Client &client, bool selectAlreadyRunning = false, timeval timeout = { -1, -1 })
+        T receive(Client& client, bool selectAlreadyRunning = false, timeval timeout = {-1, -1})
         {
             int fd = client.fd;
 
-            std::atomic<bool> done { false };
+            std::atomic<bool> done{false};
             T ret;
 
             const auto id = client.newMessage.addObserver([&client, &done, &ret]
-            {
-                ret = client.getBuff<T>();
-                done = true;
-            });
+                                                          {
+                                                              ret = client.getBuff<T>();
+                                                              done = true;
+                                                          });
 
-            const auto rmid = client.disconnected.addObserver([&done] { done = true; });
+            const auto rmid = client.disconnected.addObserver([&done]
+                                                              { done = true; });
 
             while (!done)
                 if (!selectAlreadyRunning)
                     select(timeval(timeout));
 
-            if (std::find_if(_clients.begin(), _clients.end(), [&client](const auto &c) { return c.get() == &client; })
-                    == _clients.end() || _toRemove.find(fd) != _toRemove.end())
+            if (std::find_if(_clients.begin(), _clients.end(), [&client](const auto& c)
+            { return c.get() == &client; })
+                == _clients.end() || _toRemove.find(fd) != _toRemove.end())
                 throw std::runtime_error("Client disconnected");
 
             client.newMessage.removeObserver(id);
@@ -239,7 +248,7 @@ namespace putils
         }
 
     public:
-        Client &getLastClient()
+        Client& getLastClient()
         {
             std::lock_guard<std::recursive_mutex> _(_clientsMutex);
             return *_clients.back();
@@ -253,35 +262,36 @@ namespace putils
                 reallyRemoveClient(fd);
             }
             else*/
-                _toRemove.emplace(fd);
+            _toRemove.emplace(fd);
             // const auto it = _toWrite.find(fd);
             // if (it != _toWrite.end())
-                // _toWrite.erase(it);
+            // _toWrite.erase(it);
         }
 
         bool hasClient(int fd)
         {
-            return std::find_if(_clients.begin(), _clients.end(), [fd](const auto &c)
-                    { return c->fd == fd; }
-                    ) != _clients.end();
+            return std::find_if(_clients.begin(), _clients.end(), [fd](const auto& c)
+                                { return c->fd == fd; }
+            ) != _clients.end();
         }
 
-        const Client &getClient(int fd) const
+        const Client& getClient(int fd) const
         {
-            auto it = std::find_if(_clients.cbegin(), _clients.cend(), [fd](const auto &c) { return c->fd == fd; });
+            auto it = std::find_if(_clients.cbegin(), _clients.cend(), [fd](const auto& c)
+            { return c->fd == fd; });
             if (it == _clients.end())
                 throw std::runtime_error("No such client");
             return **it;
         }
 
-        Client &getClient(int fd)
+        Client& getClient(int fd)
         {
-            auto it = std::find_if(_clients.begin(), _clients.end(), [fd](const auto &c) { return c->fd == fd; });
+            auto it = std::find_if(_clients.begin(), _clients.end(), [fd](const auto& c)
+            { return c->fd == fd; });
             if (it == _clients.end())
                 throw std::runtime_error("No such client");
             return **it;
         }
-
 
     private:
         void reallyRemoveClient(int fd)
@@ -293,7 +303,7 @@ namespace putils
                 return;
             }
 
-            auto &client = getClient(fd);
+            auto& client = getClient(fd);
 
             {
                 std::lock_guard<std::mutex> _(client._mutex);
@@ -302,7 +312,8 @@ namespace putils
 
             FD_CLR(fd, &_all_fds);
             auto it = std::find_if(_clients.begin(), _clients.end(),
-                    [fd](const auto &c) { return c->fd == fd; });
+                                   [fd](const auto& c)
+                                   { return c->fd == fd; });
 
             if (it != _clients.end())
             {
@@ -318,7 +329,7 @@ namespace putils
         }
 
     private:
-        void addClient(std::unique_ptr<Client> &&client) noexcept
+        void addClient(std::unique_ptr<Client>&& client) noexcept
         {
             std::lock_guard<std::recursive_mutex> _(_clientsMutex);
             _clients.push_back(std::move(client));
@@ -329,12 +340,13 @@ namespace putils
         {
             sockaddr_in addr;
             socklen_t size = sizeof(addr);
-            auto fd = putils::RAII<int>(accept(_serverSocket, (sockaddr *) &addr, &size),
-                    [](int fd) { connection::closeSocket(fd); });
+            auto fd = putils::RAII<int>(accept(_serverSocket, (sockaddr*)&addr, &size),
+                                        [](int fd)
+                                        { connection::closeSocket(fd); });
 
             if (fd < 0)
                 return;
-            if (doAccept(fd) == false)
+            if (!doAccept(fd))
                 return;
 
             int rfd = fd;
@@ -350,9 +362,9 @@ namespace putils
             changed();
         }
 
-        void writeToClient(int fd, const char *msg, size_t length) noexcept
+        void writeToClient(int fd, const char* msg, size_t length) noexcept
         {
-            auto &client = getClient(fd);
+            auto& client = getClient(fd);
 
             std::lock_guard<std::mutex> _(client._mutex);
 
@@ -377,7 +389,7 @@ namespace putils
                 char buff[1024];
                 std::unique_ptr<char[]> totalBuff = nullptr;
                 size_t totalLength = 0;
-                auto &client = getClient(fd);
+                auto& client = getClient(fd);
 
                 int ret;
                 {
@@ -418,14 +430,15 @@ namespace putils
 
                 _newMsgs.push_back(&client);
             }
-            catch (std::out_of_range &e)
+            catch (std::out_of_range& e)
             {
                 std::cerr << "Tried to write to non-existing client" << std::endl;
             }
         }
 
     protected:
-        bool isVerbose() const { return _verbose; }
+        bool isVerbose() const
+        { return _verbose; }
 
     private:
         bool _verbose;
@@ -438,9 +451,9 @@ namespace putils
         int _maxfd;
         putils::RAII<int> _serverSocket{0, [](int sock)
         {
-	        connection::closeSocket(sock);
+            connection::closeSocket(sock);
 #ifdef _WIN32
-			WSACleanup();
+            WSACleanup();
 #endif
         }
         };
@@ -451,14 +464,15 @@ namespace putils
     };
 
     template<>
-    inline std::string ATCPListener::Client::getBuff() const { return getMsg(); }
+    inline std::string ATCPListener::Client::getBuff() const
+    { return getMsg(); }
 
     template<>
-    inline void ATCPListener::send(Client &client, const std::string &msg)
+    inline void ATCPListener::send(Client& client, const std::string& msg)
     {
         std::lock_guard<std::mutex> _(client._mutex);
 
-        auto p = std::make_pair(std::unique_ptr<char[]>(new char[msg.length()]), msg.length());
+        auto p = std::make_pair(std::unique_ptr < char[] > (new char[msg.length()]), msg.length());
         std::memcpy(p.first.get(), msg.c_str(), msg.length());
         _toWrite.emplace(client.fd, std::move(p));
     }

@@ -16,37 +16,54 @@ namespace putils
 
         Point(Precision x = 0, Precision y = 0)
                 : x(x), y(y)
-        {}
+        { }
 
-        Point(const Point &) noexcept = default;
-        Point &operator=(const Point &) noexcept = default;
+        Point(const Point&) noexcept = default;
 
-        Point(Point &&) noexcept = default;
-        Point &operator=(Point &&) noexcept = default;
+        Point& operator=(const Point&) noexcept = default;
 
-        template<typename P>
-        Point(const Point<P, 3> &other) : x(other.x), y(other.y) {}
+        Point(Point&&) noexcept = default;
 
-        template<typename P>
-        bool operator==(const Point<P> &rhs) const noexcept { return x == rhs.x && y == rhs.y; }
+        Point& operator=(Point&&) noexcept = default;
 
         template<typename P>
-        bool operator!=(const Point<P> &rhs) const noexcept { return !(*this == rhs); }
+        Point(const Point<P, 3>& other) : x(other.x), y(other.y)
+        { }
 
         template<typename P>
-        Point operator+(const Point<P> &rhs) const noexcept { return { x + rhs.x, y + rhs.y }; }
+        bool operator==(const Point<P>& rhs) const noexcept
+        { return x == rhs.x && y == rhs.y; }
 
         template<typename P>
-        Point &operator+=(const Point<P> &rhs) noexcept { x += rhs.x; y += rhs.y; return *this; }
+        bool operator!=(const Point<P>& rhs) const noexcept
+        { return !(*this == rhs); }
 
         template<typename P>
-        Point operator-(const Point<P> &rhs) const noexcept { return { x - rhs.x, y - rhs.y }; }
+        Point operator+(const Point<P>& rhs) const noexcept
+        { return {x + rhs.x, y + rhs.y}; }
 
         template<typename P>
-        Point &operator-=(const Point<P> &rhs) noexcept { x -= rhs.x; y -= rhs.y; return *this; }
+        Point& operator+=(const Point<P>& rhs) noexcept
+        {
+            x += rhs.x;
+            y += rhs.y;
+            return *this;
+        }
 
         template<typename P>
-        Precision distanceTo(const Point<P> &rhs) const noexcept
+        Point operator-(const Point<P>& rhs) const noexcept
+        { return {x - rhs.x, y - rhs.y}; }
+
+        template<typename P>
+        Point& operator-=(const Point<P>& rhs) noexcept
+        {
+            x -= rhs.x;
+            y -= rhs.y;
+            return *this;
+        }
+
+        template<typename P>
+        Precision distanceTo(const Point<P>& rhs) const noexcept
         {
             return std::sqrt(
                     std::pow(x - rhs.x, 2) +
@@ -54,14 +71,15 @@ namespace putils
             );
         }
 
-        double angleTo(const Point<Precision, 3> &rhs) const noexcept
+        double angleTo(const Point<Precision, 3>& rhs) const noexcept
         {
             return std::atan2(rhs.y - y, rhs.x - x);
         }
 
-        static const auto get_class_name() { return "Point2"; }
+        static const auto get_class_name()
+        { return "Point2"; }
 
-        static const auto &get_attributes()
+        static const auto& get_attributes()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Point::x),
@@ -70,7 +88,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_methods()
+        static const auto& get_methods()
         {
             static const auto table = pmeta::make_table(
                     pmeta_nameof(distanceTo), &Point::distanceTo<Precision>,
@@ -79,7 +97,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_parents()
+        static const auto& get_parents()
         {
             static const auto table = pmeta::make_table();
             return table;
@@ -93,17 +111,19 @@ namespace putils
         Point<Precision> topLeft;
         Point<Precision> size;
 
-        Rect(Point<Precision, Dimensions> topLeft = {}, Point<Precision, Dimensions> size = {})
+        Rect(Point<Precision, Dimensions> topLeft = { }, Point<Precision, Dimensions> size = { })
                 : topLeft(topLeft), size(size)
-        {}
+        { }
 
         template<typename P>
-        bool operator==(const Rect<P> &rhs) const { return topLeft == rhs.topLeft && size == rhs.size; }
+        bool operator==(const Rect<P>& rhs) const
+        { return topLeft == rhs.topLeft && size == rhs.size; }
 
         template<typename P>
-        bool operator!=(const Rect<P> &rhs) const { return !(*this == rhs); }
+        bool operator!=(const Rect<P>& rhs) const
+        { return !(*this == rhs); }
 
-        bool intersect(const Rect &other, bool inclusiveBorders = false) const
+        bool intersect(const Rect& other, bool inclusiveBorders = false) const
         {
             if (inclusiveBorders)
                 return !(topLeft.x > other.topLeft.x + other.size.x ||
@@ -119,7 +139,7 @@ namespace putils
             );
         }
 
-        bool contains(const Point<Precision, 2> &point) const
+        bool contains(const Point<Precision, 2>& point) const
         {
             return (topLeft.x <= point.x &&
                     topLeft.x + size.x > point.x &&
@@ -128,9 +148,10 @@ namespace putils
             );
         }
 
-        static const auto get_class_name() { return "Rect2"; }
+        static const auto get_class_name()
+        { return "Rect2"; }
 
-        static const auto &get_attributes()
+        static const auto& get_attributes()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Rect::topLeft),
@@ -139,7 +160,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_methods()
+        static const auto& get_methods()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Rect::intersect),
@@ -148,7 +169,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_parents()
+        static const auto& get_parents()
         {
             static const auto table = pmeta::make_table();
             return table;
@@ -165,40 +186,59 @@ namespace putils
 
         Point(Precision x = 0, Precision y = 0, Precision z = 0)
                 : x(x), y(y), z(z)
-        {}
+        { }
 
-        Point(const Point &) noexcept = default;
-        Point &operator=(const Point &) noexcept = default;
+        Point(const Point&) noexcept = default;
 
-        Point(Point &&) noexcept = default;
-        Point &operator=(Point &&) noexcept = default;
+        Point& operator=(const Point&) noexcept = default;
+
+        Point(Point&&) noexcept = default;
+
+        Point& operator=(Point&&) noexcept = default;
 
         template<typename P>
-        Point(const Point<P, 2> &other) : x(other.x), y(other.y), z(0) {}
+        Point(const Point<P, 2>& other) : x(other.x), y(other.y), z(0)
+        { }
 
         template<typename P>
-        bool operator==(const Point<P, 3> &rhs) const noexcept
+        bool operator==(const Point<P, 3>& rhs) const noexcept
         { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
         template<typename P>
-        bool operator!=(const Point<P, 3> &rhs) const noexcept { return !(*this == rhs); }
+        bool operator!=(const Point<P, 3>& rhs) const noexcept
+        { return !(*this == rhs); }
 
-        Point operator-() const noexcept { return { -x, -y, -z }; }
-
-        template<typename P>
-        Point operator+(const Point<P, 3> &rhs) const noexcept { return { x + rhs.x, y + rhs.y, z + rhs.z }; }
-
-        template<typename P>
-        Point &operator+=(const Point<P, 3> &rhs) noexcept { x += rhs.x; y += rhs.y; z += rhs.z; return *this; }
+        Point operator-() const noexcept
+        { return {-x, -y, -z}; }
 
         template<typename P>
-        Point operator-(const Point<P, 3> &rhs) const noexcept { return { x - rhs.x, y - rhs.y, z - rhs.z }; }
+        Point operator+(const Point<P, 3>& rhs) const noexcept
+        { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
 
         template<typename P>
-        Point &operator-=(const Point<P, 3> &rhs) noexcept { x -= rhs.x; y -= rhs.y; z -= rhs.z; return *this; }
+        Point& operator+=(const Point<P, 3>& rhs) noexcept
+        {
+            x += rhs.x;
+            y += rhs.y;
+            z += rhs.z;
+            return *this;
+        }
 
         template<typename P>
-        Precision distanceTo(const Point<P, 3> &rhs) const noexcept
+        Point operator-(const Point<P, 3>& rhs) const noexcept
+        { return {x - rhs.x, y - rhs.y, z - rhs.z}; }
+
+        template<typename P>
+        Point& operator-=(const Point<P, 3>& rhs) noexcept
+        {
+            x -= rhs.x;
+            y -= rhs.y;
+            z -= rhs.z;
+            return *this;
+        }
+
+        template<typename P>
+        Precision distanceTo(const Point<P, 3>& rhs) const noexcept
         {
             return std::sqrt(
                     std::pow(x - rhs.x, 2) +
@@ -207,19 +247,20 @@ namespace putils
             );
         }
 
-        double angleToXY(const Point<Precision, 3> &rhs) const noexcept
+        double angleToXY(const Point<Precision, 3>& rhs) const noexcept
         {
             return std::atan2(rhs.y - y, rhs.x - x);
         }
 
-        double angleToXZ(const Point<Precision, 3> &rhs) const noexcept
+        double angleToXZ(const Point<Precision, 3>& rhs) const noexcept
         {
             return std::atan2(rhs.z - z, rhs.x - x);
         }
 
-        static const auto get_class_name() { return "Point3"; }
+        static const auto get_class_name()
+        { return "Point3"; }
 
-        static const auto &get_attributes()
+        static const auto& get_attributes()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Point::x),
@@ -229,7 +270,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_methods()
+        static const auto& get_methods()
         {
             static const auto table = pmeta::make_table(
                     pmeta_nameof(distanceTo), &Point::distanceTo<Precision>,
@@ -239,7 +280,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_parents()
+        static const auto& get_parents()
         {
             static const auto table = pmeta::make_table();
             return table;
@@ -253,17 +294,19 @@ namespace putils
         Point<Precision, 3> topLeft;
         Point<Precision, 3> size;
 
-        Rect(Point<Precision, 3> topLeft = {}, Point<Precision, 3> size = {})
+        Rect(Point<Precision, 3> topLeft = { }, Point<Precision, 3> size = { })
                 : topLeft(topLeft), size(size)
-        {}
+        { }
 
         template<typename P>
-        bool operator==(const Rect<P> &rhs) { return topLeft == rhs.topLeft && size == rhs.size; }
+        bool operator==(const Rect<P>& rhs)
+        { return topLeft == rhs.topLeft && size == rhs.size; }
 
         template<typename P>
-        bool operator!=(const Rect<P> &rhs) { return !(*this == rhs); }
+        bool operator!=(const Rect<P>& rhs)
+        { return !(*this == rhs); }
 
-        bool intersect(const Rect &other, bool inclusiveBorders = false) const
+        bool intersect(const Rect& other, bool inclusiveBorders = false) const
         {
             if (inclusiveBorders)
                 return !(topLeft.x > other.topLeft.x + other.size.x ||
@@ -283,7 +326,7 @@ namespace putils
             );
         }
 
-        bool contains(const Point<Precision, 3> &point) const
+        bool contains(const Point<Precision, 3>& point) const
         {
             return (topLeft.x <= point.x &&
                     topLeft.x + size.x > point.x &&
@@ -294,9 +337,10 @@ namespace putils
             );
         }
 
-        static const auto get_class_name() { return "Rect3"; }
+        static const auto get_class_name()
+        { return "Rect3"; }
 
-        static const auto &get_attributes()
+        static const auto& get_attributes()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Rect::topLeft),
@@ -305,7 +349,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_methods()
+        static const auto& get_methods()
         {
             static const auto table = pmeta::make_table(
                     pmeta_reflectible_attribute(&Rect::intersect),
@@ -314,7 +358,7 @@ namespace putils
             return table;
         }
 
-        static const auto &get_parents()
+        static const auto& get_parents()
         {
             static const auto table = pmeta::make_table();
             return table;
@@ -342,7 +386,7 @@ namespace std
     template<typename Precision>
     struct hash<putils::Point<Precision>>
     {
-        size_t operator()(const putils::Point<Precision> &coord) const noexcept
+        size_t operator()(const putils::Point<Precision>& coord) const noexcept
         {
             return putils::PairHash().operator()(std::make_pair(coord.x, coord.y));
         }

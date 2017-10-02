@@ -10,13 +10,14 @@ namespace pmeta
     namespace detail
     {
         template<typename F, typename Tuple, size_t ...Is>
-        void tuple_for_each(F &&f, Tuple &&tuple, std::index_sequence<Is...>);
+        void tuple_for_each(F&& f, Tuple&& tuple, std::index_sequence<Is...>);
 
         template<typename F, typename Tuple>
-        void tuple_for_each(F &&, Tuple &&, std::index_sequence<>) {}
+        void tuple_for_each(F&&, Tuple&&, std::index_sequence<>)
+        { }
 
         template<typename F, typename Tuple, size_t I, size_t ...Is>
-        void tuple_for_each(F &&f, Tuple &&tuple, std::index_sequence<I, Is...>)
+        void tuple_for_each(F&& f, Tuple&& tuple, std::index_sequence<I, Is...>)
         {
             f(std::get<I>(tuple));
             detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence<Is...>());
@@ -33,13 +34,13 @@ namespace pmeta
     //      1
     //
     template<typename F, typename ...Args>
-    void tuple_for_each(std::tuple<Args...> &tuple, F &&f)
+    void tuple_for_each(std::tuple<Args...>& tuple, F&& f)
     {
         detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence_for<Args...>());
     }
 
     template<typename F, typename ...Args>
-    void tuple_for_each(const std::tuple<Args...> &tuple, F &&f)
+    void tuple_for_each(const std::tuple<Args...>& tuple, F&& f)
     {
         detail::tuple_for_each(std::forward<F>(f), tuple, std::index_sequence_for<Args...>());
     }

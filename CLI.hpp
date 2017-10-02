@@ -11,7 +11,9 @@
 #include "fwd.hpp"
 
 #ifdef __unix__
+
 #include <signal.h>
+
 #endif
 
 namespace putils
@@ -24,24 +26,27 @@ namespace putils
             std::string value;
             std::pair<char, char> delimiters;
         };
-        using Command = std::function<void(std::string_view cmd, const std::vector<Param> &params)>;
+        using Command = std::function<void(std::string_view cmd, const std::vector<Param>& params)>;
         using CommandMap = std::unordered_map<std::string, Command>;
 
         // Ctor
     public:
-        CLI(const CommandMap &funcs,
-            const Command &default_ = [](std::string_view cmd, const std::vector<Param> &) { std::cout << "Unknown command: " << cmd << std::endl; },
-            const std::function<std::string()> &prompt = []{ return "> "; },
-            std::vector<std::pair<char, char>> &&delimiters =
-                    {
-                            { '\"', '\"'},
-                            { '\'', '\''},
-                            {'(', ')'}
-                    })
-                : _funcs(funcs), _default(default_), _prompt(prompt), _delimiters(std::move(delimiters))
+        explicit CLI(const CommandMap& funcs,
+                     const Command& default_ = [](std::string_view cmd, const std::vector<Param>&)
+                     { std::cout << "Unknown command: " << cmd << std::endl; },
+                     std::function<std::string()> prompt = []
+                     { return "> "; },
+                     std::vector<std::pair<char, char>>&& delimiters =
+                             {
+                                     {'\"', '\"'},
+                                     {'\'', '\''},
+                                     {'(',  ')'}
+                             })
+                : _funcs(funcs), _default(default_), _prompt(std::move(prompt)), _delimiters(std::move(delimiters))
         {
 #ifdef __unix__
-            signal(SIGINT, [](int){ std::cout << std::endl; });
+            signal(SIGINT, [](int)
+            { std::cout << std::endl; });
 #endif
             std::cout << _prompt() << std::flush;
         }
@@ -92,7 +97,7 @@ namespace putils
         }
 
     public:
-        void addCommand(std::string_view cmd, const Command &func)
+        void addCommand(std::string_view cmd, const Command& func)
         {
             _funcs[cmd.data()] = func;
         }
@@ -113,14 +118,14 @@ namespace putils
                 else
                     _default(cmd, p);
             }
-            catch (const std::logic_error &e)
+            catch (const std::logic_error& e)
             {
                 std::cerr << e.what() << std::endl;
             }
         }
 
     public:
-        std::atomic<bool> running { true };
+        std::atomic<bool> running{true};
 
 
         /*
@@ -128,12 +133,12 @@ namespace putils
          */
 
     private:
-        std::string getCommand(std::stringstream &s) const
+        std::string getCommand(std::stringstream& s) const
         {
             return extract(s).value;
         }
 
-        std::vector<Param> getParams(std::stringstream &s) const
+        std::vector<Param> getParams(std::stringstream& s) const
         {
             std::vector<Param> ret;
 
@@ -143,14 +148,14 @@ namespace putils
             return ret;
         }
 
-        Param extract(std::stringstream &s) const
+        Param extract(std::stringstream& s) const
         {
             while (std::isspace(s.peek()))
                 s.get();
 
             {
-                char c = s.peek();
-                for (const auto &p : _delimiters)
+                char c = (char)s.peek();
+                for (const auto& p : _delimiters)
                     if (c == p.first)
                         return extractUntilDelimiter(s, p);
             }
@@ -162,14 +167,14 @@ namespace putils
             return ret;
         }
 
-        Param extractUntilDelimiter(std::stringstream &s, const std::pair<char, char> &p) const
+        Param extractUntilDelimiter(std::stringstream& s, const std::pair<char, char>& p) const
         {
             Param ret{"", p};
 
             s.get(); // Skip first delimiter
 
             char c;
-            while (s && (c = s.get()) != p.second)
+            while (s && (c = (char)s.get()) != p.second)
             {
                 if (c == '\\' && s)
                     ret.value.append(1, s.get());
@@ -177,7 +182,8 @@ namespace putils
                     ret.value.append(1, c);
             }
             if (c != p.second)
-                throw std::logic_error(std::string("No matching delimiter (").append(1, p.second).append(") found for ").append(1, p.first));
+                throw std::logic_error(std::string("No matching delimiter (").append(1, p.second).append(") found for ")
+                                                                             .append(1, p.first));
 
             return ret;
         }
@@ -198,20 +204,20 @@ namespace putils
                     {
                             {
                                     "test",
-                                    [](std::string_view , const std::vector<putils::CLI::Param> &params)
+                                    [](std::string_view, const std::vector<putils::CLI::Param>& params)
                                     {
                                         std::cout << "Test successful" << std::endl;
-                                        for (const auto &p : params)
+                                        for (const auto& p : params)
                                             std::cout << "\t[" << p.value << "]" << std::endl;
                                     }
                             }
                     },
                     // Default
-                    [](std::string_view cmd, const std::vector<putils::CLI::Param> &params)
+                    [](std::string_view cmd, const std::vector<putils::CLI::Param>& params)
                     {
                         std::string line(cmd);
 
-                        for (const auto &p : params)
+                        for (const auto& p : params)
                         {
                             line += " ";
                             if (p.delimiters.first != '\0')
@@ -219,8 +225,7 @@ namespace putils
                                 line.append(1, p.delimiters.first);
                                 line += p.value;
                                 line.append(1, p.delimiters.second);
-                            }
-                            else
+                            } else
                                 line += p.value;
                         }
 

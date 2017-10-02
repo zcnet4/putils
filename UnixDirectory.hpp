@@ -12,7 +12,7 @@ namespace putils
     class UnixDirectory final : public ADirectory
     {
     public:
-        UnixDirectory(std::string_view path)
+        explicit UnixDirectory(std::string_view path)
                 :
                 _handle(opendir(path.data())),
                 _path(path),
@@ -25,7 +25,7 @@ namespace putils
                 _path = _path + "/";
         }
 
-        virtual ~UnixDirectory() noexcept
+        ~UnixDirectory() noexcept override
         {
             if (_handle != nullptr)
                 closedir(_handle);
@@ -34,17 +34,16 @@ namespace putils
     public:
         std::unique_ptr<File> getNextFile() noexcept override
         {
-            if (_goOn == false || _handle == nullptr)
+            if (!_goOn || _handle == nullptr)
                 return nullptr;
 
-            struct dirent *ent = readdir(_handle);
+            struct dirent* ent = readdir(_handle);
 
             if (ent == nullptr)
             {
                 _goOn = false;
                 return nullptr;
             }
-
 
             std::string file(ent->d_name);
 
@@ -61,13 +60,13 @@ namespace putils
             }
 
             return std::make_unique<File>(File{
-                                                  file, fullPath,
-                                                  S_ISDIR(sb.st_mode), S_ISLNK(sb.st_mode)
-                                          });
+                    file, fullPath,
+                    S_ISDIR(sb.st_mode), S_ISLNK(sb.st_mode)
+            });
         }
 
     private:
-        DIR *_handle;
+        DIR* _handle;
         std::string _path;
         bool _goOn;
     };

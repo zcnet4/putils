@@ -14,7 +14,7 @@ namespace putils
     namespace json
     {
         template<typename String>
-        std::string prettyPrint(String &&str);
+        std::string prettyPrint(String&& str);
 
         struct Object
         {
@@ -32,18 +32,32 @@ namespace putils
             // if fields.size() == 0, then I'm a simple value
 
             // Array
-            Object &operator[](std::size_t i) { return items[i]; }
-            const Object &operator[](std::size_t i) const { return items[i]; }
+            Object& operator[](std::size_t i)
+            { return items[i]; }
+
+            const Object& operator[](std::size_t i) const
+            { return items[i]; }
 
             // Object
-            const Object &operator[](std::string_view name) const { return fields.at(name.data()); }
-            Object &operator[](std::string_view name) { return fields[name.data()]; }
+            const Object& operator[](std::string_view name) const
+            { return fields.at(name.data()); }
+
+            Object& operator[](std::string_view name)
+            { return fields[name.data()]; }
 
             // Value
-            operator const std::string &() const { return value; }
-            const std::string &toString() const { return value; }
-            int toInt() const { return std::stoi(value); }
-            double toDouble() const { return std::stod(value); }
+            operator const std::string&() const
+            { return value; }
+
+            const std::string& toString() const
+            { return value; }
+
+            int toInt() const
+            { return std::stoi(value); }
+
+            double toDouble() const
+            { return std::stod(value); }
+
             bool toBool() const
             {
                 std::stringstream s;
@@ -53,7 +67,7 @@ namespace putils
                 return ret;
             }
 
-            friend std::ostream &operator<<(std::ostream &s, const Object &obj)
+            friend std::ostream& operator<<(std::ostream& s, const Object& obj)
             {
                 s << obj.value;
                 return s;
@@ -61,7 +75,7 @@ namespace putils
         };
 
         template<typename String>
-        Object lex(String &&str);
+        Object lex(String&& str);
     }
 }
 
@@ -72,7 +86,7 @@ namespace putils
         namespace detail
         {
             template<typename Ret>
-            void printLineAndSkipSpace(std::istringstream &s, Ret &ret, std::size_t indent)
+            void printLineAndSkipSpace(std::istringstream& s, Ret& ret, std::size_t indent)
             {
                 ret.append(1, '\n');
                 ret.append(indent, '\t');
@@ -82,7 +96,7 @@ namespace putils
         }
 
         template<typename String>
-        std::string prettyPrint(String &&str)
+        std::string prettyPrint(String&& str)
         {
             static std::string startBlock = "{[";
             static std::string endBlock = "}]";
@@ -96,7 +110,7 @@ namespace putils
 
             while (s)
             {
-                const char c = s.get();
+                const char c = (char)s.get();
                 if (c == -1)
                     break;
 
@@ -136,11 +150,13 @@ namespace putils
 
         namespace
         {
-            std::string lexValue(std::istringstream &s);
-            Object lexArray(std::istringstream &s);
-            Object lexObject(std::istringstream &s);
+            std::string lexValue(std::istringstream& s);
 
-            void readKeyValue(std::istringstream &s, Object &ret)
+            Object lexArray(std::istringstream& s);
+
+            Object lexObject(std::istringstream& s);
+
+            void readKeyValue(std::istringstream& s, Object& ret)
             {
                 while (std::isspace(s.peek()))
                     s.get();
@@ -161,12 +177,12 @@ namespace putils
                 else if (s.peek() == '[')
                     ret[key] = lexArray(s);
                 else
-                    ret[key] = Object{ lexValue(s), {}, {}, Object::Type::Value };
+                    ret[key] = Object{lexValue(s), { }, { }, Object::Type::Value};
 
                 ret.value += ret[key].value;
             }
 
-            std::string lexValue(std::istringstream &s)
+            std::string lexValue(std::istringstream& s)
             {
                 std::string ret;
 
@@ -185,7 +201,7 @@ namespace putils
 
                 while (s)
                 {
-                    const char c = s.peek();
+                    const char c = (char)s.peek();
                     if (c == -1)
                         throw std::runtime_error("Unexpected EOF");
 
@@ -203,13 +219,13 @@ namespace putils
 
                 ret = putils::chop(ret);
                 if ((ret.front() == '\"' && ret.back() == '\"') ||
-                        (ret.front() == '\'' && ret.back() == '\''))
+                    (ret.front() == '\'' && ret.back() == '\''))
                     ret = ret.substr(1, ret.size() - 2);
 
                 return ret;
             }
 
-            Object lexObject(std::istringstream &s)
+            Object lexObject(std::istringstream& s)
             {
                 Object ret;
 
@@ -231,7 +247,7 @@ namespace putils
                     while (std::isspace(s.peek()))
                         s.get();
 
-                    const char c = s.peek();
+                    const char c = (char)s.peek();
                     if (c == -1 || !s)
                         throw std::runtime_error("Unexpected EOF");
 
@@ -253,7 +269,7 @@ namespace putils
                 return ret;
             }
 
-            Object lexArray(std::istringstream &s)
+            Object lexArray(std::istringstream& s)
             {
                 Object ret;
                 ret.type = Object::Type::Array;
@@ -265,7 +281,7 @@ namespace putils
                     while (std::isspace(s.peek()))
                         s.get();
 
-                    const char c = s.peek();
+                    const char c = (char)s.peek();
                     if (c == -1)
                         throw std::runtime_error("Unexpected EOF");
                     if (c == ']')
@@ -279,7 +295,7 @@ namespace putils
                     else if (c == '[')
                         ret.items.push_back(lexArray(s));
                     else
-                        ret.items.push_back(Object{ lexValue(s), {}, {}, Object::Type::Value });
+                        ret.items.push_back(Object{lexValue(s), { }, { }, Object::Type::Value});
 
                     ret.value += ret.items.back().value;
 
@@ -295,7 +311,7 @@ namespace putils
         }
 
         template<typename Str>
-        Object lex(Str &&str)
+        Object lex(Str&& str)
         {
             std::istringstream s(FWD(str));
 

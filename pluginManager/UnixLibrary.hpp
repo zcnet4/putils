@@ -12,7 +12,7 @@ namespace putils
         // Constructor
     public:
         template<typename Str>
-        UnixLibrary(Str &&name)
+        UnixLibrary(Str&& name)
                 :
                 Library(name),
                 _handle(dlopen(name.c_str(), RTLD_NOW))
@@ -36,17 +36,18 @@ namespace putils
 
         // Load a symbol
     public:
-        void *loadSymbol(std::string_view name) noexcept override { return dlsym(_handle, name.data()); }
+        void* loadSymbol(std::string_view name) noexcept override
+        { return dlsym(_handle, name.data()); }
 
         // Attributes
     private:
-        void *_handle;
+        void* _handle;
 
         // Coplien
     public:
-        UnixLibrary(const UnixLibrary &) = delete;
+        UnixLibrary(const UnixLibrary&) = delete;
 
-        UnixLibrary &operator=(const UnixLibrary &) = delete;
+        UnixLibrary& operator=(const UnixLibrary&) = delete;
     };
 }
 

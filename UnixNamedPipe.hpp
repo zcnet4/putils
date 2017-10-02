@@ -11,15 +11,16 @@ namespace putils
     class UnixNamedPipe : public std::fstream
     {
     public:
-        UnixNamedPipe(std::string_view fileName)
-        : _fileName(fileName.data())
+        explicit UnixNamedPipe(std::string_view fileName)
+                : _fileName(fileName.data())
         {
             this->open(fileName.data());
         }
+
         UnixNamedPipe() = default;
 
     public:
-        ~UnixNamedPipe()
+        ~UnixNamedPipe() override
         {
             this->close();
         }

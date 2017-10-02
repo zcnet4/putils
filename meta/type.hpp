@@ -21,5 +21,6 @@ template<typename T>
 const pmeta::type_index pmeta::type<T>::index = std::hash<std::type_index>()(std::type_index(typeid(T)));
 
 template<typename T>
-bool operator==(pmeta::type<T>, pmeta::type<T>) { return true; }
+bool operator==(pmeta::type<T>, pmeta::type<T>)
+{ return true; }
 

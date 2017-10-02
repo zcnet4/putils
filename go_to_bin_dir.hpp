@@ -6,6 +6,7 @@
 
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdexcept>
 
 #elif defined(_WIN32)
 
@@ -19,7 +20,7 @@ namespace putils
     inline void goToBinDir(std::string currentPath)
     {
 #ifdef __unix__
-        struct stat sb;
+        struct stat sb{ };
         if (lstat(currentPath.data(), &sb) == -1)
             throw std::runtime_error("Path doesn't exist");
 

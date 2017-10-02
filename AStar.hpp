@@ -23,9 +23,10 @@ namespace putils
     public:
         template<typename Precision>
         static std::vector<putils::Point<Precision>>
-        getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
+        getNextDirection(const Point<Precision>& start, const Point<Precision>& goal, bool diagonals,
                          Precision step, Precision desiredDistance,
-                         const std::function<bool(const Point<Precision> &from, const Point<Precision> &to)> &canMoveTo) noexcept;
+                         const std::function<
+                                 bool(const Point<Precision>& from, const Point<Precision>& to)>& canMoveTo) noexcept;
     };
 
     /*
@@ -35,8 +36,8 @@ namespace putils
     namespace
     {
         template<typename Precision>
-        double heuristic_cost_estimate(const putils::Point<Precision> &start,
-                                       const putils::Point<Precision> &goal) noexcept
+        double heuristic_cost_estimate(const putils::Point<Precision>& start,
+                                       const putils::Point<Precision>& goal) noexcept
         {
             return std::sqrt(
                     std::pow(goal.x - start.x, 2) +
@@ -46,7 +47,8 @@ namespace putils
 
         template<typename Precision>
         std::vector<putils::Point<Precision>>
-        reconstruct_path(const std::unordered_map<Point<Precision>, Point<Precision>> &cameFrom, putils::Point<Precision> &current, const putils::Point<Precision> &pos) noexcept
+        reconstruct_path(const std::unordered_map<Point<Precision>, Point<Precision>>& cameFrom,
+                         putils::Point<Precision>& current, const putils::Point<Precision>& pos) noexcept
         {
             std::vector<putils::Point<Precision>> res;
             if (!cameFrom.size())
@@ -65,9 +67,10 @@ namespace putils
 
     template<typename Precision>
     std::vector<putils::Point<Precision>>
-    AStar::getNextDirection(const Point<Precision> &start, const Point<Precision> &goal, bool diagonals,
+    AStar::getNextDirection(const Point<Precision>& start, const Point<Precision>& goal, bool diagonals,
                             Precision step, Precision desiredDistance,
-                            const std::function<bool(const Point<Precision> &from, const Point<Precision> &to)> &canMoveTo) noexcept
+                            const std::function<
+                                    bool(const Point<Precision>& from, const Point<Precision>& to)>& canMoveTo) noexcept
     {
         // The set of nodes already evaluated.
         std::vector<Point<Precision>> closedSet;
@@ -90,7 +93,8 @@ namespace putils
         // For the first node, that value is completely heuristic.
         fScore.emplace(start, heuristic_cost_estimate(start, goal));
 
-        const auto findClosest = [&fScore](const auto &l, const auto &r) { return fScore.at(l) < fScore.at(r); };
+        const auto findClosest = [&fScore](const auto& l, const auto& r)
+        { return fScore.at(l) < fScore.at(r); };
 
         while (openSet.size())
         {
@@ -136,7 +140,7 @@ namespace putils
                 }
         }
 
-        return {};
+        return { };
     }
 
     namespace test
@@ -147,33 +151,35 @@ namespace putils
                     "First step", []
                     {
                         const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 5, 0 }, true, 1, 1,
-                                [](const putils::Point2i &, const putils::Point2i &) { return true; }
+                                putils::Point2i{0, 0}, putils::Point2i{5, 0}, true, 1, 1,
+                                [](const putils::Point2i&, const putils::Point2i&)
+                                { return true; }
                         );
-                        return steps[0] == putils::Point2i{ 1, 0 };
+                        return steps[0] == putils::Point2i{1, 0};
                     },
                     "Straight line", []
                     {
                         const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 3, 0 }, true, 1, 1,
-                                [](const putils::Point2i &, const putils::Point2i &) { return true; }
+                                putils::Point2i{0, 0}, putils::Point2i{3, 0}, true, 1, 1,
+                                [](const putils::Point2i&, const putils::Point2i&)
+                                { return true; }
                         );
                         return steps.size() == 3 &&
-                               steps[0] == putils::Point2i{ 1, 0 } &&
-                               steps[1] == putils::Point2i{ 2, 0 } &&
-                               steps[2] == putils::Point2i{ 3, 0 };
+                               steps[0] == putils::Point2i{1, 0} &&
+                               steps[1] == putils::Point2i{2, 0} &&
+                               steps[2] == putils::Point2i{3, 0};
                     },
                     "Obstacle", []
                     {
                         const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 3, 0 }, true, 1, 1,
-                                [](const putils::Point2i &from, const putils::Point2i &to)
-                                { return to != putils::Point2i{ 2, 0 }; }
+                                putils::Point2i{0, 0}, putils::Point2i{3, 0}, true, 1, 1,
+                                [](const putils::Point2i& from, const putils::Point2i& to)
+                                { return to != putils::Point2i{2, 0}; }
                         );
                         return steps.size() == 3 &&
-                               steps[0] == putils::Point2i{ 1, 0 } &&
-                                (steps[1] == putils::Point2i{ 2, -1 } || steps[1] == putils::Point2i{ 2, 1 }) &&
-                               steps[2] == putils::Point2i{ 3, 0 };
+                               steps[0] == putils::Point2i{1, 0} &&
+                               (steps[1] == putils::Point2i{2, -1} || steps[1] == putils::Point2i{2, 1}) &&
+                               steps[2] == putils::Point2i{3, 0};
                     }
             );
         }

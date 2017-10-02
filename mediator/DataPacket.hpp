@@ -6,9 +6,11 @@ namespace putils
 {
     struct ADataPacket
     {
-        virtual ~ADataPacket() {}
+        virtual ~ADataPacket()
+        { }
 
-        ADataPacket(pmeta::type_index type) : type(type) {}
+        ADataPacket(pmeta::type_index type) : type(type)
+        { }
 
         pmeta::type_index type;
     };
@@ -16,10 +18,10 @@ namespace putils
     template<typename T>
     struct DataPacket : ADataPacket
     {
-        DataPacket(const T &data)
+        DataPacket(const T& data)
                 : ADataPacket(pmeta::type<T>::index), data(data)
-        {}
+        { }
 
-        const T &data;
+        const T& data;
     };
 }

@@ -13,7 +13,7 @@ class RoutesModule : public putils::Module<RoutesModule, kia::packets::HttpReque
 {
 public:
     using HttpParams = std::unordered_map<std::string, std::string>;
-    using Route = std::function<std::string(const HttpParams &)>;
+    using Route = std::function<std::string(const HttpParams&)>;
 
     struct Uri
     {
@@ -23,7 +23,7 @@ public:
     };
 
 public:
-    void handle(const kia::packets::HttpRequest &p) const noexcept;
+    void handle(const kia::packets::HttpRequest& p) const noexcept;
 
 public:
     enum Method
@@ -31,13 +31,13 @@ public:
         Get,
         Post
     };
-    void addRoute(std::string_view uri, Method method, const Route &route);
+    void addRoute(std::string_view uri, Method method, const Route& route);
 
 private:
-    void sendResponse(const kia::packets::HttpRequest &p, std::string_view response) const noexcept;
+    void sendResponse(const kia::packets::HttpRequest& p, std::string_view response) const noexcept;
 
 private:
-    void send404(const kia::packets::HttpRequest &request) const noexcept;
+    void send404(const kia::packets::HttpRequest& request) const noexcept;
 
 private:
     std::vector<Uri> _get;

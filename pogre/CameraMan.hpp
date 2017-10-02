@@ -2,10 +2,11 @@
 
 #include <memory>
 
-#include <OgreCamera.h>
-#include <OgreSceneNode.h>
-#include <OgreSceneManager.h>
-#include <OgreRenderWindow.h>
+#include <OGRE/OgreCamera.h>
+#include <OGRE/OgreSceneNode.h>
+#include <OGRE/OgreSceneManager.h>
+#include <OGRE/OgreRenderWindow.h>
+#include <OGRE/Bites/OgreInput.h>
 
 #include "CameraStrategy.hpp"
 #include "FreeFloatingStrategy.hpp"

@@ -17,17 +17,17 @@ namespace putils
     class OpenSSLTCPListener final : public ATCPListener
     {
     private:
-        static std::string getCertificate(std::string &&extension)
+        static std::string getCertificate(std::string&& extension)
         {
             Directory dir("certificates");
             std::regex reg("^.*\\" + extension);
             std::string ret = "";
 
-            dir.for_each([&reg, &ret](const putils::Directory::File &f)
-            {
-                if (std::regex_match(f.fullPath, reg))
-                    ret = f.fullPath;
-            });
+            dir.for_each([&reg, &ret](const putils::Directory::File& f)
+                         {
+                             if (std::regex_match(f.fullPath, reg))
+                                 ret = f.fullPath;
+                         });
 
             return ret;
         }
@@ -55,12 +55,13 @@ namespace putils
                 throw std::runtime_error(putils::concat("Failed to use private key ", key));
         }
 
-        ~OpenSSLTCPListener() { EVP_cleanup(); }
+        ~OpenSSLTCPListener()
+        { EVP_cleanup(); }
 
     private:
-        static SSL *init_ssl(SSL_CTX *ctx, int fd)
+        static SSL* init_ssl(SSL_CTX* ctx, int fd)
         {
-            SSL *ssl = SSL_new(ctx);
+            SSL* ssl = SSL_new(ctx);
             if (ssl == nullptr)
             {
                 std::cerr << "[OpenSSL] Failed to SSL_new" << std::endl;
@@ -79,7 +80,8 @@ namespace putils
                 return false;
             }
 
-            _ssls.emplace(fd, putils::RAII<SSL *>(ssl, [](SSL *ssl) { SSL_free(ssl); }));
+            _ssls.emplace(fd, putils::RAII<SSL*>(ssl, [](SSL* ssl)
+            { SSL_free(ssl); }));
             if (SSL_accept(ssl) <= 0)
             {
                 std::cerr << "[OpenSSL] Failed to SSL accept" << std::endl;
@@ -92,9 +94,11 @@ namespace putils
         }
 
     private:
-        int doWrite(int fd, const char *data, size_t length) noexcept { return SSL_write(_ssls.at(fd), data, length); }
+        int doWrite(int fd, const char* data, size_t length) noexcept
+        { return SSL_write(_ssls.at(fd), data, length); }
 
-        int doRead(int fd, char *buff, size_t length) noexcept { return SSL_read(_ssls.at(fd), buff, length); }
+        int doRead(int fd, char* buff, size_t length) noexcept
+        { return SSL_read(_ssls.at(fd), buff, length); }
 
         void doRemove(int fd) noexcept
         {
@@ -104,7 +108,9 @@ namespace putils
         }
 
     private:
-        putils::RAII<SSL_CTX *> _ssl_ctx{nullptr, [](SSL_CTX *ctx) { SSL_CTX_free(ctx); }};
-        std::unordered_map<int, putils::RAII<SSL *>> _ssls;      // Maps sockets to their SSL object. SSL object closes the socket
+        putils::RAII<SSL_CTX*> _ssl_ctx{nullptr, [](SSL_CTX* ctx)
+        { SSL_CTX_free(ctx); }};
+        std::unordered_map<int, putils::RAII<SSL*>>
+                _ssls;      // Maps sockets to their SSL object. SSL object closes the socket
     };
 }

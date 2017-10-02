@@ -12,15 +12,15 @@
 #include "mediator/Mediator.hpp"
 #include "concat.hpp"
 
-SecureConnectionModule::SecureConnectionModule(putils::Mediator &mediator, short normalPort, short securePort)
-    : putils::BaseModule(&mediator)
+SecureConnectionModule::SecureConnectionModule(putils::Mediator& mediator, short normalPort, short securePort)
+        : putils::BaseModule(&mediator)
 {
     if (normalPort > 0)
         _connections.emplace_back(std::make_unique<putils::TCPListener>(normalPort));
     if (securePort > 0)
         _connections.emplace_back(std::make_unique<putils::OpenSSLTCPListener>(securePort));
 
-    for (auto &connection : _connections)
+    for (auto& connection : _connections)
     {
         try
         {
@@ -36,15 +36,15 @@ SecureConnectionModule::SecureConnectionModule(putils::Mediator &mediator, short
                         runServer(*connection.connection, connection.mutex, connection.requests);
                     });
         }
-        catch (std::runtime_error &e)
+        catch (std::runtime_error& e)
         {
             std::cerr << "[SecureConnection] " << e.what() << std::endl;
         }
     }
 }
 
-void SecureConnectionModule::runServer(putils::ATCPListener &server, std::mutex &mutex,
-                                       const std::atomic<int> &requests) const noexcept
+void SecureConnectionModule::runServer(putils::ATCPListener& server, std::mutex& mutex,
+                                       const std::atomic<int>& requests) const noexcept
 {
     try
     {
@@ -58,21 +58,22 @@ void SecureConnectionModule::runServer(putils::ATCPListener &server, std::mutex 
                 server.select({2, 0});
         }
     }
-    catch (std::exception &e)
+    catch (std::exception& e)
     {
         std::cerr << e.what() << std::endl;
     }
 }
 
-void SecureConnectionModule::newConnection(putils::ATCPListener &server, std::atomic<int> &requests) const noexcept
+void SecureConnectionModule::newConnection(putils::ATCPListener& server, std::atomic<int>& requests) const noexcept
 {
-    auto &client = server.getLastClient();
-    client.newMessage += [this, &client, &requests]() { newMessage(requests, client); };
-    send(kia::packets::Log{ "[SecureConnection] New client" });
+    auto& client = server.getLastClient();
+    client.newMessage += [this, &client, &requests]()
+    { newMessage(requests, client); };
+    send(kia::packets::Log{"[SecureConnection] New client"});
 }
 
 template<typename Client>
-void SecureConnectionModule::newMessage(std::atomic<int> &requests, Client &client) const noexcept
+void SecureConnectionModule::newMessage(std::atomic<int>& requests, Client& client) const noexcept
 {
     ++requests;
     std::string msg = client.getMsg();
@@ -80,20 +81,20 @@ void SecureConnectionModule::newMessage(std::atomic<int> &requests, Client &clie
     // Log this message
     send(kia::packets::Log{
             putils::concat("[SecureConnection] Receiving\n",
-                    "[", msg, "]\n")
-            });
+                           "[", msg, "]\n")
+    });
 
     // Notify other modules of the incoming message
     runTask([this, &client, msg]()
-    {
-        send(kia::packets::IncomingMessage{ client.fd, msg });
-    });
+            {
+                send(kia::packets::IncomingMessage{client.fd, msg});
+            });
 }
 
-void SecureConnectionModule::handle(const kia::packets::OutgoingMessage &packet) noexcept
+void SecureConnectionModule::handle(const kia::packets::OutgoingMessage& packet) noexcept
 {
 
-    for (auto &connection : _connections)
+    for (auto& connection : _connections)
     {
         if (connection.connection != nullptr)
         {
@@ -103,8 +104,8 @@ void SecureConnectionModule::handle(const kia::packets::OutgoingMessage &packet)
     }
 }
 
-void SecureConnectionModule::trySend(const kia::packets::OutgoingMessage &p, putils::ATCPListener &connection,
-                                     std::atomic<int> &requests) const noexcept
+void SecureConnectionModule::trySend(const kia::packets::OutgoingMessage& p, putils::ATCPListener& connection,
+                                     std::atomic<int>& requests) const noexcept
 {
     if (connection.hasClient(p.clientFd))
     {
@@ -112,10 +113,10 @@ void SecureConnectionModule::trySend(const kia::packets::OutgoingMessage &p, put
 
         send(kia::packets::Log{
                 putils::concat("[SecureConnection] Sending:\n",
-                        "[", p.msg, "]\n")
-                });
+                               "[", p.msg, "]\n")
+        });
 
-        auto &client = connection.getClient(p.clientFd);
+        auto& client = connection.getClient(p.clientFd);
         client.send(p.msg + "\r\n");
         // TODO: this probably shouldn't be here, but up to this point clients need the connection to be closed
         // in order to accept the response

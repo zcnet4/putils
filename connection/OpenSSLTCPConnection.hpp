@@ -14,22 +14,24 @@ namespace putils
     class OpenSSLTCPConnection final : public ATCPConnection
     {
     private:
-        int doWrite(int, const char *data, int length) noexcept { return SSL_write(_ssl, data, length); }
+        int doWrite(int, const char* data, int length) noexcept
+        { return SSL_write(_ssl, data, length); }
 
-        int doRead(int, char *dest, int length) noexcept { return SSL_read(_ssl, dest, length); }
+        int doRead(int, char* dest, int length) noexcept
+        { return SSL_read(_ssl, dest, length); }
 
     private:
-        static std::string getCertificate(std::string &&extension)
+        static std::string getCertificate(std::string&& extension)
         {
             Directory dir("certificates");
             std::regex reg("^.*\\" + extension);
             std::string ret = "";
 
-            dir.for_each([&reg, &ret](const putils::Directory::File &f)
-            {
-                if (std::regex_match(f.fullPath, reg))
-                    ret = f.fullPath;
-            });
+            dir.for_each([&reg, &ret](const putils::Directory::File& f)
+                         {
+                             if (std::regex_match(f.fullPath, reg))
+                                 ret = f.fullPath;
+                         });
 
             return ret;
         }
@@ -63,7 +65,9 @@ namespace putils
         }
 
     private:
-        putils::RAII<SSL_CTX *> _ssl_ctx{nullptr, [](SSL_CTX *ctx) { SSL_CTX_free(ctx); }};
-        putils::RAII<SSL *> _ssl{nullptr, [](SSL *ssl) { SSL_free(ssl); }};
+        putils::RAII<SSL_CTX*> _ssl_ctx{nullptr, [](SSL_CTX* ctx)
+        { SSL_CTX_free(ctx); }};
+        putils::RAII<SSL*> _ssl{nullptr, [](SSL* ssl)
+        { SSL_free(ssl); }};
     };
 }

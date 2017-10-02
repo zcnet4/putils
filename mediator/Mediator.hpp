@@ -12,7 +12,7 @@ namespace putils
     class Mediator
     {
     public:
-        ~Mediator() { running = false; completeTasks(); }
+        virtual ~Mediator() { running = false; completeTasks(); }
 
     public:
         void addModule(BaseModule &m);

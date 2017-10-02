@@ -4,7 +4,9 @@
 #include "ATCPConnection.hpp"
 
 #ifdef __unix__
+
 # include <signal.h>
+
 #endif
 
 namespace putils
@@ -21,16 +23,18 @@ namespace putils
         }
 
     private:
-        int doRead(int fd, char *dest, int length) noexcept { return (int) recv(fd, dest, (size_t) length, 0); }
+        int doRead(int fd, char* dest, int length) noexcept
+        { return (int)recv(fd, dest, (size_t)length, 0); }
 
-        int doWrite(int fd, const char *data, int length) noexcept { return (int) ::send(fd, data, (size_t) length, 0); }
+        int doWrite(int fd, const char* data, int length) noexcept
+        { return (int)::send(fd, data, (size_t)length, 0); }
     };
 
     namespace test
     {
         inline int tcpConnection()
         {
-            putils::TCPConnection   sock("127.0.0.1", 4242);
+            putils::TCPConnection sock("127.0.0.1", 4242);
 
             // Receive string
             std::cout << sock.receive() << std::endl;

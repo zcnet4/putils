@@ -36,27 +36,27 @@ namespace putils
 
             putils::Directory dir(path);
 
-            dir.for_each([this](const putils::ADirectory::File &f)
-            {
-                if (std::regex_match(f.fullPath, freg))
-                {
-                    try
-                    {
-                        auto plugin = putils::LibraryFactory::make(f.fullPath);
-                        _libraries.push_back(plugin);
-                    }
-                    catch (std::runtime_error &e)
-                    {
-                        std::cerr << e.what() << std::endl;
-                    }
-                }
-            });
+            dir.for_each([this](const putils::ADirectory::File& f)
+                         {
+                             if (std::regex_match(f.fullPath, freg))
+                             {
+                                 try
+                                 {
+                                     auto plugin = putils::LibraryFactory::make(f.fullPath);
+                                     _libraries.push_back(plugin);
+                                 }
+                                 catch (std::runtime_error& e)
+                                 {
+                                     std::cerr << e.what() << std::endl;
+                                 }
+                             }
+                         });
         }
 
     public:
         // In each plugin, execute the [name] function, taking P as parameter
         template<typename ...P>
-        void execute(std::string_view name, P &&...params) noexcept
+        void execute(std::string_view name, P&& ...params) noexcept
         {
             for (auto plugin : _libraries)
                 plugin->execute<void>(name, std::forward<P>(params)...);
@@ -65,7 +65,7 @@ namespace putils
         // In each plugin, execute the [name] function, returning a T and taking a P as parameter
         // Returns a vector of all values returned
         template<typename T, typename ...P>
-        std::vector<T> executeWithReturn(std::string_view name, P &&...params) noexcept
+        std::vector<T> executeWithReturn(std::string_view name, P&& ...params) noexcept
         {
             std::vector<T> ret;
 
@@ -85,7 +85,7 @@ namespace putils
 
         // Coplien
     public:
-        PluginManager(const PluginManager &) = delete;
-        PluginManager &operator=(const PluginManager &) = delete;
+        PluginManager(const PluginManager&) = delete;
+        PluginManager& operator=(const PluginManager&) = delete;
     };
 }

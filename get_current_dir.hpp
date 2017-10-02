@@ -1,7 +1,10 @@
 #pragma once
 
 #ifdef __unix__
+
 # include <unistd.h>
+# include <string>
+
 #endif
 
 namespace putils

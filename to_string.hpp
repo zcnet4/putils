@@ -8,7 +8,7 @@
 namespace putils
 {
     template<typename Obj>
-    std::string to_string(Obj &&obj)
+    std::string to_string(Obj&& obj)
     {
         std::stringstream s;
         s << FWD(obj);
@@ -22,7 +22,7 @@ namespace putils
         return s.str();
     }
 
-    inline std::string to_string(std::istream &s)
+    inline std::string to_string(std::istream& s)
     {
         return read_stream(s);
     }
@@ -38,5 +38,6 @@ namespace putils
     };
 
     template<>
-    inline bool parse(std::string_view str) { return str == "true"; }
+    inline bool parse(std::string_view str)
+    { return str == "true"; }
 }

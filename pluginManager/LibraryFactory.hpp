@@ -10,7 +10,7 @@ namespace putils
     namespace
     {
         template<typename Str1, typename Str2>
-        std::string addLibToPath(Str1 &&name, Str2 &&extension) noexcept
+        std::string addLibToPath(Str1&& name, Str2&& extension) noexcept
         {
             static std::regex end(std::string("^.*\\") + extension + "$");
 
@@ -26,8 +26,7 @@ namespace putils
                     lib = name.substr(it + 1);
                 }
                 return path + "lib" + lib + extension;
-            }
-            else
+            } else
                 return name;
         }
     }
@@ -35,7 +34,7 @@ namespace putils
     namespace LibraryFactory
     {
         template<typename Str>
-        putils::Library *make(Str &&name)
+        putils::Library* make(Str&& name)
         {
             static std::unordered_map<std::string, std::unique_ptr<Library>> _register;
 
