@@ -62,6 +62,7 @@ TEST(ConnectionTest, ClientDisconnected)
 
     running = false;
     t.join();
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
     server.select({ 0, 0 }); // One more to make sure servers notices disconnection
     EXPECT_TRUE(disconnected);
 }
