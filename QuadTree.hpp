@@ -27,7 +27,7 @@ namespace putils
 
     public:
         template<typename Obj>
-        bool add(Obj &&obj, const Rect<Precision> &boundingBox) noexcept
+        bool add(Obj &&obj, const Rect<Precision> &boundingBox)
         {
             if (!_boundingBox.intersect(boundingBox))
                 return false; // object isn't in this area
@@ -38,7 +38,7 @@ namespace putils
                 return true;
             }
 
-            if (!_children.size())
+            if (_children.empty())
                 divideIntoChildren();
 
             bool good = false;
@@ -46,7 +46,7 @@ namespace putils
                 good |= c.add(obj, boundingBox);
 
             if (!good)
-                std::cerr << "[QuadTree] Couldn't add object. This should never happen." << std::endl;
+                throw std::runtime_error("Couldn't add object. This should never happen.");
 
             return good;
         }
@@ -68,7 +68,7 @@ namespace putils
         }
 
     public:
-        void move(const Contained &obj, const Rect<Precision> &boundingBox) noexcept
+        void move(const Contained &obj, const Rect<Precision> &boundingBox)
         {
             remove(obj);
             add(obj, boundingBox);

@@ -69,6 +69,8 @@ namespace putils
                             Precision step, Precision desiredDistance,
                             const std::function<bool(const Point<Precision> &from, const Point<Precision> &to)> &canMoveTo) noexcept
     {
+        bool first = true;
+        Point<Precision> closest;
         // The set of nodes already evaluated.
         std::vector<Point<Precision>> closedSet;
         // The set of currently discovered nodes still to be evaluated.
@@ -95,7 +97,13 @@ namespace putils
         while (openSet.size())
         {
             const auto it = std::min_element(openSet.cbegin(), openSet.cend(), findClosest);
+
             auto current = *it;
+            if (first || closest.distanceTo(goal) > current.distanceTo(goal))
+            {
+                closest = current;
+                first = false;
+            }
 
             if (goal.distanceTo(current) < desiredDistance)
                 return reconstruct_path(cameFrom, current, start);
@@ -136,46 +144,6 @@ namespace putils
                 }
         }
 
-        return {};
+        return reconstruct_path(cameFrom, closest, start);
     }
-
-    namespace test
-    {
-        inline bool astar()
-        {
-            return putils::runTests(
-                    "First step", []
-                    {
-                        const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 5, 0 }, true, 1, 1,
-                                [](const putils::Point2i &, const putils::Point2i &) { return true; }
-                        );
-                        return steps[0] == putils::Point2i{ 1, 0 };
-                    },
-                    "Straight line", []
-                    {
-                        const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 3, 0 }, true, 1, 1,
-                                [](const putils::Point2i &, const putils::Point2i &) { return true; }
-                        );
-                        return steps.size() == 3 &&
-                               steps[0] == putils::Point2i{ 1, 0 } &&
-                               steps[1] == putils::Point2i{ 2, 0 } &&
-                               steps[2] == putils::Point2i{ 3, 0 };
-                    },
-                    "Obstacle", []
-                    {
-                        const auto steps = putils::AStar::getNextDirection<int>(
-                                putils::Point2i{ 0, 0 }, putils::Point2i{ 3, 0 }, true, 1, 1,
-                                [](const putils::Point2i &from, const putils::Point2i &to)
-                                { return to != putils::Point2i{ 2, 0 }; }
-                        );
-                        return steps.size() == 3 &&
-                               steps[0] == putils::Point2i{ 1, 0 } &&
-                                (steps[1] == putils::Point2i{ 2, -1 } || steps[1] == putils::Point2i{ 2, 1 }) &&
-                               steps[2] == putils::Point2i{ 3, 0 };
-                    }
-            );
-        }
-    };
 }
