@@ -9,6 +9,7 @@ namespace putils
     template<typename Container, typename Predicate>
     void remove_if(Container &container, Predicate &&pred)
     {
-        container.erase(std::remove_if(container.begin(), container.end(), FWD(pred)), container.end());
+        const auto it = std::remove_if(container.begin(), container.end(), FWD(pred));
+        container.erase(it, container.end());
     }
 }

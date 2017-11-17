@@ -6,6 +6,8 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <unordered_set>
+#include <set>
 
 #include "meta/type.hpp"
 #include "to_string.hpp"
@@ -287,6 +289,16 @@ namespace putils
             static void serialize(std::ostream &s, std::string_view name, const std::vector<T> &container) { printContainer(s, name, container); }
             template<typename T>
             static void unserialize(std::istream &s, std::vector<T> &attr) { unserializeContainer(s, attr); }
+
+            template<typename T>
+            static void serialize(std::ostream &s, std::string_view name, const std::set<T> &container) { printContainer(s, name, container); }
+            template<typename T>
+            static void unserialize(std::istream &s, std::set<T> &attr) { unserializeContainer(s, attr); }
+
+            template<typename T>
+            static void serialize(std::ostream &s, std::string_view name, const std::unordered_set<T> &container) { printContainer(s, name, container); }
+            template<typename T>
+            static void unserialize(std::istream &s, std::unordered_set<T> &attr) { unserializeContainer(s, attr); }
 
             /*
              * "Normal" objects
