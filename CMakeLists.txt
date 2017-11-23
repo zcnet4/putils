@@ -24,4 +24,13 @@ if(PUTILS_TEST)
             test/*/*.cpp test/*/*.hpp)
     add_executable(${test_name} ${testSrc})
     target_link_libraries(${test_name} putils mediator connection pluginManager gtest_main)
+
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/CMakeModules)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        include(CodeCoverage)
+        append_coverage_compiler_flags()
+        setup_target_for_coverage(NAME ${test_name}_coverage
+                EXECUTABLE ${test_name}
+                coverage)
+    endif()
 endif()
