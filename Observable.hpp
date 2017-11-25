@@ -64,16 +64,8 @@ namespace putils
     public:
         void changed(const Args &...args) noexcept
         {
-            for (auto it = _observers.cbegin(); it != _observers.cend(); ++it)
-            {
-                try { it->second(args...); }
-                catch (std::bad_function_call &)
-                {
-                    auto tmp = it;
-                    ++it;
-                    _observers.erase(tmp);
-                }
-            }
+            for (const auto & [_, func] : _observers)
+                func(args...);
         }
         void operator()(const Args &...args) noexcept { changed(args...); }
 
