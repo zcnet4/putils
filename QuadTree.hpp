@@ -26,15 +26,15 @@ namespace putils
         {}
 
     public:
-        template<typename Obj>
-        bool add(Obj &&obj, const Rect<Precision> &boundingBox)
+        template<typename O>
+        bool add(O &&obj, const Rect<Precision> &boundingBox)
         {
             if (!_boundingBox.intersect(boundingBox))
                 return false; // object isn't in this area
 
             if (_items.size() < MaxChildren || _boundingBox.size.x < 2 || _boundingBox.size.y < 2)
             {
-                _items.push_back({ boundingBox, obj });
+                _items.push_back(Obj{ boundingBox, obj });
                 return true;
             }
 
