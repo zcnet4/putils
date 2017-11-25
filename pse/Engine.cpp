@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Engine.hpp"
 
 namespace pse
@@ -9,7 +10,7 @@ namespace pse
               _items(),
               _refreshTimer(1 / refreshRate)
 #ifdef PSE_TGUI
-             , _tgui(_window)
+    , _tgui(_window)
 #endif
     {
     }
@@ -38,7 +39,7 @@ namespace pse
 
         _refreshTimer.restart();
 
-        for (const auto &p : _items)
+        for (const auto& p : _items)
         {
             auto item = p.first;
             // If item isn't supposed to move, fuck it
@@ -48,8 +49,9 @@ namespace pse
             // If item hasn't reached destination, move it closer depending on how long it has left to move
             if (!isSamePosition(item->getDestination(), item->getPosition()))
             {
-                float coeff = (float) (1 / (item->getMoveDuration() / _refreshTimer.getDuration().count()));
-                sf::Vector2f dist = item->getDestination() - item->getPreviousPosition();
+                float        coeff = (float) (1 / (item->getMoveDuration() /
+                                                   _refreshTimer.getDuration().count()));
+                sf::Vector2f dist  = item->getDestination() - item->getPreviousPosition();
                 dist *= coeff;
                 item->setPosition(item->getPosition() + dist);
             }
@@ -63,17 +65,19 @@ namespace pse
 
     void Engine::drawItems() noexcept
     {
-        size_t drawn = 0;
+        size_t drawn  = 0;
         size_t height = 0;
 
         while (drawn < _items.size())
         {
-            for (const auto &p : _items)
-                if (p.second <= height)
+            for (const auto& p : _items)
+            {
+                if (p.second == height)
                 {
                     p.first->draw(_window);
                     ++drawn;
                 }
+            }
 
             ++height;
         }
