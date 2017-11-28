@@ -15,10 +15,8 @@
 //
 // Phiste SFML Engine
 //
-namespace pse
-{
-    class Engine
-    {
+namespace pse {
+    class Engine {
         // Constructor
     public:
         Engine(size_t screenWidth, size_t screenHeight,
@@ -31,19 +29,17 @@ namespace pse
 
         // Items getters and setters
     public:
-        void addItem(ViewItem &item, size_t height = 0) { _items.push_back(std::make_pair(&item, height)); }
+        void addItem(ViewItem & item, size_t height = 0) { _items.push_back(std::make_pair(&item, height)); }
 
-        void removeItem(const ViewItem &item)
-        {
+        void removeItem(const ViewItem & item) {
             _items.erase(std::find_if(_items.begin(), _items.end(),
-                    [&item](auto &p) { return p.first == &item; })
+                                      [&item](auto & p) { return p.first == &item; })
             );
         }
 
-        void setItemHeight(const ViewItem &item, std::size_t height)
-        {
+        void setItemHeight(const ViewItem & item, std::size_t height) {
             auto it = std::find_if(_items.begin(), _items.end(),
-                                   [&item](auto &p) { return p.first == &item; }
+                                   [&item](auto & p) { return p.first == &item; }
             );
             if (it != _items.end())
                 it->second = height;
@@ -56,8 +52,7 @@ namespace pse
 
         // Poll event
     public:
-        bool pollEvent(sf::Event &e) noexcept
-        {
+        bool pollEvent(sf::Event & e) noexcept {
             bool ret = _window.pollEvent(e);
 
 #ifdef PSE_TGUI
@@ -70,7 +65,7 @@ namespace pse
 
         // Splash a color on screen
     public:
-        void displayColor(const sf::Color &color) noexcept { _window.clear(color); }
+        void displayColor(const sf::Color & color) noexcept { _window.clear(color); }
 
     private:
         void refreshMovingItems() noexcept;
@@ -79,15 +74,14 @@ namespace pse
 
         // Approximation of whether two positions are the same
     public:
-        static bool isSamePosition(const sf::Vector2f &p1, const sf::Vector2f &p2) noexcept
-        {
+        static bool isSamePosition(const sf::Vector2f & p1, const sf::Vector2f & p2) noexcept {
             return ((-5 < (p1.x - p2.x) && (p1.x - p2.x) < 5) &&
                     (-5 < (p1.y - p2.y) && (p1.y - p2.y) < 5));
         }
 
         // Access sf::RenderWindow
     public:
-        sf::RenderWindow &getRenderWindow() noexcept { return _window; }
+        sf::RenderWindow & getRenderWindow() noexcept { return _window; }
 
         // Attributes
     private:
@@ -96,28 +90,28 @@ namespace pse
         putils::Timer _refreshTimer;
 
 #ifdef PSE_TGUI
-    public:
-        template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-        void addItem(const std::shared_ptr<T> &widget, std::string_view name = "")
-        { _tgui.add(widget, name); }
+        public:
+            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
+            void addItem(const std::shared_ptr<T> &widget, std::string_view name = "")
+            { _tgui.add(widget, name); }
 
-        template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-        bool removeItem(const std::shared_ptr<T> &widget)
-        { return _tgui.remove(widget); }
+            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
+            bool removeItem(const std::shared_ptr<T> &widget)
+            { return _tgui.remove(widget); }
 
-        template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
-        typename T::Ptr get(std::string_view name, bool recursive = false) const
-        { return _tgui.get(name, recursive); }
+            template<typename T, typename = std::enable_if_t<std::is_base_of<tgui::Widget, T>::value>>
+            typename T::Ptr get(std::string_view name, bool recursive = false) const
+            { return _tgui.get(name, recursive); }
 
-        tgui::Gui &getGui() noexcept { return _tgui; }
-    private:
-        tgui::Gui _tgui;
+            tgui::Gui &getGui() noexcept { return _tgui; }
+        private:
+            tgui::Gui _tgui;
 #endif
 
         // Coplien
     public:
         Engine(const Engine &) = delete;
 
-        Engine &operator=(const Engine &) = delete;
+        Engine & operator=(const Engine &) = delete;
     };
 }
